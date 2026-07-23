@@ -60,7 +60,7 @@ test("a priced draft previews the verdict with 'Would be'", () => {
 test("a draft with no price is just 'Draft'", () => {
   expect(
     statusChip({ workflow: "draft", hasPrice: false, marginPct: null }),
-  ).toEqual({ label: "Draft", tone: "neutral" });
+  ).toEqual({ label: "Draft", tone: "inactive" });
 });
 
 test("profit is coloured only for the three health tones", () => {

@@ -15,11 +15,17 @@
 
 // ── the tone vocabulary (named by meaning, never colour) ──────────────────
 
-/** Every chip tone. `neutral` carries no health judgement. */
-export type ChipTone = "positive" | "caution" | "critical" | "neutral";
+/**
+ * Every chip tone. Two of them carry no health judgement:
+ * - `neutral`  — a live product missing an input ("No price"). Filled.
+ * - `inactive` — a product outside the live range (Draft, Archived). Outlined.
+ * The split mirrors the two-layer status model in PRD §8.
+ */
+export type ChipTone = "positive" | "caution" | "critical" | "neutral" | "inactive";
 
-/** The three tones that are allowed to colour a *number* (the profit figure). */
-export type StatusTone = Exclude<ChipTone, "neutral">;
+/** The three tones that are allowed to colour a *number* (the profit figure).
+ *  `neutral` and `inactive` are non-verdict tones, so they're excluded. */
+export type StatusTone = Exclude<ChipTone, "neutral" | "inactive">;
 
 // ── the status model ──────────────────────────────────────────────────────
 
@@ -37,15 +43,12 @@ export const DEFAULT_THRESHOLDS: Thresholds = { healthyMin: 0.3, cautionMin: 0.1
  * The explicit label ↔ tone table §8 demands. Adding a status here forces you
  * to give it both a label and a tone — they can't fall out of sync.
  */
-export const PROFITABILITY_META: Record<
-  Profitability,
-  { label: string; tone: ChipTone }
-> = {
+export const PROFITABILITY_META = {
   healthy: { label: "Healthy", tone: "positive" },
   caution: { label: "Caution", tone: "caution" },
   risky: { label: "Risky", tone: "critical" },
   "no-price": { label: "No price", tone: "neutral" },
-};
+} as const satisfies Record<Profitability, { label: string; tone: ChipTone }>;
 
 /** Margin → status. `no-price` is decided upstream, by the absence of a price. */
 export function profitabilityFromMargin(
@@ -98,7 +101,7 @@ export function statusChip(
       const { label, tone } = PROFITABILITY_META[status];
       return { label: `Would be ${label} · ${formatPct(marginPct)}`, tone };
     }
-    return { label: "Draft", tone: "neutral" };
+    return { label: "Draft", tone: "inactive" };
   }
 
   // active

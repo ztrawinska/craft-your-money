@@ -18,6 +18,8 @@ const toneClasses: Record<ChipTone, string> = {
   caution: "bg-status-amber/15 text-status-amber",
   critical: "bg-status-red/15 text-status-red",
   neutral: "bg-ink/10 text-ink/70",
+  // outlined, not filled: a product outside the live range (Draft, Archived).
+  inactive: "border border-ink/14 text-ink/42",
 };
 
 type ChipProps = {

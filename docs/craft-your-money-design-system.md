@@ -147,7 +147,7 @@ Each component below is a real reusable piece, not a convention. Building them a
 The only way to show status in this system.
 
 **Props:** `tone` (meaning, not colour) and children.
-**Tones:** `positive` / `caution` / `critical` / `neutral`.
+**Tones:** `positive` / `caution` / `critical` / `neutral` / `inactive`.
 
 | User-facing label | Tone | Appearance |
 |---|---|---|
@@ -155,14 +155,31 @@ The only way to show status in this system.
 | Caution · 22% | `caution` | amber at 15% bg, amber text |
 | Risky · 8% | `critical` | red at 15% bg, red text |
 | No price | `neutral` | ink at 10% bg, ink-70 text |
-| Draft | `neutral` | transparent bg, ink-14 border, ink-42 text |
+| Draft | `inactive` | transparent bg, ink-14 border, ink-42 text |
+| Archived | `inactive` | transparent bg, ink-14 border, ink-42 text |
 | Would be Healthy · 52% | `positive` | draft preview — "Would be" carries the tentativeness |
+
+**Why `neutral` and `inactive` are separate tones.** The status model has two
+layers (PRD §8). *Healthy / Caution / Risky / No price* are **profitability
+statuses** — a verdict on a product that is live in the collection. *Draft* and
+*Archived* are **workflow states**: the product isn't in the live range at all,
+so there is nothing to judge. The rendering encodes exactly that split — a
+**filled** chip is a verdict on a live product; an **outlined** chip means the
+product sits outside the range. `No price` therefore stays `neutral` and stays
+filled: it *is* live, it's just missing an input. `Draft` and `Archived` take
+`inactive`.
+
+**Why it isn't called `neutral-outline`.** That name describes the *rendering*
+(an outline), which is the exact mistake the tone vocabulary exists to prevent —
+we say `caution`, never `amber`. `inactive` names the *meaning* (the product is
+outside the live range); the outline is merely how that meaning looks today.
 
 **Anatomy:** `rounded-full`, `px-3 py-1`, 12px Plex 600, tabular numerals.
 
 **Rules**
 - Chips merge label + margin into one unit: `Healthy · 64%`, never a badge next to a coloured number.
 - "No price" takes `neutral`, not a status colour — it is a missing input, not a health judgment.
+- `inactive` (Draft, Archived) is outlined, not filled — the product is outside the live range, so there is no verdict to colour.
 - Never invent a tone for a one-off. If a new meaning appears, add it to the union type.
 
 **Anti-patterns:** raw coloured status text; a coloured number with a separate badge; chips used for anything that isn't status.
