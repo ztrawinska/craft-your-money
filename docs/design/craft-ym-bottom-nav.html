@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Craft Your Money — Bottom Navigation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500&family=IBM+Plex+Sans:wght@0,300;0,400;0,500;0,600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --page:      #F7F4F0;
+  --card:      #FFFFFF;
+
+  --ink:       #1E1916;
+  --ink-70:    rgba(30,25,22,0.70);
+  --ink-55:    rgba(30,25,22,0.55);
+  --ink-42:    rgba(30,25,22,0.42);
+  --ink-14:    rgba(30,25,22,0.14);
+  --ink-07:    rgba(30,25,22,0.07);
+
+  --clay:        #A0716A;
+  --clay-deep:   #8A5A52;
+  --clay-wash:   rgba(160,113,106,0.09);
+
+  --serif: 'Lora', Georgia, serif;
+  --sans:  'IBM Plex Sans', system-ui, sans-serif;
+}
+
+html { font-size: 16px; }
+body {
+  background: #EFEBE4;
+  font-family: var(--sans);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  padding: 48px 24px 90px;
+}
+
+.doc-head {
+  max-width: 1000px; margin: 0 auto 40px;
+  padding-bottom: 18px; border-bottom: 1px solid var(--ink-14);
+}
+.doc-head h1 { font-family: var(--serif); font-size: 22px; font-weight: 500; }
+.doc-head h1 em { font-style: italic; color: var(--ink-42); }
+.doc-head p { font-size: 12px; font-weight: 300; color: var(--ink-55); line-height: 1.6; margin-top: 8px; max-width: 660px; }
+
+.section-label {
+  max-width: 1000px; margin: 0 auto 16px;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-42);
+}
+
+/* nav specimen container */
+.specimens {
+  max-width: 1000px; margin: 0 auto 44px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+
+.spec {
+  background: var(--page);
+  border: 1px solid var(--ink-14);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(30,25,22,0.04);
+}
+
+.spec-tag {
+  font-size: 9px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-42);
+  padding: 10px 16px 0;
+}
+
+/* ── THE NAV ── */
+.bnav {
+  display: flex; align-items: flex-end; justify-content: space-around;
+  padding: 11px 8px 14px;
+  border-top: 1px solid var(--ink-07);
+  margin-top: 8px;
+  position: relative;
+}
+
+.bn {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  position: relative;
+  padding: 2px 10px;
+  flex: 1;
+}
+
+.bn-ico { width: 23px; height: 23px; display: block; }
+.bn-ico path, .bn-ico circle, .bn-ico rect, .bn-ico line, .bn-ico polyline, .bn-ico polygon {
+  fill: none;
+  stroke: var(--ink-42);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.bn-ico .fillmark { fill: var(--ink-42); stroke: none; }
+
+.bn-lbl { font-size: 9.5px; font-weight: 500; color: var(--ink-42); letter-spacing: 0.01em; }
+
+/* active */
+.bn.on::before {
+  content: ''; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  width: 22px; height: 2px; background: var(--clay-deep); border-radius: 0 0 2px 2px;
+}
+.bn.on .bn-ico path, .bn.on .bn-ico circle, .bn.on .bn-ico rect,
+.bn.on .bn-ico line, .bn.on .bn-ico polyline, .bn.on .bn-ico polygon { stroke: var(--clay-deep); }
+.bn.on .bn-ico .fillmark { fill: var(--clay-deep); }
+.bn.on .bn-lbl { color: var(--clay-deep); font-weight: 600; }
+
+/* the elevated plus */
+.bn-plus-wrap { flex: 1; display: flex; justify-content: center; align-items: flex-end; }
+.bn-plus {
+  width: 42px; height: 42px;
+  background: var(--clay-deep);
+  border-radius: 11px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1px;
+}
+.bn-plus svg { width: 19px; height: 19px; }
+.bn-plus svg line { stroke: #FDFBF9; stroke-width: 1.9; stroke-linecap: round; }
+
+/* icon legend */
+.legend {
+  max-width: 1000px; margin: 0 auto 44px;
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px;
+}
+@media (max-width: 720px){ .legend { grid-template-columns: repeat(2,1fr);} }
+
+.leg {
+  background: var(--card);
+  border: 1px solid var(--ink-14);
+  border-radius: 8px;
+  padding: 18px 14px 14px;
+  text-align: center;
+}
+.leg-ico { width: 30px; height: 30px; margin: 0 auto 12px; }
+.leg-ico path, .leg-ico circle, .leg-ico rect, .leg-ico line, .leg-ico polyline, .leg-ico polygon {
+  fill: none; stroke: var(--clay-deep); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round;
+}
+.leg-ico .fillmark { fill: var(--clay-deep); stroke: none; }
+.leg-name { font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+.leg-desc { font-size: 10.5px; font-weight: 300; color: var(--ink-55); line-height: 1.5; }
+
+/* notes */
+.notes { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; }
+@media (max-width: 720px){ .notes { grid-template-columns: 1fr; } }
+.note { background: var(--card); border: 1px solid var(--ink-14); border-radius: 6px; padding: 15px 18px; }
+.note.kept { border-left: 3px solid var(--clay); }
+.note-tag { font-size: 9px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--clay-deep); margin-bottom: 6px; }
+.note p { font-size: 12px; font-weight: 300; color: var(--ink-70); line-height: 1.6; }
+.note p strong { font-weight: 500; color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="doc-head">
+  <h1>Bottom navigation — <em>the shared component</em></h1>
+  <p>Five slots per PRD, flat clay-square "+". Neutral Lucide icons (open-source, ISC) — chrome stays branch-agnostic so the product ports to any craft. Jewelry lives in content and sample data, never in navigation. Shown in every active state; the icon set is defined once and reused across all screens.</p>
+</div>
+
+<!-- ═══ ICON LEGEND ═══ -->
+<p class="section-label">The icon set</p>
+<div class="legend">
+
+  <div class="leg">
+    <svg class="leg-ico" viewBox="0 0 24 24">
+      <path d="M3 9.5 L12 3 L21 9.5 V20 a1 1 0 0 1 -1 1 H4 a1 1 0 0 1 -1 -1 Z"/><polyline points="9 21 9 13 15 13 15 21"/>
+    </svg>
+    <p class="leg-name">Home</p>
+    <p class="leg-desc">The dashboard. A plain house — the one icon that shouldn't be clever.</p>
+  </div>
+
+  <div class="leg">
+    <svg class="leg-ico" viewBox="0 0 24 24">
+      <path d="M20.6 13.4 L13.4 20.6 a2 2 0 0 1 -2.8 0 L2.5 12.5 A2 2 0 0 1 2 11.1 V4 a2 2 0 0 1 2 -2 h7.1 a2 2 0 0 1 1.4 0.6 l8.1 8.1 a2 2 0 0 1 0 2.7 Z"/>
+      <circle class="fillmark" cx="7" cy="7" r="1.2"/>
+    </svg>
+    <p class="leg-name">Products</p>
+    <p class="leg-desc">A price tag — a neutral, universal "item you sell". Works for any craft.</p>
+  </div>
+
+  <div class="leg">
+    <svg class="leg-ico" viewBox="0 0 24 24">
+      <line x1="12" y1="5" x2="12" y2="19"/>
+      <line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+    <p class="leg-name">Add</p>
+    <p class="leg-desc">Always "new product". A flat clay square — primary by colour, not by lift.</p>
+  </div>
+
+  <div class="leg">
+    <svg class="leg-ico" viewBox="0 0 24 24">
+      <polygon points="12 2.5 22 7.5 12 12.5 2 7.5"/>
+      <polyline points="2 12.5 12 17.5 22 12.5"/>
+      <polyline points="2 16.8 12 21.8 22 16.8"/>
+    </svg>
+    <p class="leg-name">Materials</p>
+    <p class="leg-desc">Stacked layers — raw stock you reuse. Reads as materials in any trade.</p>
+  </div>
+
+  <div class="leg">
+    <svg class="leg-ico" viewBox="0 0 24 24">
+      <path d="M3 6.5 A2 2 0 0 1 5 4.5 H19 a2 2 0 0 1 2 2 V8"/><path d="M3 6.5 V17.5 a2 2 0 0 0 2 2 H19 a2 2 0 0 0 2 -2 V11 a2 2 0 0 0 -2 -2 H5 a2 2 0 0 1 -2 -2 Z"/><circle class="fillmark" cx="16.5" cy="14" r="1.2"/>
+    </svg>
+    <p class="leg-name">Costs</p>
+    <p class="leg-desc">A wallet — business costs, the money that leaves before you make anything.</p>
+  </div>
+
+</div>
+
+<!-- ═══ NAV IN EVERY STATE ═══ -->
+<p class="section-label">Every active state</p>
+<div class="specimens">
+
+  <!-- Home active -->
+  <div class="spec">
+    <p class="spec-tag">Home active</p>
+    <div class="bnav">
+      <div class="bn on">
+        <svg class="bn-ico" viewBox="0 0 24 24"><path d="M3 9.5 L12 3 L21 9.5 V20 a1 1 0 0 1 -1 1 H4 a1 1 0 0 1 -1 -1 Z"/><polyline points="9 21 9 13 15 13 15 21"/></svg>
+        <span class="bn-lbl">Home</span>
+      </div>
+      <div class="bn">
+        <svg class="bn-ico" viewBox="0 0 24 24"><path d="M20.6 13.4 L13.4 20.6 a2 2 0 0 1 -2.8 0 L2.5 12.5 A2 2 0 0 1 2 11.1 V4 a2 2 0 0 1 2 -2 h7.1 a2 2 0 0 1 1.4 0.6 l8.1 8.1 a2 2 0 0 1 0 2.7 Z"/><circle class="fillmark" cx="7" cy="7" r="1.2"/></svg>
+        <span class="bn-lbl">Products</span>
+      </div>
+      <div class="bn-plus-wrap"><div class="bn-plus"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+      <div class="bn">
+        <svg class="bn-ico" viewBox="0 0 24 24"><polygon points="12 2.5 22 7.5 12 12.5 2 7.5"/><polyline points="2 12.5 12 17.5 22 12.5"/><polyline points="2 16.8 12 21.8 22 16.8"/></svg>
+        <span class="bn-lbl">Materials</span>
+      </div>
+      <div class="bn">
+        <svg class="bn-ico" viewBox="0 0 24 24"><path d="M3 6.5 A2 2 0 0 1 5 4.5 H19 a2 2 0 0 1 2 2 V8"/><path d="M3 6.5 V17.5 a2 2 0 0 0 2 2 H19 a2 2 0 0 0 2 -2 V11 a2 2 0 0 0 -2 -2 H5 a2 2 0 0 1 -2 -2 Z"/><circle class="fillmark" cx="16.5" cy="14" r="1.2"/></svg>
+        <span class="bn-lbl">Costs</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products active -->
+  <div class="spec">
+    <p class="spec-tag">Products active</p>
+    <div class="bnav">
+      <div class="bn">
+        <svg class="bn-ico" viewBox="0 0 24 24"><path d="M3 9.5 L12 3 L21 9.5 V20 a1 1 0 0 1 -1 1 H4 a1 1 0 0 1 -1 -1 Z"/><polyline points="9 21 9 13 15 13 15 21"/></svg>
+        <span class="bn-lbl">Home</span>
+      </div>
+      <div class="bn on">
+        <svg class="bn-ico" viewBox="0 0 24 24"><path d="M20.6 13.4 L13.4 20.6 a2 2 0 0 1 -2.8 0 L2.5 12.5 A2 2 0 0 1 2 11.1 V4 a2 2 0 0 1 2 -2 h7.1 a2 2 0 0 1 1.4 0.6 l8.1 8.1 a2 2 0 0 1 0 2.7 Z"/><circle class="fillmark" cx="7" cy="7" r="1.2"/></svg>
+        <span class="bn-lbl">Products</span>
+      </div>
+      <div class="bn-plus-wrap"><div class="bn-plus"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+      <div class="bn">
+        <svg class="bn-ico" viewBox="0 0 24 24"><polygon points="12 2.5 22 7.5 12 12.5 2 7.5"/><polyline points="2 12.5 12 17.5 22 12.5"/><polyline points="2 16.8 12 21.8 22 16.8"/></svg>
+        <span class="bn-lbl">Materials</span>
+      </div>
+      <div class="bn">
+        <svg class="bn-ico" viewBox="0 0 24 24"><path d="M3 6.5 A2 2 0 0 1 5 4.5 H19 a2 2 0 0 1 2 2 V8"/><path d="M3 6.5 V17.5 a2 2 0 0 0 2 2 H19 a2 2 0 0 0 2 -2 V11 a2 2 0 0 0 -2 -2 H5 a2 2 0 0 1 -2 -2 Z"/><circle class="fillmark" cx="16.5" cy="14" r="1.2"/></svg>
+        <span class="bn-lbl">Costs</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Materials active -->
+  <div class="spec">
+    <p class="spec-tag">Materials active</p>
+    <div class="bnav">
+      <div class="bn">
+        <svg class="bn-ico" viewBox="0 0 24 24"><path d="M3 9.5 L12 3 L21 9.5 V20 a1 1 0 0 1 -1 1 H4 a1 1 0 0 1 -1 -1 Z"/><polyline points="9 21 9 13 15 13 15 21"/></svg>
+        <span class="bn-lbl">Home</span>
+      </div>
+      <div class="bn">
+        <svg class="bn-ico" viewBox="0 0 24 24"><path d="M20.6 13.4 L13.4 20.6 a2 2 0 0 1 -2.8 0 L2.5 12.5 A2 2 0 0 1 2 11.1 V4 a2 2 0 0 1 2 -2 h7.1 a2 2 0 0 1 1.4 0.6 l8.1 8.1 a2 2 0 0 1 0 2.7 Z"/><circle class="fillmark" cx="7" cy="7" r="1.2"/></svg>
+        <span class="bn-lbl">Products</span>
+      </div>
+      <div class="bn-plus-wrap"><div class="bn-plus"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+      <div class="bn on">
+        <svg class="bn-ico" viewBox="0 0 24 24"><polygon points="12 2.5 22 7.5 12 12.5 2 7.5"/><polyline points="2 12.5 12 17.5 22 12.5"/><polyline points="2 16.8 12 21.8 22 16.8"/></svg>
+        <span class="bn-lbl">Materials</span>
+      </div>
+      <div class="bn">
+        <svg class="bn-ico" viewBox="0 0 24 24"><path d="M3 6.5 A2 2 0 0 1 5 4.5 H19 a2 2 0 0 1 2 2 V8"/><path d="M3 6.5 V17.5 a2 2 0 0 0 2 2 H19 a2 2 0 0 0 2 -2 V11 a2 2 0 0 0 -2 -2 H5 a2 2 0 0 1 -2 -2 Z"/><circle class="fillmark" cx="16.5" cy="14" r="1.2"/></svg>
+        <span class="bn-lbl">Costs</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Costs active -->
+  <div class="spec">
+    <p class="spec-tag">Costs active</p>
+    <div class="bnav">
+      <div class="bn">
+        <svg class="bn-ico" viewBox="0 0 24 24"><path d="M3 9.5 L12 3 L21 9.5 V20 a1 1 0 0 1 -1 1 H4 a1 1 0 0 1 -1 -1 Z"/><polyline points="9 21 9 13 15 13 15 21"/></svg>
+        <span class="bn-lbl">Home</span>
+      </div>
+      <div class="bn">
+        <svg class="bn-ico" viewBox="0 0 24 24"><path d="M20.6 13.4 L13.4 20.6 a2 2 0 0 1 -2.8 0 L2.5 12.5 A2 2 0 0 1 2 11.1 V4 a2 2 0 0 1 2 -2 h7.1 a2 2 0 0 1 1.4 0.6 l8.1 8.1 a2 2 0 0 1 0 2.7 Z"/><circle class="fillmark" cx="7" cy="7" r="1.2"/></svg>
+        <span class="bn-lbl">Products</span>
+      </div>
+      <div class="bn-plus-wrap"><div class="bn-plus"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+      <div class="bn">
+        <svg class="bn-ico" viewBox="0 0 24 24"><polygon points="12 2.5 22 7.5 12 12.5 2 7.5"/><polyline points="2 12.5 12 17.5 22 12.5"/><polyline points="2 16.8 12 21.8 22 16.8"/></svg>
+        <span class="bn-lbl">Materials</span>
+      </div>
+      <div class="bn on">
+        <svg class="bn-ico" viewBox="0 0 24 24"><path d="M3 6.5 A2 2 0 0 1 5 4.5 H19 a2 2 0 0 1 2 2 V8"/><path d="M3 6.5 V17.5 a2 2 0 0 0 2 2 H19 a2 2 0 0 0 2 -2 V11 a2 2 0 0 0 -2 -2 H5 a2 2 0 0 1 -2 -2 Z"/><circle class="fillmark" cx="16.5" cy="14" r="1.2"/></svg>
+        <span class="bn-lbl">Costs</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ NOTES ═══ -->
+<div class="notes">
+  <div class="note kept">
+    <p class="note-tag">Layout, per PRD</p>
+    <p><strong>Home · Products · + · Materials · Costs.</strong> The "+" is always "new product" — a flat, gently-rounded clay square on the baseline with the rest. Primary through colour alone; no lift, no shadow, no FAB. Settings stays off the nav, reached by the gear on Home.</p>
+  </div>
+  <div class="note">
+    <p class="note-tag">Active state — three signals, quiet</p>
+    <p>Active tab gets a <strong>clay top-tick</strong> (echoing the pricing block's top rule), clay icon stroke, and a heavier clay label. No background pill, no fill — Linear restraint. The tick is the same 2px clay device used for the decision surface, so "where you are" and "where you decide" share one visual language.</p>
+  </div>
+  <div class="note">
+    <p class="note-tag">Icons — neutral by design</p>
+    <p>Chrome carries <strong>no branch signal</strong>: tag, layers, wallet, house — a maker of candles or ceramics reads them the same. Jewelry stays where it's swappable: sample products, materials in grams of silver, labour steps like "Soldering". <strong>The nav never has to be redrawn to change trade.</strong> Lucide set (open-source, ISC), single-weight 1.6px.</p>
+  </div>
+  <div class="note">
+    <p class="note-tag">Build notes</p>
+    <p>Icons ship as inline SVG (crisp at any density, colour via <code>stroke</code>). Bar sits flat on the page with a hairline top — no shadow — consistent with r3. Touch targets are the full 44px+ column, not just the glyph. Labels always shown; no icon-only mode.</p>
+  </div>
+</div>
+
+</body>
+</html>

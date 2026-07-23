@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard vNext — action rows + clean empty state</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--page:#F7F4F0;--card:#FFFFFF;--cream-mid:#EDE7DD;--ink:#1E1916;--ink-70:rgba(30,25,22,0.70);--ink-55:rgba(30,25,22,0.55);--ink-42:rgba(30,25,22,0.42);--ink-30:rgba(30,25,22,0.30);--ink-14:rgba(30,25,22,0.14);--ink-07:rgba(30,25,22,0.07);--clay:#A0716A;--clay-deep:#8A5A52;--clay-wash:rgba(160,113,106,0.09);--iris:#6467C9;--iris-deep:#5155B4;--iris-wash:rgba(100,103,201,0.06);--iris-border:rgba(100,103,201,0.30);--green:#3A7D52;--green-chip:rgba(58,125,82,0.12);--amber:#9C7B2A;--red:#B04A40;--red-chip:rgba(176,74,64,0.11);--serif:'Lora',Georgia,serif;--sans:'IBM Plex Sans',system-ui,sans-serif}
+html{font-size:16px}
+body{background:#EFEBE4;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;padding:44px 24px 80px}
+.head{max-width:1000px;margin:0 auto 32px;padding-bottom:16px;border-bottom:1px solid var(--ink-14)}
+.head h1{font-family:var(--serif);font-size:21px;font-weight:500}.head h1 em{font-style:italic;color:var(--ink-42)}
+.head p{font-size:12px;font-weight:300;color:var(--ink-55);line-height:1.6;margin-top:8px;max-width:660px}
+.stage{max-width:1000px;margin:0 auto;display:flex;gap:40px;justify-content:center;flex-wrap:wrap}
+.unit{display:flex;flex-direction:column;align-items:center;gap:14px}
+.unit-cap{text-align:center}.unit-cap .t{font-family:var(--serif);font-size:16px;font-weight:500}
+.unit-cap .s{font-size:10px;font-weight:600;letter-spacing:0.13em;text-transform:uppercase;color:var(--clay-deep);margin-top:4px}
+
+.screen{width:390px;background:var(--page);border:1px solid rgba(30,25,22,0.22);border-radius:22px;overflow:hidden;box-shadow:0 1px 2px rgba(30,25,22,0.05),0 12px 40px -12px rgba(30,25,22,0.18);position:relative}
+.screen::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;opacity:0.30;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.12 0 0 0 0 0.10 0 0 0 0 0.08 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E")}
+.screen>*{position:relative;z-index:1}
+
+.dh{display:flex;align-items:flex-start;justify-content:space-between;padding:26px 24px 6px}
+.dh-date{font-size:11px;font-weight:400;color:var(--ink-42);letter-spacing:0.02em;margin-bottom:5px}
+.dh-greet{font-family:var(--serif);font-size:27px;font-weight:500;letter-spacing:-0.01em;line-height:1.1}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--clay-deep);color:#FDFBF9;font-family:var(--serif);font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.brief{padding:16px 24px 26px}
+.brief p{font-size:15px;font-weight:300;color:var(--ink-70);line-height:1.7}.brief p strong{font-weight:500;color:var(--ink)}
+
+.hero{padding:0 24px 4px}
+.hero-l{font-size:9.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-42);margin-bottom:9px}
+.hero-v{font-family:var(--serif);font-weight:500;letter-spacing:-0.02em;line-height:0.96;font-feature-settings:'tnum';color:var(--ink);font-size:46px}
+.hero-v .cur{font-size:29px;color:var(--ink-42);vertical-align:1px}
+.hero-sub{font-size:12px;font-weight:300;color:var(--ink-55);margin-top:9px;line-height:1.5}
+.support{margin:20px 24px 0;padding-top:16px;border-top:1px solid var(--ink-07);display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.sp.divide{border-left:1px solid var(--ink-07);padding-left:16px}
+.sp-l{font-size:9px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--ink-42);margin-bottom:6px}
+.sp-v{font-family:var(--serif);font-size:20px;font-weight:500;font-feature-settings:'tnum';color:var(--ink)}
+.sp-v .u{font-family:var(--sans);font-size:10.5px;font-weight:300;color:var(--ink-42)}
+.sp-v.ok{font-size:14px;color:var(--ink-55);font-style:italic;font-weight:400}
+.sp-chev{font-size:13px;color:var(--clay-deep);margin-left:4px}
+
+/* ACTION ROWS — YNAB lesson, our flat language: each row ends in a verb-action */
+.sec-lbl{font-size:10px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:var(--ink-42);padding:0 24px 8px;margin-top:32px}
+.act{display:flex;align-items:center;gap:13px;padding:15px 24px 15px 21px;border-top:1px solid var(--ink-07);border-left:3px solid transparent}
+.act.urgent{border-left-color:var(--red)}.act.missing{border-left-color:var(--ink-30)}
+.act-body{flex:1;min-width:0}
+.act-name{font-family:var(--serif);font-size:15px;font-weight:500;line-height:1.2}
+.act-meta{font-size:11.5px;font-weight:300;color:var(--ink-55);margin-top:3px}
+.act-meta .chip{display:inline-block;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:100px;font-feature-settings:'tnum';margin-right:6px;vertical-align:1px}
+.chip.risky{background:var(--red-chip);color:var(--red)}.chip.noprice{background:var(--ink-07);color:var(--ink-55)}
+/* the action button — clay, quiet but unmistakably tappable */
+.act-link{flex-shrink:0;font-size:13.5px;font-weight:600;color:var(--clay-deep);white-space:nowrap;display:inline-flex;align-items:center;gap:5px;background:none;border:none;padding:0;cursor:pointer}
+.act-link svg{width:15px;height:15px}
+.act-link svg path{fill:none;stroke:var(--clay-deep);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
+.resume{margin:32px 24px 0;padding:16px 18px;border:1px dashed var(--ink-14);border-radius:8px;display:flex;align-items:center;justify-content:space-between}
+.rs-l{font-size:9px;font-weight:600;letter-spacing:0.13em;text-transform:uppercase;color:var(--ink-42);margin-bottom:4px}
+.rs-n{font-family:var(--serif);font-size:14px;font-weight:500}
+.rs-m{font-size:10.5px;font-weight:300;font-style:italic;color:var(--ink-42);margin-top:2px}
+.rs-a{font-size:14px;color:var(--clay-deep)}
+
+.ask{margin:32px 24px 4px;display:flex;align-items:center;gap:9px;padding:13px 16px;border:1px solid var(--iris-border);background:var(--iris-wash);border-radius:8px}
+.ask .glint{width:15px;height:15px;flex-shrink:0}.ask .glint path{fill:var(--iris)}
+.ask .txt{font-size:13.5px;font-weight:500;color:var(--iris-deep);flex:1}.ask .arw{font-size:14px;color:var(--iris-deep)}
+
+.bnav{display:flex;align-items:flex-end;justify-content:space-around;padding:11px 8px 14px;border-top:1px solid var(--ink-07);background:var(--page);margin-top:26px}
+.bn{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:5px;position:relative;padding:0 10px;flex:1}
+.bn.on::before{content:'';position:absolute;top:-11px;left:50%;transform:translateX(-50%);width:22px;height:2px;background:var(--clay-deep);border-radius:0 0 2px 2px}
+.bn-ico{width:22px;height:22px}
+.bn-ico path,.bn-ico circle,.bn-ico polyline,.bn-ico line,.bn-ico polygon{fill:none;stroke:var(--ink-42);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.bn-ico .fillmark{fill:var(--ink-42);stroke:none}
+.bn.on .bn-ico path,.bn.on .bn-ico circle,.bn.on .bn-ico polyline,.bn.on .bn-ico line,.bn.on .bn-ico polygon{stroke:var(--clay-deep)}
+.bn.on .bn-ico .fillmark{fill:var(--clay-deep)}
+.bn-l{font-size:9px;font-weight:500;color:var(--ink-42)}.bn.on .bn-l{color:var(--clay-deep);font-weight:600}
+.bn-plus-wrap{flex:1;display:flex;justify-content:center;align-items:flex-end}
+.bn-plus{width:42px;height:42px;background:var(--clay-deep);border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:1px}
+.bn-plus svg{width:19px;height:19px}.bn-plus svg line{stroke:#FDFBF9;stroke-width:1.9;stroke-linecap:round}
+
+.legend{max-width:1000px;margin:34px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:820px){.legend{grid-template-columns:1fr}}
+.note{background:var(--card);border:1px solid var(--ink-14);border-radius:6px;padding:15px 18px}
+.note.kept{border-left:3px solid var(--clay)}
+.note-tag{font-size:9px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--clay-deep);margin-bottom:6px}
+.note p{font-size:12px;font-weight:300;color:var(--ink-70);line-height:1.6}.note p strong{font-weight:500;color:var(--ink)}
+</style></head>
+<body>
+<div class="head"><h1>Dashboard vNext — <em>action rows, clean empty state</em></h1>
+<p>The YNAB lesson, in our flat language: every attention row now ends in a <strong>clay verb-link</strong> — Reprice ›, Set price › — not just a status chip. And when nothing needs you, the whole section is <strong>gone</strong> — no reassurance line, no empty state. The briefing carries the good news; the shorter screen is the message.</p></div>
+
+<div class="stage">
+
+  <!-- STATE 1: action rows -->
+  <div class="unit">
+    <div class="unit-cap"><p class="t">Something to do</p><p class="s">rows end in an action</p></div>
+    <div class="screen">
+      <div class="dh"><div><p class="dh-date">Tuesday, 21 July</p><p class="dh-greet">Good afternoon, Zuza</p></div><div class="avatar">Z</div></div>
+      <div class="brief"><p>Your pricing is holding healthy — most of your range earns well. But <strong>Stacking set ×3</strong> is quietly losing money on every sale. Worth two minutes today.</p></div>
+
+      <div class="hero">
+        <p class="hero-l">Avg profit / piece</p>
+        <p class="hero-v"><span class="cur">£</span>18.40</p>
+        <p class="hero-sub">across your 12 priced products, after all costs</p>
+      </div>
+      <div class="support">
+        <div class="sp"><p class="sp-l">Priced</p><p class="sp-v">12<span class="u"> / 14</span></p></div>
+        <div class="sp divide"><p class="sp-l">Below target</p><p class="sp-v">3<span class="sp-chev">›</span></p></div>
+      </div>
+
+      <p class="sec-lbl">Needs attention</p>
+      <div class="act urgent">
+        <div class="act-body">
+          <p class="act-name">Stacking set × 3</p>
+          <p class="act-meta"><span class="chip risky">Risky · 8%</span>losing £2.06 / sale</p>
+        </div>
+        <span class="act-link">Reprice <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></span>
+      </div>
+      <div class="act missing">
+        <div class="act-body">
+          <p class="act-name">Forged copper cuff</p>
+          <p class="act-meta"><span class="chip noprice">No price</span>active without one</p>
+        </div>
+        <span class="act-link">Set price <svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></span>
+      </div>
+
+      <div class="ask"><svg class="glint" viewBox="0 0 24 24"><path d="M12 3 Q13.6 9.4 21 12 Q13.6 14.6 12 21 Q10.4 14.6 3 12 Q10.4 9.4 12 3 Z"/></svg><span class="txt">Ask about your prices</span><span class="arw">→</span></div>
+
+      <div class="bnav">
+        <div class="bn on"><svg class="bn-ico" viewBox="0 0 24 24"><path d="M3 9.5 L12 3 L21 9.5 V20 a1 1 0 0 1 -1 1 H4 a1 1 0 0 1 -1 -1 Z"/><polyline points="9 21 9 13 15 13 15 21"/></svg><span class="bn-l">Home</span></div>
+        <div class="bn"><svg class="bn-ico" viewBox="0 0 24 24"><path d="M20.6 13.4 L13.4 20.6 a2 2 0 0 1 -2.8 0 L2.5 12.5 A2 2 0 0 1 2 11.1 V4 a2 2 0 0 1 2 -2 h7.1 a2 2 0 0 1 1.4 0.6 l8.1 8.1 a2 2 0 0 1 0 2.7 Z"/><circle class="fillmark" cx="7" cy="7" r="1.2"/></svg><span class="bn-l">Products</span></div>
+        <div class="bn-plus-wrap"><div class="bn-plus"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+        <div class="bn"><svg class="bn-ico" viewBox="0 0 24 24"><polygon points="12 2.5 22 7.5 12 12.5 2 7.5"/><polyline points="2 12.5 12 17.5 22 12.5"/><polyline points="2 16.8 12 21.8 22 16.8"/></svg><span class="bn-l">Materials</span></div>
+        <div class="bn"><svg class="bn-ico" viewBox="0 0 24 24"><path d="M3 6.5 A2 2 0 0 1 5 4.5 H19 a2 2 0 0 1 2 2 V8"/><path d="M3 6.5 V17.5 a2 2 0 0 0 2 2 H19 a2 2 0 0 0 2 -2 V11 a2 2 0 0 0 -2 -2 H5 a2 2 0 0 1 -2 -2 Z"/><circle class="fillmark" cx="16.5" cy="14" r="1.2"/></svg><span class="bn-l">Costs</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATE 2: good day — section GONE entirely -->
+  <div class="unit">
+    <div class="unit-cap"><p class="t">A good day</p><p class="s">section simply gone</p></div>
+    <div class="screen">
+      <div class="dh"><div><p class="dh-date">Thursday, 23 July</p><p class="dh-greet">Good morning, Zuza</p></div><div class="avatar">Z</div></div>
+      <div class="brief"><p>Everything's holding strong — <strong>all 14 products</strong> priced and earning above your target. Nothing needs you today. Nice work.</p></div>
+
+      <div class="hero">
+        <p class="hero-l">Avg profit / piece</p>
+        <p class="hero-v"><span class="cur">£</span>19.80</p>
+        <p class="hero-sub">across all 14 products, after all costs</p>
+      </div>
+      <div class="support">
+        <div class="sp"><p class="sp-l">Priced</p><p class="sp-v">14<span class="u"> / 14</span></p></div>
+        <div class="sp divide"><p class="sp-l">Below target</p><p class="sp-v ok">all on target</p></div>
+      </div>
+
+      <!-- NO attention section at all. Straight to resume. -->
+      <div class="resume">
+        <div><p class="rs-l">Continue where you left off</p><p class="rs-n">New ring concept</p><p class="rs-m">Draft · edited 2 days ago</p></div>
+        <span class="rs-a">→</span>
+      </div>
+
+      <div class="ask"><svg class="glint" viewBox="0 0 24 24"><path d="M12 3 Q13.6 9.4 21 12 Q13.6 14.6 12 21 Q10.4 14.6 3 12 Q10.4 9.4 12 3 Z"/></svg><span class="txt">Ask about your prices</span><span class="arw">→</span></div>
+
+      <div class="bnav">
+        <div class="bn on"><svg class="bn-ico" viewBox="0 0 24 24"><path d="M3 9.5 L12 3 L21 9.5 V20 a1 1 0 0 1 -1 1 H4 a1 1 0 0 1 -1 -1 Z"/><polyline points="9 21 9 13 15 13 15 21"/></svg><span class="bn-l">Home</span></div>
+        <div class="bn"><svg class="bn-ico" viewBox="0 0 24 24"><path d="M20.6 13.4 L13.4 20.6 a2 2 0 0 1 -2.8 0 L2.5 12.5 A2 2 0 0 1 2 11.1 V4 a2 2 0 0 1 2 -2 h7.1 a2 2 0 0 1 1.4 0.6 l8.1 8.1 a2 2 0 0 1 0 2.7 Z"/><circle class="fillmark" cx="7" cy="7" r="1.2"/></svg><span class="bn-l">Products</span></div>
+        <div class="bn-plus-wrap"><div class="bn-plus"><svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div></div>
+        <div class="bn"><svg class="bn-ico" viewBox="0 0 24 24"><polygon points="12 2.5 22 7.5 12 12.5 2 7.5"/><polyline points="2 12.5 12 17.5 22 12.5"/><polyline points="2 16.8 12 21.8 22 16.8"/></svg><span class="bn-l">Materials</span></div>
+        <div class="bn"><svg class="bn-ico" viewBox="0 0 24 24"><path d="M3 6.5 A2 2 0 0 1 5 4.5 H19 a2 2 0 0 1 2 2 V8"/><path d="M3 6.5 V17.5 a2 2 0 0 0 2 2 H19 a2 2 0 0 0 2 -2 V11 a2 2 0 0 0 -2 -2 H5 a2 2 0 0 1 -2 -2 Z"/><circle class="fillmark" cx="16.5" cy="14" r="1.2"/></svg><span class="bn-l">Costs</span></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="legend">
+  <div class="note kept"><p class="note-tag">Rows end in a verb (YNAB lesson)</p><p>Each attention row ends in a <strong>clay verb-link</strong> — "Reprice ›", "Set price ›" — using our Lucide chevron, so the row answers "what do I do?", not just "what's wrong?". No new button level: same semantics as our "+ Add material" and Reset links. The status chip shrinks into the meta line.</p></div>
+  <div class="note kept"><p class="note-tag">Empty = gone, not reassured</p><p>On a good day the section <strong>doesn't render at all</strong> — no green "all clear" band. The briefing already says "nice work"; a shorter, calmer screen says the rest. Confidence through absence.</p></div>
+  <div class="note"><p class="note-tag">Two states, not three</p><p>Attention is now binary: <strong>rows, or nothing</strong>. No third "empty-with-message" state to design, build, or maintain. Cleaner in the UI and in the code.</p></div>
+  <div class="note"><p class="note-tag">Still our language, not YNAB's</p><p>We took the <em>structure</em> (action per row, hide when empty) but kept our skin: flat, hairline rows, left-edge urgency stripe, one clay accent — no floating cards, no gradient. Structure borrowed, style ours.</p></div>
+</div>
+</body></html>

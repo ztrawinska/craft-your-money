@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Price Check — r3</title>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--page:#F7F4F0;--card:#fff;--ink:#1E1916;--ink-70:rgba(30,25,22,.70);--ink-55:rgba(30,25,22,.55);--ink-42:rgba(30,25,22,.42);--ink-30:rgba(30,25,22,.30);--ink-14:rgba(30,25,22,.14);--ink-07:rgba(30,25,22,.07);
+--clay:#A0716A;--clay-deep:#8A5A52;--clay-wash:rgba(160,113,106,.09);
+--iris:#6467C9;--iris-deep:#5155B4;--iris-wash:rgba(100,103,201,.055);--iris-line:rgba(100,103,201,.28);
+--green:#3A7D52;--green-chip:rgba(58,125,82,.12);--amber:#9C7B2A;--amber-chip:rgba(156,123,42,.13);--red:#B04A40;
+--serif:'Lora',Georgia,serif;--sans:'IBM Plex Sans',system-ui,sans-serif}
+html{font-size:16px}
+body{background:#EFEBE4;font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;padding:42px 22px 80px}
+.doc-head{max-width:1120px;margin:0 auto 30px;padding-bottom:16px;border-bottom:1px solid var(--ink-14)}
+.doc-head h1{font-family:var(--serif);font-size:21px;font-weight:500}
+.doc-head h1 em{font-style:italic;color:var(--ink-42)}
+.doc-head p{font-size:12px;font-weight:300;color:var(--ink-55);line-height:1.6;margin-top:8px;max-width:700px}
+.stage{max-width:1120px;margin:0 auto;display:flex;gap:36px;justify-content:center;flex-wrap:wrap}
+.unit{display:flex;flex-direction:column;align-items:center;gap:13px}
+.unit-cap{text-align:center}
+.unit-cap .t{font-family:var(--serif);font-size:15px;font-weight:500}
+.unit-cap .s{font-size:10px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--iris-deep);margin-top:4px}
+
+.screen{width:390px;background:var(--page);border:1px solid rgba(30,25,22,.22);border-radius:22px;overflow:hidden;position:relative}
+.screen::before{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.30;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.12 0 0 0 0 0.10 0 0 0 0 0.08 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E")}
+.screen>*{position:relative;z-index:1}
+
+.ctx{padding:20px 24px 0}
+.ctx-l{font-size:9.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-42);margin-bottom:6px}
+.ctx-n{font-family:var(--serif);font-size:19px;font-weight:500;line-height:1.2}
+
+/* the ONE framed surface — pricing block; the check lives inside it */
+.pblock{margin:16px 24px 0;background:var(--card);border:1px solid rgba(160,113,106,.34);border-radius:8px;position:relative;overflow:hidden;padding:18px 16px 16px}
+.pblock::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--clay)}
+.p-lbl{font-size:9px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-55);margin-bottom:6px}
+.p-price{display:inline-flex;align-items:baseline;border-bottom:2px solid var(--clay);padding-bottom:3px;margin-bottom:9px}
+.p-price .c{font-family:var(--serif);font-size:17px;color:var(--ink-42);transform:translateY(-11px);margin-right:2px}
+.p-price .w{font-family:var(--serif);font-size:40px;font-weight:500;line-height:.88;letter-spacing:-.025em;font-feature-settings:'tnum'}
+.p-price .d{font-family:var(--serif);font-size:18px;color:var(--ink-70);transform:translateY(-11px);margin-left:2px}
+.p-profit{display:flex;align-items:center;justify-content:space-between;gap:8px;padding-top:12px;border-top:1px solid var(--ink-07)}
+.p-profit-a{font-family:var(--serif);font-size:25px;font-weight:500;color:var(--green);font-feature-settings:'tnum'}
+.chip{font-size:10.5px;font-weight:600;padding:5px 10px;border-radius:100px;font-feature-settings:'tnum';white-space:nowrap}
+.chip.h{background:var(--green-chip);color:var(--green)}
+
+/* ── the assistant surface: an INSET inside the frame, marked by iris ── */
+.check{margin-top:16px;border-top:1px solid var(--ink-07);padding-top:14px}
+.rv{border-left:2px solid var(--iris);background:var(--iris-wash);border-radius:0 6px 6px 0;padding:12px 13px 11px 12px}
+.rv-hd{display:flex;align-items:center;gap:7px;margin-bottom:10px}
+.rv-hd .glint{width:13px;height:13px;flex-shrink:0}
+.rv-hd .glint path{fill:var(--iris)}
+.rv-hd .t{font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--iris-deep);flex:1}
+.rv-hd .x{font-size:13px;color:var(--ink-30)}
+.rv-verdict{font-family:var(--serif);font-size:14px;font-weight:500;line-height:1.45;color:var(--ink);margin-bottom:12px}
+
+.fnd{display:flex;gap:9px;padding:9px 0;border-top:1px solid rgba(100,103,201,.14)}
+.fnd-n{font-family:var(--serif);font-size:11px;color:var(--iris-deep);flex-shrink:0;width:12px;padding-top:1px}
+.fnd-t{font-size:12px;font-weight:300;color:var(--ink-70);line-height:1.5}
+.fnd-t b{font-weight:500;color:var(--ink)}
+
+.sc-l{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-42);margin:12px 0 7px}
+.sc-row{display:flex;gap:7px}
+.sc{flex:1;border:1px solid var(--ink-14);border-radius:6px;padding:8px 10px;background:var(--card)}
+.sc-p{font-family:var(--serif);font-size:15px;font-weight:500;font-feature-settings:'tnum'}
+.sc-m{font-size:10px;font-weight:300;color:var(--ink-55);margin-top:2px}
+
+.fu-l{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-42);margin:13px 0 7px}
+.fu-row{display:flex;gap:6px;flex-wrap:wrap}
+.fu{font-size:11.5px;font-weight:500;color:var(--iris-deep);border:1px solid var(--iris-line);border-radius:100px;padding:5px 11px;background:transparent}
+
+.prov{margin-top:12px;padding-top:10px;border-top:1px solid rgba(100,103,201,.14);font-size:10px;font-weight:300;font-style:italic;color:var(--ink-42);line-height:1.55}
+.prov b{font-style:normal;font-weight:500;color:var(--ink-55)}
+
+/* answered state */
+.ans{margin-top:10px;padding:10px 12px;background:var(--card);border:1px solid rgba(100,103,201,.18);border-radius:6px}
+.ans-q{font-size:11.5px;font-weight:600;color:var(--iris-deep);margin-bottom:6px}
+.ans-t{font-size:12px;font-weight:300;color:var(--ink-70);line-height:1.55}
+.ans-t b{font-weight:500;color:var(--ink)}
+.ans-src{font-size:10px;font-weight:300;font-style:italic;color:var(--ink-42);margin-top:7px;line-height:1.5}
+
+.savebar{margin-top:20px;border-top:1px solid var(--ink-07);padding:14px 24px 18px;background:var(--page)}
+.btn{display:block;width:100%;text-align:center;font-size:14px;font-weight:600;padding:13px;border-radius:7px}
+.btn-p{background:var(--clay-deep);color:#FDFBF9;margin-bottom:8px}
+.btn-g{background:transparent;color:var(--ink-55);border:1px solid var(--ink-14);font-weight:500}
+
+.notes{max-width:1120px;margin:32px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:900px){.notes{grid-template-columns:1fr}}
+.note{background:var(--card);border:1px solid var(--ink-14);border-radius:6px;padding:15px 18px}
+.note.iris{border-left:3px solid var(--iris)}
+.note-tag{font-size:9px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--iris-deep);margin-bottom:6px}
+.note p{font-size:12px;font-weight:300;color:var(--ink-70);line-height:1.6}
+.note p b{font-weight:500;color:var(--ink)}
+</style></head><body>
+
+<div class="doc-head"><h1>Price Check — <em>the assistant surface, in r3</em></h1>
+<p>The one place iris does real work. Rebuilt flat: the review is not a floating card but an <b>inset inside the pricing block</b>, marked by an iris left-rule — so the screen still has exactly one framed surface. Left: the review. Right: after tapping a follow-up chip.</p></div>
+
+<div class="stage">
+
+  <div class="unit">
+    <div class="unit-cap"><p class="t">The review</p><p class="s">verdict · 3 findings · 2 scenarios</p></div>
+    <div class="screen">
+    <div class="ctx">
+      <p class="ctx-l">Ring</p>
+      <p class="ctx-n">Hammered silver stacking band</p>
+    </div>
+
+    <div class="pblock">
+      <p class="p-lbl">Your price</p>
+      <div class="p-price"><span class="c">£</span><span class="w">42</span><span class="d">.00</span></div>
+      <div class="p-profit">
+        <span class="p-profit-a">£18.20</span>
+        <span class="chip h">Healthy · 52%</span>
+      </div>
+
+      <div class="check">
+        <div class="rv">
+          <div class="rv-hd"><svg class="glint" viewBox="0 0 24 24"><path d="M12 3 Q13.6 9.4 21 12 Q13.6 14.6 12 21 Q10.4 14.6 3 12 Q10.4 9.4 12 3 Z"/></svg><span class="t">Price check</span><span class="x">×</span></div>
+          <p class="rv-verdict">£42.00 looks strong. Healthy at 52%, well above your £23.43 floor — with room to hold it.</p>
+
+          <div class="fnd"><span class="fnd-n">1</span><p class="fnd-t"><b>What drives it:</b> labour is 80% of your cost. Your bench time sets this price.</p></div>
+          <div class="fnd"><span class="fnd-n">2</span><p class="fnd-t"><b>What's missing:</b> no packaging cost. Your usual £0.85 box moves margin to 50% — still Healthy.</p></div>
+          <div class="fnd"><span class="fnd-n">3</span><p class="fnd-t"><b>Your room:</b> you'd stay Healthy down to about £34 on today's costs.</p></div>
+
+          <p class="sc-l">If you priced it differently</p>
+          <div class="sc-row">
+            <div class="sc"><p class="sc-p">£36.00</p><p class="sc-m">44% · Healthy</p></div>
+            <div class="sc"><p class="sc-p">£48.00</p><p class="sc-m">58% · Healthy</p></div>
+          </div>
+
+          <p class="fu-l">Ask about this check</p>
+          <div class="fu-row">
+            <span class="fu">Why so labour-heavy?</span>
+            <span class="fu">Compare to my other rings</span>
+          </div>
+
+          <p class="prov"><b>Used:</b> your costs, your 40% target, your 11 other products. <b>Assumed:</b> nothing about demand. <b>Can't know:</b> what your buyers will pay.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="savebar">
+      <div class="btn btn-p">Save and activate</div>
+      <div class="btn btn-g">Save draft</div>
+    </div>
+  </div>
+</div>
+
+  <div class="unit">
+    <div class="unit-cap"><p class="t">After a follow-up</p><p class="s">answer appended · fresh chips</p></div>
+    <div class="screen">
+    <div class="ctx">
+      <p class="ctx-l">Ring</p>
+      <p class="ctx-n">Hammered silver stacking band</p>
+    </div>
+
+    <div class="pblock">
+      <p class="p-lbl">Your price</p>
+      <div class="p-price"><span class="c">£</span><span class="w">42</span><span class="d">.00</span></div>
+      <div class="p-profit">
+        <span class="p-profit-a">£18.20</span>
+        <span class="chip h">Healthy · 52%</span>
+      </div>
+
+      <div class="check">
+        <div class="rv">
+          <div class="rv-hd"><svg class="glint" viewBox="0 0 24 24"><path d="M12 3 Q13.6 9.4 21 12 Q13.6 14.6 12 21 Q10.4 14.6 3 12 Q10.4 9.4 12 3 Z"/></svg><span class="t">Price check</span><span class="x">×</span></div>
+          <p class="rv-verdict">£42.00 looks strong. Healthy at 52%, well above your £23.43 floor — with room to hold it.</p>
+
+          <div class="fnd"><span class="fnd-n">1</span><p class="fnd-t"><b>What drives it:</b> labour is 80% of your cost. Your bench time sets this price.</p></div>
+
+          <div class="ans">
+            <p class="ans-q">Why so labour-heavy?</p>
+            <p class="ans-t">Three separate steps at £15/hr add up to 45 minutes per ring. Your materials are cheap by comparison — silver here is only <b>£2.48</b>. That's not a problem: it means your price is protected from silver price swings, but sensitive to your time. If you batch the soldering across several rings, this cost drops without touching quality.</p>
+            <p class="ans-src">From this product's labour rows and your bench rate. No assumptions about your process.</p>
+          </div>
+
+          <p class="fu-l">Ask about this check</p>
+          <div class="fu-row">
+            <span class="fu">What if I batch soldering?</span>
+            <span class="fu">Is £15/hr enough?</span>
+          </div>
+
+          <p class="prov"><b>Used:</b> your costs, your 40% target, your 11 other products. <b>Assumed:</b> nothing about demand. <b>Can't know:</b> what your buyers will pay.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="savebar">
+      <div class="btn btn-p">Save and activate</div>
+      <div class="btn btn-g">Save draft</div>
+    </div>
+  </div>
+</div>
+
+<div class="notes">
+  <div class="note iris">
+    <p class="note-tag">Still one framed surface</p>
+    <p>The review is an <b>inset inside the pricing block</b>, not a card floating over it — an iris left-rule and a barely-there iris wash. The clay frame stays the screen's only enclosure, so the r3 rule holds even when the assistant speaks.</p>
+  </div>
+  <div class="note iris">
+    <p class="note-tag">Iris earns its place</p>
+    <p>Iris appears on exactly four things: the glint, the section label, the finding numerals, and the follow-up chips. It never touches the price, the profit, or the status chip — those stay clay and status colours. <b>Iris marks who is speaking, never what the answer is.</b></p>
+  </div>
+  <div class="note iris">
+    <p class="note-tag">The assistant reviews, never decides</p>
+    <p>Scenarios are <b>preview-only</b> — they show what a different price would mean, but tapping one never sets it. There is no "apply" anywhere in this card. The price stays the user's decision.</p>
+  </div>
+  <div class="note">
+    <p class="note-tag">Provenance is part of the answer</p>
+    <p><b>Used / Assumed / Can't know</b> closes every review. It states what the assistant actually had, and — more importantly — admits what it cannot know (demand, what buyers will pay). Honesty about limits is what makes the rest trustworthy.</p>
+  </div>
+  <div class="note">
+    <p class="note-tag">Bounded, not a chat</p>
+    <p>Follow-ups are <b>chips, never free text</b>, and they're generated from the findings themselves — finding 1 mentions labour, so "Why so labour-heavy?" exists. Roughly three exchanges deep, then it stops. The assistant cannot introduce new UI.</p>
+  </div>
+  <div class="note">
+    <p class="note-tag">Silent by default</p>
+    <p>None of this exists until the user taps the glint. One protective exception: activating below the calculated price offers a declinable second look. The assistant never opens on its own.</p>
+  </div>
+</div>
+</body></html>
