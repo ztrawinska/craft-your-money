@@ -124,6 +124,19 @@ export const OVERVIEW_SORT_ORDER: readonly SortKey[] = [
   "draft",
 ];
 
+/**
+ * The left-edge urgency stripe on an overview row (design system §2.6). Only
+ * the three coloured profitability states get one — it's a secondary scan aid
+ * that mirrors the chip. No-price and drafts get no stripe.
+ */
+export function stripeTone(
+  input: ProductStatusInput,
+): Exclude<Profitability, "no-price"> | null {
+  if (input.workflow !== "active") return null;
+  if (!input.hasPrice || input.marginPct === null) return null;
+  return profitabilityFromMargin(input.marginPct, input.thresholds);
+}
+
 export function sortKey(input: ProductStatusInput): SortKey {
   if (input.workflow === "draft") return "draft";
   if (!input.hasPrice || input.marginPct === null) return "no-price";

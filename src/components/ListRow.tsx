@@ -1,33 +1,75 @@
 /**
  * ListRow — the workhorse two-line row (design system §2.6).
  *
- *   Primary label (Lora)                         [right slot]
- *   Meta line (the arithmetic, in a quiet voice)
+ *   [stripe]  Primary label                          [right slot]
+ *             Meta line (the quiet second voice)
  *
- * The label is a name, so it's Lora. The meta line carries the sum in plain
- * form ("4g × £0.62/g") so the row shows its working. The right slot is
- * whatever the screen needs there — a <Price> here, a <Chip> on the overview.
+ * Two real uses shape it, so it takes an `emphasis`:
+ * - "line"    — a cost line on Product Detail: label in Plex, no stripe, static.
+ * - "product" — a product on the overview: name in Lora, an urgency stripe, and
+ *               the whole row is a link to the detail screen.
  *
- * The optional left stripe is a status scan-aid used on lists; it's off by
- * default because the detail screen's cost rows carry no urgency.
+ * Muting (draft, archived): we dim the *content* — the name and meta recede —
+ * but never the right slot. Dimming the whole row would make a live action look
+ * disabled (§2.6 anti-pattern). On the overview the slot is a chip, which stays
+ * full-strength so the status reads clearly.
  */
 import type { ReactNode } from "react";
+import Link from "next/link";
+
+/** The urgency-stripe tones — only the three coloured profitability states. */
+type Stripe = "risky" | "caution" | "healthy" | null;
 
 type ListRowProps = {
   label: string;
-  /** Marks a value pulled from the materials library (deterministic, not AI). */
-  library?: boolean;
-  /** The quiet second line — the arithmetic behind the value. */
-  meta?: string;
+  meta?: ReactNode;
   /** Right-hand slot: a price, a chip, a verb-link. */
   value?: ReactNode;
+  /** Marks a value pulled from the materials library (deterministic, not AI). */
+  library?: boolean;
+  emphasis?: "line" | "product";
+  stripe?: Stripe;
+  muted?: boolean;
+  /** When set, the whole row becomes a link (overview rows open the detail). */
+  href?: string;
 };
 
-export function ListRow({ label, library, meta, value }: ListRowProps) {
-  return (
-    <div className="py-3">
-      <div className="flex items-baseline justify-between gap-3">
-        <span className="font-sans text-[15px] text-ink">
+const stripeColor: Record<Exclude<Stripe, null>, string> = {
+  risky: "border-l-status-red", // full — the loudest
+  caution: "border-l-status-amber/55",
+  healthy: "border-l-status-green/38", // quietest — it's fine, just noting
+};
+
+export function ListRow({
+  label,
+  meta,
+  value,
+  library,
+  emphasis = "line",
+  stripe = null,
+  muted = false,
+  href,
+}: ListRowProps) {
+  const isProduct = emphasis === "product";
+
+  const labelClass = isProduct
+    ? `font-serif text-[16px] leading-[1.2] ${
+        muted ? "font-normal text-ink/55" : "font-medium text-ink"
+      }`
+    : "font-sans text-[15px] text-ink";
+
+  const rowClass = [
+    "flex justify-between gap-3",
+    isProduct
+      ? "min-h-[64px] items-center border-l-[3px] py-[13px] pl-[21px] pr-6"
+      : "items-baseline py-3",
+    stripe ? stripeColor[stripe] : isProduct ? "border-l-transparent" : "",
+  ].join(" ");
+
+  const content = (
+    <>
+      <div className="min-w-0">
+        <span className={labelClass}>
           {label}
           {library && (
             <span
@@ -38,13 +80,26 @@ export function ListRow({ label, library, meta, value }: ListRowProps) {
             </span>
           )}
         </span>
-        {value && <span className="flex-shrink-0">{value}</span>}
+        {meta && (
+          <p
+            className={`mt-[3px] font-sans font-light ${
+              isProduct ? "text-[11.5px]" : "text-[12px]"
+            } ${muted ? "text-ink/30" : "text-ink/42"}`}
+          >
+            {meta}
+          </p>
+        )}
       </div>
-      {meta && (
-        <p className="mt-[3px] font-sans text-[12px] font-light text-ink/42">
-          {meta}
-        </p>
-      )}
-    </div>
+      {value && <div className="flex-shrink-0">{value}</div>}
+    </>
   );
+
+  if (href) {
+    return (
+      <Link href={href} className={rowClass}>
+        {content}
+      </Link>
+    );
+  }
+  return <div className={rowClass}>{content}</div>;
 }

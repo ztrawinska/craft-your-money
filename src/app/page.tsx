@@ -5,10 +5,10 @@ export default function Home() {
     <main className="mx-auto flex w-full max-w-[430px] flex-1 flex-col gap-6 px-6 py-16">
       <h1 className="font-serif text-[27px] font-medium">Craft Your Money</h1>
       <Link
-        href="/products/1"
+        href="/products"
         className="w-fit font-sans text-clay-deep underline underline-offset-2"
       >
-        View sample product →
+        View products →
       </Link>
     </main>
   );

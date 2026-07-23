@@ -9,6 +9,7 @@ import {
   profitabilityFromMargin,
   profitTone,
   statusChip,
+  stripeTone,
   sortKey,
   compareByStatus,
   DEFAULT_THRESHOLDS,
@@ -68,6 +69,16 @@ test("profit is coloured only for the three health tones", () => {
   expect(profitTone("caution")).toBe("caution");
   expect(profitTone("risky")).toBe("critical");
   expect(profitTone("no-price")).toBe(null);
+});
+
+test("only the three coloured statuses get an urgency stripe", () => {
+  const active = (marginPct: number) =>
+    stripeTone({ workflow: "active", hasPrice: true, marginPct });
+  expect(active(0.08)).toBe("risky");
+  expect(active(0.22)).toBe("caution");
+  expect(active(0.64)).toBe("healthy");
+  expect(stripeTone({ workflow: "active", hasPrice: false, marginPct: null })).toBe(null);
+  expect(stripeTone({ workflow: "draft", hasPrice: true, marginPct: 0.64 })).toBe(null);
 });
 
 test("overview sorts problems first, drafts last", () => {
