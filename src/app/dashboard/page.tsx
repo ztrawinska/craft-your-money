@@ -19,7 +19,8 @@ import { Chip } from "@/components/Chip";
 import { ListRow } from "@/components/ListRow";
 import { Price } from "@/components/Price";
 import { SectionLabel } from "@/components/SectionLabel";
-import { pricingFor, products, statusInputFor } from "@/lib/products";
+import { pricingFor, statusInputFor } from "@/lib/products";
+import { listProducts } from "@/lib/store";
 import { statusChip } from "@/lib/status";
 
 const HEALTHY_MIN = 0.3; // "below your 30% target"
@@ -27,55 +28,56 @@ const RISKY_MAX = 0.15;
 
 const greeting = { date: "Tuesday, 21 July", text: "Good afternoon, Zuza", initial: "Z" };
 
-// ── everything below is derived from the shared product list ──────────────
-const active = products.filter((p) => p.workflow === "active");
-const activePriced = active.filter((p) => p.finalPrice !== null);
-
-const pricedDone = activePriced.length;
-const activeTotal = active.length;
-const avgProfit =
-  pricedDone > 0
-    ? activePriced.reduce((s, p) => s + (pricingFor(p).profit ?? 0), 0) / pricedDone
-    : 0;
-const belowTarget = activePriced.filter((p) => {
-  const m = pricingFor(p).marginPct;
-  return m !== null && m < HEALTHY_MIN;
-}).length;
-
-const weakest = [...activePriced].sort(
-  (a, b) => (pricingFor(a).marginPct ?? 0) - (pricingFor(b).marginPct ?? 0),
-)[0];
-
-// Attention: active risky first, then active no-price. Drafts never appear.
-const risky = active.filter((p) => {
-  const m = pricingFor(p).marginPct;
-  return m !== null && m < RISKY_MAX;
-});
-const noPrice = active.filter((p) => p.finalPrice === null);
-const attention = [
-  ...risky.map((p) => {
-    const profit = pricingFor(p).profit ?? 0;
-    return {
-      p,
-      stripe: "risky" as const,
-      note:
-        profit < 0
-          ? `losing £${Math.abs(profit).toFixed(2)} / sale`
-          : `only £${profit.toFixed(2)} / sale`,
-      action: "Reprice",
-    };
-  }),
-  ...noPrice.map((p) => ({
-    p,
-    stripe: "neutral" as const,
-    note: "active without one",
-    action: "Set price",
-  })),
-].slice(0, 3);
-
-const resume = products.find((p) => p.workflow === "draft" && p.finalPrice === null);
-
 export default function Dashboard() {
+  // Everything below is derived from the stored product list, at request time.
+  const products = listProducts();
+  const active = products.filter((p) => p.workflow === "active");
+  const activePriced = active.filter((p) => p.finalPrice !== null);
+
+  const pricedDone = activePriced.length;
+  const activeTotal = active.length;
+  const avgProfit =
+    pricedDone > 0
+      ? activePriced.reduce((s, p) => s + (pricingFor(p).profit ?? 0), 0) / pricedDone
+      : 0;
+  const belowTarget = activePriced.filter((p) => {
+    const m = pricingFor(p).marginPct;
+    return m !== null && m < HEALTHY_MIN;
+  }).length;
+
+  const weakest = [...activePriced].sort(
+    (a, b) => (pricingFor(a).marginPct ?? 0) - (pricingFor(b).marginPct ?? 0),
+  )[0];
+
+  // Attention: active risky first, then active no-price. Drafts never appear.
+  const risky = active.filter((p) => {
+    const m = pricingFor(p).marginPct;
+    return m !== null && m < RISKY_MAX;
+  });
+  const noPrice = active.filter((p) => p.finalPrice === null);
+  const attention = [
+    ...risky.map((p) => {
+      const profit = pricingFor(p).profit ?? 0;
+      return {
+        p,
+        stripe: "risky" as const,
+        note:
+          profit < 0
+            ? `losing £${Math.abs(profit).toFixed(2)} / sale`
+            : `only £${profit.toFixed(2)} / sale`,
+        action: "Reprice",
+      };
+    }),
+    ...noPrice.map((p) => ({
+      p,
+      stripe: "neutral" as const,
+      note: "active without one",
+      action: "Set price",
+    })),
+  ].slice(0, 3);
+
+  const resume = products.find((p) => p.workflow === "draft" && p.finalPrice === null);
+
   return (
     <div className="flex min-h-screen flex-col">
       <main className="mx-auto w-full max-w-[430px] flex-1">

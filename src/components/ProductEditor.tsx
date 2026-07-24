@@ -11,9 +11,10 @@
  */
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { ArrowLeft, ChevronDown, Ellipsis, Plus } from "lucide-react";
 import Link from "next/link";
+import { saveProductAction } from "@/app/products/actions";
 import { Button } from "@/components/Button";
 import { ListRow } from "@/components/ListRow";
 import { Price } from "@/components/Price";
@@ -407,6 +408,23 @@ export function ProductEditor({ product }: { product: Product }) {
   const addingMat = editMat?.index === "new";
   const addingLab = editLab?.index === "new";
 
+  // ── saving (persists through a Server Action, then returns to the overview) ─
+  const [isSaving, startSaving] = useTransition();
+  const parsedFinal = num(priceText);
+  const finalPrice = priceText.trim() !== "" && Number.isFinite(parsedFinal) ? parsedFinal : null;
+
+  const save = (workflow: "draft" | "active") =>
+    startSaving(async () => {
+      await saveProductAction({
+        ...product,
+        workflow,
+        finalPrice,
+        materials,
+        labour,
+        otherCosts: product.otherCosts,
+      });
+    });
+
   return (
     <main className="mx-auto w-full max-w-[430px] pb-24">
       {/* ── header: back · workflow stamp · more ── */}
@@ -609,9 +627,13 @@ export function ProductEditor({ product }: { product: Product }) {
           Unsaved changes
         </p>
         <div className="mb-2">
-          <Button variant="primary">Save and activate</Button>
+          <Button variant="primary" onClick={() => save("active")} disabled={isSaving}>
+            {isSaving ? "Saving…" : "Save and activate"}
+          </Button>
         </div>
-        <Button variant="ghost">Save draft</Button>
+        <Button variant="ghost" onClick={() => save("draft")} disabled={isSaving}>
+          Save draft
+        </Button>
       </div>
     </main>
   );

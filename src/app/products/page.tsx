@@ -12,7 +12,8 @@ import { Chip } from "@/components/Chip";
 import { Dropdown } from "@/components/Dropdown";
 import { ListRow } from "@/components/ListRow";
 import { TintedBand } from "@/components/TintedBand";
-import { products, statusInputFor, type Product } from "@/lib/products";
+import { statusInputFor, type Product } from "@/lib/products";
+import { listProducts } from "@/lib/store";
 import { compareByStatus, statusChip, stripeTone } from "@/lib/status";
 
 function metaPrice(p: Product): string {
@@ -21,6 +22,7 @@ function metaPrice(p: Product): string {
 }
 
 export default function ProductsOverview() {
+  const products = listProducts();
   const sorted = [...products].sort((a, b) =>
     compareByStatus(statusInputFor(a), statusInputFor(b)),
   );

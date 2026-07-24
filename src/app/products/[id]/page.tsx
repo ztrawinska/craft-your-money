@@ -5,7 +5,7 @@
  */
 import { notFound } from "next/navigation";
 import { ProductEditor } from "@/components/ProductEditor";
-import { getProduct } from "@/lib/products";
+import { getProduct } from "@/lib/store";
 
 export default async function ProductDetail({
   params,

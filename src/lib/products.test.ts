@@ -3,7 +3,10 @@
  * quantity×unit-cost and minutes×rate, the derived numbers must be unchanged.
  */
 import { test, expect } from "vitest";
-import { getProduct, labourLineCost, materialLineCost, pricingFor } from "./products";
+import { labourLineCost, materialLineCost, pricingFor } from "./products";
+import { seedProducts } from "./seed";
+
+const seed = (id: string) => seedProducts.find((p) => p.id === id)!;
 
 test("line-cost helpers price a row correctly", () => {
   expect(materialLineCost({ name: "x", quantity: 4, unit: "g", unitCost: 0.62 })).toBeCloseTo(2.48, 2);
@@ -11,7 +14,7 @@ test("line-cost helpers price a row correctly", () => {
 });
 
 test("the flagship still reduces to its known figures", () => {
-  const p = pricingFor(getProduct("hammered-band")!);
+  const p = pricingFor(seed("hammered-band"));
   expect(p.directCost).toBeCloseTo(14.06, 2);
   expect(p.fullCost).toBeCloseTo(16.8, 2);
   expect(p.profit).toBeCloseTo(18.2, 2);
@@ -19,5 +22,5 @@ test("the flagship still reduces to its known figures", () => {
 });
 
 test("stacking set is still a real loss", () => {
-  expect(pricingFor(getProduct("stacking-set")!).profit! < 0).toBe(true);
+  expect(pricingFor(seed("stacking-set")).profit! < 0).toBe(true);
 });
