@@ -36,6 +36,8 @@ type ButtonProps = {
   iconTrailing?: ReactNode;
   /** When set, the button navigates: renders as a link, not a <button>. */
   href?: string;
+  onClick?: () => void;
+  disabled?: boolean;
   className?: string;
 };
 
@@ -45,6 +47,8 @@ export function Button({
   iconLeading,
   iconTrailing,
   href,
+  onClick,
+  disabled,
   className = "",
 }: ButtonProps) {
   const cls = `font-sans ${variantClass[variant]} ${className}`;
@@ -58,13 +62,13 @@ export function Button({
 
   if (href) {
     return (
-      <Link href={href} className={cls}>
+      <Link href={href} className={cls} onClick={onClick}>
         {inner}
       </Link>
     );
   }
   return (
-    <button type="button" className={cls}>
+    <button type="button" className={cls} onClick={onClick} disabled={disabled}>
       {inner}
     </button>
   );

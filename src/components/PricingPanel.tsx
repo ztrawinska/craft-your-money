@@ -1,20 +1,17 @@
 /**
  * PricingPanel — the interactive pricing block (PRD §6, the decision).
  *
- * This is the app's first Client Component: it holds the one piece of state
- * that drives everything downstream — the user's price — and recomputes profit,
- * margin, status and the warning live as they type.
+ * Controlled: the parent (ProductEditor) owns the price text and the sync
+ * state, because the price has to react to cost edits too (the calculated
+ * suggestion moves when materials change). This component just renders the
+ * block from the current price and reports edits back up.
  *
- * The three-state sync (§6):
- *   1. A new product pre-fills nothing; a stored price loads decoupled.
- *   2. The first keystroke decouples the price from the suggestion, for good.
- *   3. "Reset to calculated" is one-time and does NOT re-enable auto-sync.
- * (Auto-sync's live follow only bites once cost entry exists — the next slice —
- * but the decoupling is modelled correctly now.)
+ * It recomputes profit, margin, status and the warning on every render from
+ * the (live) direct cost and the current price — all via the tested pure
+ * functions in pricing.ts / status.ts.
  */
 "use client";
 
-import { useState } from "react";
 import { AssistantSlot } from "@/components/AssistantSlot";
 import { Chip } from "@/components/Chip";
 import { FramedSurface } from "@/components/FramedSurface";
@@ -28,7 +25,10 @@ type PricingPanelProps = {
   targetMarginPct: number;
   vatRatePct: number | null;
   businessCostShare: number | null;
-  initialFinalPrice: number | null;
+  priceText: string;
+  onPriceChange: (value: string) => void;
+  onReset: () => void;
+  onUseSuggested: () => void;
 };
 
 const resetLinkClass =
@@ -40,19 +40,16 @@ export function PricingPanel({
   targetMarginPct,
   vatRatePct,
   businessCostShare,
-  initialFinalPrice,
+  priceText,
+  onPriceChange,
+  onReset,
+  onUseSuggested,
 }: PricingPanelProps) {
   const options = { targetMarginPct, vatRatePct, businessCostShare };
 
   // The calculated suggestion depends only on cost + target, not the price.
   const suggestion = computePricingFromDirect(directCost, { finalPrice: null, ...options });
   const calculatedPrice = suggestion.calculatedPrice;
-
-  const [priceText, setPriceText] = useState(() =>
-    initialFinalPrice != null ? initialFinalPrice.toFixed(2) : "",
-  );
-  // A stored price loads decoupled; a fresh one starts synced to the suggestion.
-  const [, setDecoupled] = useState(initialFinalPrice != null);
 
   const parsed = priceText.trim() === "" ? NaN : Number(priceText.replace(",", "."));
   const finalPrice = Number.isFinite(parsed) ? parsed : null;
@@ -92,22 +89,11 @@ export function PricingPanel({
       <div className="mb-2 flex items-baseline justify-between text-[9.5px] font-semibold uppercase tracking-[0.18em] text-ink/55">
         <span>Your price</span>
         {diverged ? (
-          <button
-            type="button"
-            onClick={() => calculatedPrice != null && setPriceText(calculatedPrice.toFixed(2))}
-            className={resetLinkClass}
-          >
+          <button type="button" onClick={onReset} className={resetLinkClass}>
             Reset to £{calculatedPrice!.toFixed(2)}
           </button>
         ) : finalPrice == null && calculatedPrice != null ? (
-          <button
-            type="button"
-            onClick={() => {
-              setPriceText(calculatedPrice.toFixed(2));
-              setDecoupled(false); // using the suggestion keeps it synced
-            }}
-            className={resetLinkClass}
-          >
+          <button type="button" onClick={onUseSuggested} className={resetLinkClass}>
             Use £{calculatedPrice.toFixed(2)}
           </button>
         ) : null}
@@ -120,10 +106,7 @@ export function PricingPanel({
           aria-label="Your price"
           placeholder="0.00"
           value={priceText}
-          onChange={(e) => {
-            setPriceText(e.target.value);
-            setDecoupled(true); // first manual edit decouples, permanently
-          }}
+          onChange={(e) => onPriceChange(e.target.value)}
           className="bg-transparent font-serif text-[44px] font-medium leading-none tracking-[-0.02em] tabular-nums text-ink caret-clay-deep outline-none placeholder:text-ink/25"
           style={{ width: `${Math.max(priceText.length, 4) + 0.5}ch` }}
         />

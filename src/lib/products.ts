@@ -3,24 +3,29 @@
  * here, so a product's identity, price and status are the same everywhere —
  * no more each screen inventing its own numbers.
  *
- * Only inputs are stored (materials, labour, price, target, VAT, fixed-cost
- * share). Everything derived — direct cost, the calculated suggestion, profit,
- * margin — is computed by `computePricing` at read time (PRD §14: never store
- * calculated values). `pricingFor` and `statusInputFor` are the two lenses the
- * screens use.
+ * Only inputs are stored (materials with quantity/unit/unit-cost, labour with
+ * minutes/rate, price, target, VAT, fixed-cost share). Everything derived —
+ * each line's cost, direct cost, the calculated suggestion, profit, margin — is
+ * computed at read time (PRD §14: never store calculated values). The line-cost
+ * helpers below are the single definition of "what a row costs".
  */
 import { computePricing, type Pricing } from "@/lib/pricing";
 import type { ProductStatusInput } from "@/lib/status";
 
 export type ProductType = "Ring" | "Necklace" | "Earrings" | "Bracelet" | "Other";
 
+// A material is priced as quantity × unit cost (PRD §5). The unit may be a
+// measure ("g", "cm") or empty for a plain count ("2 × £6.50").
 export type MaterialLine = {
   name: string;
-  detail: string; // the quiet arithmetic: "4g × £0.62/g"
-  cost: number;
+  quantity: number;
+  unit: string;
+  unitCost: number;
   fromLibrary?: boolean;
 };
-export type LabourLine = { step: string; detail: string; cost: number };
+// Labour is minutes at an hourly rate.
+export type LabourLine = { step: string; minutes: number; rate: number };
+// Other direct costs are flat per-unit amounts.
 export type OtherLine = { label: string; cost: number };
 
 export type Product = {
@@ -37,6 +42,26 @@ export type Product = {
   otherCosts: OtherLine[];
 };
 
+// ── line costs — the one definition of what a row costs ───────────────────
+
+export const materialLineCost = (m: MaterialLine): number => m.quantity * m.unitCost;
+export const labourLineCost = (l: LabourLine): number => (l.minutes / 60) * l.rate;
+
+/** The quiet second line under a material name: "4g × £0.62/g", "2 × £6.50". */
+export function materialDetail(m: MaterialLine): string {
+  const unit = m.unit.trim();
+  if (m.quantity === 1) {
+    return unit ? `£${m.unitCost.toFixed(2)} / ${unit}` : `£${m.unitCost.toFixed(2)}`;
+  }
+  return unit
+    ? `${m.quantity}${unit} × £${m.unitCost.toFixed(2)}/${unit}`
+    : `${m.quantity} × £${m.unitCost.toFixed(2)}`;
+}
+
+export function labourDetail(l: LabourLine): string {
+  return `${l.minutes} min · £${l.rate}/hr`;
+}
+
 export const products: Product[] = [
   {
     id: "stacking-set",
@@ -48,13 +73,13 @@ export const products: Product[] = [
     vatRatePct: 20,
     businessCostShare: null,
     materials: [
-      { name: "Sterling silver sheet", detail: "14g × £0.62/g", cost: 8.68, fromLibrary: true },
-      { name: "Solder wire", detail: "0.5g × £1.10/g", cost: 0.55, fromLibrary: true },
+      { name: "Sterling silver sheet", quantity: 14, unit: "g", unitCost: 0.62, fromLibrary: true },
+      { name: "Solder wire", quantity: 0.5, unit: "g", unitCost: 1.1, fromLibrary: true },
     ],
     labour: [
-      { step: "Sawing & shaping", detail: "50 min · £15/hr", cost: 12.5 },
-      { step: "Soldering ×3 bands", detail: "35 min · £15/hr", cost: 8.75 },
-      { step: "Polishing", detail: "15 min · £15/hr", cost: 3.75 },
+      { step: "Sawing & shaping", minutes: 50, rate: 15 },
+      { step: "Soldering ×3 bands", minutes: 35, rate: 15 },
+      { step: "Polishing", minutes: 15, rate: 15 },
     ],
     otherCosts: [],
   },
@@ -68,12 +93,12 @@ export const products: Product[] = [
     vatRatePct: 20,
     businessCostShare: null,
     materials: [
-      { name: "Freshwater pearls", detail: "2 × £6.50", cost: 13.0, fromLibrary: true },
-      { name: "Silver ear wires", detail: "pair", cost: 2.75, fromLibrary: true },
+      { name: "Freshwater pearls", quantity: 2, unit: "", unitCost: 6.5, fromLibrary: true },
+      { name: "Silver ear wires", quantity: 1, unit: "pair", unitCost: 2.75, fromLibrary: true },
     ],
     labour: [
-      { step: "Wire wrapping", detail: "40 min · £15/hr", cost: 10.0 },
-      { step: "Assembly & finishing", detail: "40 min · £15/hr", cost: 10.0 },
+      { step: "Wire wrapping", minutes: 40, rate: 15 },
+      { step: "Assembly & finishing", minutes: 40, rate: 15 },
     ],
     otherCosts: [],
   },
@@ -87,12 +112,12 @@ export const products: Product[] = [
     vatRatePct: 20,
     businessCostShare: null,
     materials: [
-      { name: "Silver wire", detail: "10g × £0.72/g", cost: 7.2, fromLibrary: true },
-      { name: "Chain (45cm)", detail: "45cm × £0.18/cm", cost: 8.1 },
+      { name: "Silver wire", quantity: 10, unit: "g", unitCost: 0.72, fromLibrary: true },
+      { name: "Chain", quantity: 45, unit: "cm", unitCost: 0.18 },
     ],
     labour: [
-      { step: "Twisting & forming", detail: "30 min · £15/hr", cost: 7.5 },
-      { step: "Finishing", detail: "11 min · £15/hr", cost: 2.75 },
+      { step: "Twisting & forming", minutes: 30, rate: 15 },
+      { step: "Finishing", minutes: 11, rate: 15 },
     ],
     otherCosts: [],
   },
@@ -105,10 +130,10 @@ export const products: Product[] = [
     targetMarginPct: 40,
     vatRatePct: 20,
     businessCostShare: null,
-    materials: [{ name: "Copper sheet", detail: "20g × £0.09/g", cost: 1.8 }],
+    materials: [{ name: "Copper sheet", quantity: 20, unit: "g", unitCost: 0.09 }],
     labour: [
-      { step: "Forging", detail: "35 min · £15/hr", cost: 8.75 },
-      { step: "Finishing", detail: "15 min · £15/hr", cost: 3.75 },
+      { step: "Forging", minutes: 35, rate: 15 },
+      { step: "Finishing", minutes: 15, rate: 15 },
     ],
     otherCosts: [],
   },
@@ -124,13 +149,13 @@ export const products: Product[] = [
     vatRatePct: 20,
     businessCostShare: 2.74,
     materials: [
-      { name: "Sterling silver sheet", detail: "4g × £0.62/g", cost: 2.48, fromLibrary: true },
-      { name: "Solder wire", detail: "0.3g × £1.10/g", cost: 0.33, fromLibrary: true },
+      { name: "Sterling silver sheet", quantity: 4, unit: "g", unitCost: 0.62, fromLibrary: true },
+      { name: "Solder wire", quantity: 0.3, unit: "g", unitCost: 1.1, fromLibrary: true },
     ],
     labour: [
-      { step: "Sawing & shaping", detail: "20 min · £15/hr", cost: 5.0 },
-      { step: "Soldering", detail: "15 min · £15/hr", cost: 3.75 },
-      { step: "Polishing", detail: "10 min · £15/hr", cost: 2.5 },
+      { step: "Sawing & shaping", minutes: 20, rate: 15 },
+      { step: "Soldering", minutes: 15, rate: 15 },
+      { step: "Polishing", minutes: 10, rate: 15 },
     ],
     otherCosts: [],
   },
@@ -143,7 +168,7 @@ export const products: Product[] = [
     targetMarginPct: 40,
     vatRatePct: 20,
     businessCostShare: null,
-    materials: [{ name: "Silver wire", detail: "6g × £0.72/g", cost: 4.32, fromLibrary: true }],
+    materials: [{ name: "Silver wire", quantity: 6, unit: "g", unitCost: 0.72, fromLibrary: true }],
     labour: [],
     otherCosts: [],
   },
@@ -153,8 +178,8 @@ export const products: Product[] = [
 
 export function pricingFor(p: Product): Pricing {
   return computePricing({
-    materials: p.materials.map((m) => m.cost),
-    labour: p.labour.map((l) => l.cost),
+    materials: p.materials.map(materialLineCost),
+    labour: p.labour.map(labourLineCost),
     other: p.otherCosts.map((o) => o.cost),
     finalPrice: p.finalPrice,
     targetMarginPct: p.targetMarginPct,
