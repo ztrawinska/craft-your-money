@@ -22,15 +22,23 @@ const toneClasses: Record<ChipTone, string> = {
   inactive: "border border-ink/14 text-ink/42",
 };
 
+// Default is the standalone chip. `sm` is only for a chip sitting inline in
+// dense text — e.g. inside a dashboard attention row's meta line.
+const sizeClasses = {
+  default: "px-3 py-1 text-[12px]",
+  sm: "px-2 py-0.5 text-[10.5px]",
+} as const;
+
 type ChipProps = {
   tone?: ChipTone;
+  size?: keyof typeof sizeClasses;
   children: React.ReactNode;
 };
 
-export function Chip({ tone = "neutral", children }: ChipProps) {
+export function Chip({ tone = "neutral", size = "default", children }: ChipProps) {
   return (
     <span
-      className={`inline-flex items-center rounded-full px-3 py-1 text-[12px] font-semibold font-sans tabular-nums ${toneClasses[tone]}`}
+      className={`inline-flex items-center rounded-full font-semibold font-sans tabular-nums ${sizeClasses[size]} ${toneClasses[tone]}`}
     >
       {children}
     </span>

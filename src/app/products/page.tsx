@@ -56,7 +56,7 @@ export default function ProductsOverview() {
 
   return (
     <>
-      <main className="mx-auto w-full max-w-[430px] pb-[84px]">
+      <main className="mx-auto w-full max-w-[430px] pb-[104px]">
         {/* header */}
         <div className="flex items-baseline justify-between px-6 pb-3.5 pt-[22px]">
           <h1 className="font-serif text-[26px] font-medium tracking-[-0.01em]">

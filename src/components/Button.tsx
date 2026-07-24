@@ -10,8 +10,12 @@
  * There is deliberately no fourth level. `link` carries no fixed size or
  * weight so it can sit inside text at whatever size its context needs; the
  * caller passes those via className.
+ *
+ * With an `href` a Button renders as a link (a verb-link that navigates, like
+ * "Reprice ›") instead of a <button> — same look, right semantics.
  */
 import type { ReactNode } from "react";
+import Link from "next/link";
 
 type ButtonVariant = "primary" | "ghost" | "link";
 
@@ -20,7 +24,7 @@ const variantClass: Record<ButtonVariant, string> = {
     "block w-full text-center rounded-[7px] px-4 py-[14px] text-[14.5px] font-semibold bg-clay-deep text-[#FDFBF9] shadow-[0_1px_2px_rgba(138,90,82,0.3)]",
   ghost:
     "block w-full text-center rounded-[7px] px-4 py-[14px] text-[14.5px] font-medium border border-ink/14 text-ink/55",
-  link: "inline-flex items-baseline gap-[7px] text-clay-deep",
+  link: "inline-flex items-center gap-[7px] text-clay-deep",
 };
 
 type ButtonProps = {
@@ -30,6 +34,8 @@ type ButtonProps = {
   iconLeading?: ReactNode;
   /** Trailing icon — a chevron promises navigation ("Reprice ›"). */
   iconTrailing?: ReactNode;
+  /** When set, the button navigates: renders as a link, not a <button>. */
+  href?: string;
   className?: string;
 };
 
@@ -38,16 +44,28 @@ export function Button({
   children,
   iconLeading,
   iconTrailing,
+  href,
   className = "",
 }: ButtonProps) {
-  return (
-    <button
-      type="button"
-      className={`font-sans ${variantClass[variant]} ${className}`}
-    >
+  const cls = `font-sans ${variantClass[variant]} ${className}`;
+  const inner = (
+    <>
       {iconLeading && <span>{iconLeading}</span>}
       {children}
       {iconTrailing && <span>{iconTrailing}</span>}
+    </>
+  );
+
+  if (href) {
+    return (
+      <Link href={href} className={cls}>
+        {inner}
+      </Link>
+    );
+  }
+  return (
+    <button type="button" className={cls}>
+      {inner}
     </button>
   );
 }

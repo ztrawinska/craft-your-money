@@ -17,8 +17,13 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 
-/** The urgency-stripe tones — only the three coloured profitability states. */
-type Stripe = "risky" | "caution" | "healthy" | null;
+/**
+ * The left-stripe tones. The three coloured ones are the overview's urgency
+ * scale; `neutral` (ink-30) is the dashboard attention list's mark for a
+ * No-price row — there every row is already an attention item, so "no stripe"
+ * would read as "nothing here".
+ */
+type Stripe = "risky" | "caution" | "healthy" | "neutral" | null;
 
 type ListRowProps = {
   label: string;
@@ -38,6 +43,7 @@ const stripeColor: Record<Exclude<Stripe, null>, string> = {
   risky: "border-l-status-red", // full — the loudest
   caution: "border-l-status-amber/55",
   healthy: "border-l-status-green/38", // quietest — it's fine, just noting
+  neutral: "border-l-ink/30", // a missing input, not a health judgement
 };
 
 export function ListRow({

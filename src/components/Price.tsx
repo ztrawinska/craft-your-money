@@ -55,34 +55,41 @@ type PriceProps = {
 };
 
 export function Price({ value, variant = "inline", tone }: PriceProps): ReactNode {
-  // Big prices split so the eye lands on the pounds: whole number large,
-  // decimals and currency smaller and lifted to the top.
-  if (variant === "primary" || variant === "hero") {
+  // The final price splits so the eye lands on the pounds: whole number large,
+  // decimals and currency smaller and lifted, over the clay underline.
+  if (variant === "primary") {
     const [whole, dec] = value.toFixed(2).split(".");
-    const isHero = variant === "hero";
     return (
       <span
-        className={`${base} inline-flex items-baseline ${
-          isHero ? "" : "border-b-2 border-clay pb-[5px]"
-        }`}
+        className={`${base} inline-flex items-baseline border-b-2 border-clay pb-[5px]`}
       >
-        <span
-          className={`mr-[2px] -translate-y-[15px] text-ink/42 ${
-            isHero ? "text-[29px]" : "text-[22px]"
-          }`}
-        >
+        <span className="mr-[2px] -translate-y-[15px] text-[22px] text-ink/42">
           {CURRENCY}
         </span>
-        <span
-          className={`font-medium tracking-[-0.025em] ${
-            isHero ? "text-[46px] leading-none" : "text-[56px] leading-[0.86]"
-          }`}
-        >
+        <span className="text-[56px] font-medium leading-[0.86] tracking-[-0.025em]">
           {whole}
         </span>
         <span className="ml-[2px] -translate-y-[15px] text-[25px] text-ink/70">
           .{dec}
         </span>
+      </span>
+    );
+  }
+
+  // The dashboard hero is a single calm figure — currency smaller, but the
+  // number whole (no decimal split). Fully monochrome; it needs no anchor.
+  if (variant === "hero") {
+    return (
+      <span
+        className={`${base} text-[46px] font-medium leading-[0.96] tracking-[-0.02em] text-ink`}
+      >
+        <span
+          className="text-[29px] text-ink/42"
+          style={{ verticalAlign: "1px" }}
+        >
+          {CURRENCY}
+        </span>
+        {value.toFixed(2)}
       </span>
     );
   }

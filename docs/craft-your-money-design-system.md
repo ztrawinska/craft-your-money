@@ -174,7 +174,9 @@ filled: it *is* live, it's just missing an input. `Draft` and `Archived` take
 we say `caution`, never `amber`. `inactive` names the *meaning* (the product is
 outside the live range); the outline is merely how that meaning looks today.
 
-**Anatomy:** `rounded-full`, `px-3 py-1`, 12px Plex 600, tabular numerals.
+**Anatomy:** `rounded-full`, `px-3 py-1`, 12px Plex 600, tabular numerals. A
+`sm` size (10.5px, `px-2 py-0.5`) exists only for a chip sitting inline in dense
+text — e.g. the status chip inside a dashboard attention row's meta line.
 
 **Rules**
 - Chips merge label + margin into one unit: `Healthy · 64%`, never a badge next to a coloured number.
@@ -269,7 +271,7 @@ The workhorse. Two lines, optional left stripe, optional right slot.
           Meta line (Plex 11.5px ink-55)
 ```
 
-- **Left stripe:** 3px, status-coloured, urgency-scaled (red full, amber 55%, green 38%, none for No price / Draft). A secondary scan aid — the chip is primary.
+- **Left stripe:** 3px, status-coloured, urgency-scaled (red full, amber 55%, green 38%, none for No price / Draft). A secondary scan aid — the chip is primary. *Exception:* on the dashboard's curated attention list — where every row already needs action — a No-price row takes a neutral `ink-30` stripe rather than none, since "no stripe" would there read as "nothing here".
 - **Right slot:** a chip (overview) or a verb-link (dashboard attention).
 - **Meta line** carries the arithmetic in the quiet voice: `4g × £0.62/g`, `20 min · £15/hr`, `Ring · £42.00`.
 - Height 56–64px. Whole row is tappable; no hover-only affordances.

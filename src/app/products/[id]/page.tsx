@@ -9,6 +9,7 @@
  * summary → the ONE framed surface (pricing) → market benchmark → save bar.
  * No bottom nav on this screen.
  */
+import { AssistantSlot } from "@/components/AssistantSlot";
 import { Button } from "@/components/Button";
 import { Chip } from "@/components/Chip";
 import { FramedSurface } from "@/components/FramedSurface";
@@ -188,12 +189,9 @@ export default function ProductDetail() {
 
         {/* Assistant slot (design system §2.9) — the only place iris appears.
             Static placeholder for now; behaviour comes later. */}
-        <div className="mt-5 flex items-center justify-center gap-[7px] rounded-[6px] border border-iris/30 bg-iris/[0.055] px-[14px] py-3 text-[13px] font-medium text-iris-deep">
-          <svg viewBox="0 0 24 24" className="h-[14px] w-[14px] fill-iris">
-            <path d="M12 3 Q13.6 9.4 21 12 Q13.6 14.6 12 21 Q10.4 14.6 3 12 Q10.4 9.4 12 3 Z" />
-          </svg>
+        <AssistantSlot centered className="mt-5">
           Check this price
-        </div>
+        </AssistantSlot>
       </FramedSurface>
 
       {/* ── market benchmark: collapsed by default ── */}
