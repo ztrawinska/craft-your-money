@@ -28,6 +28,7 @@ import {
   materialLineCost,
   type LabourLine,
   type MaterialLine,
+  type OtherLine,
   type Product,
 } from "@/lib/products";
 
@@ -41,10 +42,12 @@ const fieldInput =
 
 type MatDraft = { name: string; quantity: string; unit: string; unitCost: string };
 type LabDraft = { step: string; minutes: string; rate: string };
+type OtherDraft = { label: string; amount: string };
 type EditState<D> = { index: number | "new"; draft: D; confirmingDelete: boolean };
 
 const BLANK_MAT: MatDraft = { name: "", quantity: "", unit: "", unitCost: "" };
 const BLANK_LAB: LabDraft = { step: "", minutes: "", rate: String(BENCH_RATE) };
+const BLANK_OTHER: OtherDraft = { label: "", amount: "" };
 
 const draftFromMat = (m: MaterialLine): MatDraft => ({
   name: m.name,
@@ -56,6 +59,10 @@ const draftFromLab = (l: LabourLine): LabDraft => ({
   step: l.step,
   minutes: String(l.minutes),
   rate: String(l.rate),
+});
+const draftFromOther = (o: OtherLine): OtherDraft => ({
+  label: o.label,
+  amount: o.cost.toFixed(2),
 });
 
 const num = (s: string) => Number(s.replace(",", "."));
@@ -275,13 +282,47 @@ function LabourFields({
   );
 }
 
+function OtherFields({
+  draft,
+  onPatch,
+  footer,
+}: {
+  draft: OtherDraft;
+  onPatch: (p: Partial<OtherDraft>) => void;
+  footer: React.ReactNode;
+}) {
+  return (
+    <EditShell>
+      <label className="block">
+        <FieldLabel>Cost</FieldLabel>
+        <input
+          autoFocus
+          value={draft.label}
+          onChange={(e) => onPatch({ label: e.target.value })}
+          placeholder="e.g. Gift box, hallmarking"
+          className={`${fieldInput} font-sans`}
+        />
+      </label>
+      <div className="mt-3">
+        <label className="block w-[120px]">
+          <FieldLabel>Amount</FieldLabel>
+          <MoneyInput value={draft.amount} onChange={(v) => onPatch({ amount: v })} />
+        </label>
+      </div>
+      {footer}
+    </EditShell>
+  );
+}
+
 // ── the editor ────────────────────────────────────────────────────────────
 
 export function ProductEditor({ product }: { product: Product }) {
   const [materials, setMaterials] = useState<MaterialLine[]>(product.materials);
   const [labour, setLabour] = useState<LabourLine[]>(product.labour);
+  const [otherCosts, setOtherCosts] = useState<OtherLine[]>(product.otherCosts);
   const [editMat, setEditMat] = useState<EditState<MatDraft> | null>(null);
   const [editLab, setEditLab] = useState<EditState<LabDraft> | null>(null);
+  const [editOther, setEditOther] = useState<EditState<OtherDraft> | null>(null);
 
   const options = {
     targetMarginPct: product.targetMarginPct,
@@ -289,7 +330,7 @@ export function ProductEditor({ product }: { product: Product }) {
     businessCostShare: product.businessCostShare,
   };
 
-  const otherTotal = product.otherCosts.reduce((s, o) => s + o.cost, 0);
+  const otherTotal = otherCosts.reduce((s, o) => s + o.cost, 0);
   const materialsTotal = materials.reduce((s, m) => s + materialLineCost(m), 0);
   const labourTotal = labour.reduce((s, l) => s + labourLineCost(l), 0);
   const directCost = materialsTotal + labourTotal + otherTotal;
@@ -324,13 +365,27 @@ export function ProductEditor({ product }: { product: Product }) {
   const lLine = Number.isFinite(lMin) && Number.isFinite(lRate) ? (lMin / 60) * lRate : null;
   const lValid = !!ld && ld.step.trim() !== "" && lMin > 0 && lRate > 0;
 
+  // ── other-cost draft parse + validation (a flat amount) ──
+  const od = editOther?.draft;
+  const oAmount = od ? num(od.amount) : NaN;
+  const oLine = Number.isFinite(oAmount) ? oAmount : null;
+  const oValid = !!od && od.label.trim() !== "" && oAmount > 0;
+
+  // Only one row across all three sections is edited at a time.
   const openMat = (index: number | "new", draft: MatDraft) => {
     setEditLab(null);
+    setEditOther(null);
     setEditMat({ index, draft, confirmingDelete: false });
   };
   const openLab = (index: number | "new", draft: LabDraft) => {
     setEditMat(null);
+    setEditOther(null);
     setEditLab({ index, draft, confirmingDelete: false });
+  };
+  const openOther = (index: number | "new", draft: OtherDraft) => {
+    setEditMat(null);
+    setEditLab(null);
+    setEditOther({ index, draft, confirmingDelete: false });
   };
 
   function saveMat() {
@@ -364,11 +419,27 @@ export function ProductEditor({ product }: { product: Product }) {
     }
     setEditMat(null);
   }
+  function saveOther() {
+    if (!editOther || !oValid || !od) return;
+    const next: OtherLine = { label: od.label.trim(), cost: oAmount };
+    setOtherCosts((prev) =>
+      editOther.index === "new"
+        ? [...prev, next]
+        : prev.map((o, i) => (i === editOther.index ? { ...o, ...next } : o)),
+    );
+    setEditOther(null);
+  }
   function deleteLab() {
     if (editLab && editLab.index !== "new") {
       setLabour((prev) => prev.filter((_, i) => i !== editLab.index));
     }
     setEditLab(null);
+  }
+  function deleteOther() {
+    if (editOther && editOther.index !== "new") {
+      setOtherCosts((prev) => prev.filter((_, i) => i !== editOther.index));
+    }
+    setEditOther(null);
   }
 
   const matFooter = (isNew: boolean) => (
@@ -400,13 +471,31 @@ export function ProductEditor({ product }: { product: Product }) {
     />
   );
 
+  const otherFooter = (isNew: boolean) => (
+    <FormFooter
+      lineCost={oLine}
+      valid={oValid}
+      isNew={isNew}
+      confirmingDelete={!!editOther?.confirmingDelete}
+      deleteCopy="Remove this cost? It's only taken off this product."
+      onSave={saveOther}
+      onCancel={() => setEditOther(null)}
+      onAskDelete={() => setEditOther((e) => (e ? { ...e, confirmingDelete: true } : e))}
+      onConfirmDelete={deleteOther}
+      onCancelDelete={() => setEditOther((e) => (e ? { ...e, confirmingDelete: false } : e))}
+    />
+  );
+
   const patchMat = (p: Partial<MatDraft>) =>
     setEditMat((e) => (e ? { ...e, draft: { ...e.draft, ...p } } : e));
   const patchLab = (p: Partial<LabDraft>) =>
     setEditLab((e) => (e ? { ...e, draft: { ...e.draft, ...p } } : e));
+  const patchOther = (p: Partial<OtherDraft>) =>
+    setEditOther((e) => (e ? { ...e, draft: { ...e.draft, ...p } } : e));
 
   const addingMat = editMat?.index === "new";
   const addingLab = editLab?.index === "new";
+  const addingOther = editOther?.index === "new";
 
   // ── saving (persists through a Server Action, then returns to the overview) ─
   const [isSaving, startSaving] = useTransition();
@@ -421,7 +510,7 @@ export function ProductEditor({ product }: { product: Product }) {
         finalPrice,
         materials,
         labour,
-        otherCosts: product.otherCosts,
+        otherCosts,
       });
     });
 
@@ -548,16 +637,49 @@ export function ProductEditor({ product }: { product: Product }) {
         </section>
 
         {/* other costs — read-only for now */}
-        {product.otherCosts.length > 0 && (
-          <section className="border-t border-ink/7 pb-1.5 pt-[22px]">
-            <SectionLabel total={<Price value={otherTotal} variant="sectionTotal" />}>
-              Other costs
-            </SectionLabel>
-            {product.otherCosts.map((o) => (
-              <ListRow key={o.label} label={o.label} value={<Price value={o.cost} variant="inline" />} />
-            ))}
-          </section>
-        )}
+        {/* other costs — editable */}
+        <section className="border-t border-ink/7 pb-1.5 pt-[22px]">
+          <SectionLabel
+            total={otherCosts.length > 0 ? <Price value={otherTotal} variant="sectionTotal" /> : undefined}
+          >
+            Other costs
+          </SectionLabel>
+          {otherCosts.map((o, i) =>
+            editOther && editOther.index === i ? (
+              <OtherFields
+                key={`o-edit-${i}`}
+                draft={editOther.draft}
+                onPatch={patchOther}
+                footer={otherFooter(false)}
+              />
+            ) : (
+              <button
+                key={i}
+                type="button"
+                onClick={() => openOther(i, draftFromOther(o))}
+                className="block w-full text-left"
+              >
+                <ListRow label={o.label} value={<Price value={o.cost} variant="inline" />} />
+              </button>
+            ),
+          )}
+          {addingOther && (
+            <OtherFields draft={editOther!.draft} onPatch={patchOther} footer={otherFooter(true)} />
+          )}
+          {!addingOther && (
+            <Button
+              variant="link"
+              iconLeading={addIcon}
+              onClick={() => openOther("new", BLANK_OTHER)}
+              className="pt-3 text-[13px] font-medium"
+            >
+              Add cost{" "}
+              <span className="text-[11.5px] font-light italic text-ink/42">
+                box, casting, outsourced finishing…
+              </span>
+            </Button>
+          )}
+        </section>
 
         {/* reconciling summary — live */}
         <div className="mt-[22px] border-t border-ink/14 pb-1 pt-5">
@@ -571,6 +693,12 @@ export function ProductEditor({ product }: { product: Product }) {
             <div className="flex items-baseline justify-between py-[3px] text-[13px] text-ink/55">
               <span>Labour</span>
               <Price value={labourTotal} variant="summary" />
+            </div>
+          )}
+          {otherCosts.length > 0 && (
+            <div className="flex items-baseline justify-between py-[3px] text-[13px] text-ink/55">
+              <span>Other costs</span>
+              <Price value={otherTotal} variant="summary" />
             </div>
           )}
           <div className="mt-[10px] flex items-baseline justify-between border-t border-ink/7 pt-3">
