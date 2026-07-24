@@ -38,6 +38,8 @@ type ButtonProps = {
   href?: string;
   onClick?: () => void;
   disabled?: boolean;
+  /** Use "submit" inside a form; ignored when href is set. */
+  type?: "button" | "submit";
   className?: string;
 };
 
@@ -49,6 +51,7 @@ export function Button({
   href,
   onClick,
   disabled,
+  type = "button",
   className = "",
 }: ButtonProps) {
   const cls = `font-sans ${variantClass[variant]} ${className}`;
@@ -68,7 +71,7 @@ export function Button({
     );
   }
   return (
-    <button type="button" className={cls} onClick={onClick} disabled={disabled}>
+    <button type={type} className={cls} onClick={onClick} disabled={disabled}>
       {inner}
     </button>
   );
