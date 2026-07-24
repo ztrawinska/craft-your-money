@@ -2,13 +2,12 @@
  * ProductEditor — the interactive Product Detail (PRD §5, §12).
  *
  * This client component owns every editable piece of the screen: the material
- * lines and the user's price. Holding them together is what lets a cost edit
- * cascade — change a material, the direct cost moves, the calculated suggestion
- * moves, and (while still synced) the price follows it. That auto-sync is the
- * §6 behaviour that only comes alive once costs are editable.
+ * and labour lines and the user's price. Holding them together is what lets a
+ * cost edit cascade — change a cost, the direct cost moves, the calculated
+ * suggestion moves, and (while still synced) the price follows it.
  *
- * This slice makes MATERIALS editable inline (§2.12); labour and other costs
- * are read-only for now (same pattern, next).
+ * Materials and labour are both editable inline (§2.12); "other costs" is the
+ * same pattern and stays read-only for now.
  */
 "use client";
 
@@ -26,47 +25,94 @@ import {
   labourLineCost,
   materialDetail,
   materialLineCost,
+  type LabourLine,
   type MaterialLine,
   type Product,
 } from "@/lib/products";
 
 const addIcon = <Plus size={14} strokeWidth={2} />;
+const BENCH_RATE = 15; // default hourly rate for a new labour step (PRD §14)
 
 const fieldInput =
   "w-full rounded-[5px] border border-ink/14 bg-page px-3 py-2.5 text-[16px] text-ink outline-none focus:border-clay focus:ring-[3px] focus:ring-clay/12";
 
-// ── a material as it's being edited (all strings until saved) ─────────────
+// ── drafts (all strings until saved) ──────────────────────────────────────
 
 type MatDraft = { name: string; quantity: string; unit: string; unitCost: string };
-const BLANK: MatDraft = { name: "", quantity: "", unit: "", unitCost: "" };
+type LabDraft = { step: string; minutes: string; rate: string };
+type EditState<D> = { index: number | "new"; draft: D; confirmingDelete: boolean };
 
-function draftFrom(m: MaterialLine): MatDraft {
-  return { name: m.name, quantity: String(m.quantity), unit: m.unit, unitCost: m.unitCost.toFixed(2) };
+const BLANK_MAT: MatDraft = { name: "", quantity: "", unit: "", unitCost: "" };
+const BLANK_LAB: LabDraft = { step: "", minutes: "", rate: String(BENCH_RATE) };
+
+const draftFromMat = (m: MaterialLine): MatDraft => ({
+  name: m.name,
+  quantity: String(m.quantity),
+  unit: m.unit,
+  unitCost: m.unitCost.toFixed(2),
+});
+const draftFromLab = (l: LabourLine): LabDraft => ({
+  step: l.step,
+  minutes: String(l.minutes),
+  rate: String(l.rate),
+});
+
+const num = (s: string) => Number(s.replace(",", "."));
+
+// ── small shared form pieces ──────────────────────────────────────────────
+
+function FieldLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <span className="mb-1 block text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/42">
+      {children}
+    </span>
+  );
 }
 
-type EditState = { index: number | "new"; draft: MatDraft; confirmingDelete: boolean };
+function MoneyInput({
+  value,
+  onChange,
+  placeholder = "0.00",
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  placeholder?: string;
+}) {
+  return (
+    <div className="relative">
+      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 font-serif text-[15px] text-ink/42">
+        £
+      </span>
+      <input
+        inputMode="decimal"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className={`${fieldInput} pl-6 font-serif tabular-nums`}
+      />
+    </div>
+  );
+}
 
-// ── the inline edit form (§2.12) ──────────────────────────────────────────
-
-function MaterialForm({
-  draft,
-  isNew,
+/** Shared footer for both inline forms: live line cost, then either the
+ *  Save/Cancel/Delete actions or the inline delete confirm. */
+function FormFooter({
   lineCost,
   valid,
+  isNew,
   confirmingDelete,
-  onPatch,
+  deleteCopy,
   onSave,
   onCancel,
   onAskDelete,
   onConfirmDelete,
   onCancelDelete,
 }: {
-  draft: MatDraft;
-  isNew: boolean;
   lineCost: number | null;
   valid: boolean;
+  isNew: boolean;
   confirmingDelete: boolean;
-  onPatch: (patch: Partial<MatDraft>) => void;
+  deleteCopy: string;
   onSave: () => void;
   onCancel: () => void;
   onAskDelete: () => void;
@@ -74,65 +120,7 @@ function MaterialForm({
   onCancelDelete: () => void;
 }) {
   return (
-    // the 3px clay left stripe marks edit mode; content below shifts down
-    <div className="my-2 border-l-[3px] border-clay py-3 pl-4 pr-1">
-      <label className="block">
-        <span className="mb-1 block text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/42">
-          Material
-        </span>
-        <input
-          autoFocus
-          value={draft.name}
-          onChange={(e) => onPatch({ name: e.target.value })}
-          placeholder="e.g. Sterling silver sheet"
-          className={`${fieldInput} font-sans`}
-        />
-      </label>
-
-      <div className="mt-3 flex gap-2">
-        <label className="w-[64px]">
-          <span className="mb-1 block text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/42">
-            Qty
-          </span>
-          <input
-            inputMode="decimal"
-            value={draft.quantity}
-            onChange={(e) => onPatch({ quantity: e.target.value })}
-            placeholder="0"
-            className={`${fieldInput} font-serif tabular-nums`}
-          />
-        </label>
-        <label className="w-[64px]">
-          <span className="mb-1 block text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/42">
-            Unit
-          </span>
-          <input
-            value={draft.unit}
-            onChange={(e) => onPatch({ unit: e.target.value })}
-            placeholder="g"
-            className={`${fieldInput} font-sans`}
-          />
-        </label>
-        <label className="flex-1">
-          <span className="mb-1 block text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/42">
-            Cost / unit
-          </span>
-          <div className="relative">
-            <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 font-serif text-[15px] text-ink/42">
-              £
-            </span>
-            <input
-              inputMode="decimal"
-              value={draft.unitCost}
-              onChange={(e) => onPatch({ unitCost: e.target.value })}
-              placeholder="0.00"
-              className={`${fieldInput} pl-6 font-serif tabular-nums`}
-            />
-          </div>
-        </label>
-      </div>
-
-      {/* live line cost, on a dashed rule */}
+    <>
       <div className="mt-3 flex items-baseline justify-between border-t border-dashed border-ink/14 pt-2.5">
         <span className="text-[11px] font-light text-ink/55">Line cost</span>
         <span className="font-serif text-[15px] tabular-nums text-ink">
@@ -142,9 +130,7 @@ function MaterialForm({
 
       {confirmingDelete ? (
         <div className="mt-3">
-          <p className="mb-2 text-[12px] font-light leading-[1.5] text-ink/70">
-            Remove this material? The library item stays — only this line goes.
-          </p>
+          <p className="mb-2 text-[12px] font-light leading-[1.5] text-ink/70">{deleteCopy}</p>
           <div className="flex items-center gap-5">
             <button type="button" onClick={onCancelDelete} className="text-[13px] text-ink/55">
               Keep it
@@ -174,17 +160,117 @@ function MaterialForm({
             Cancel
           </button>
           {!isNew && (
-            <button
-              type="button"
-              onClick={onAskDelete}
-              className="ml-auto text-[13px] text-status-red"
-            >
+            <button type="button" onClick={onAskDelete} className="ml-auto text-[13px] text-status-red">
               Delete
             </button>
           )}
         </div>
       )}
-    </div>
+    </>
+  );
+}
+
+// the 3px clay left stripe marks edit mode; content below shifts down
+function EditShell({ children }: { children: React.ReactNode }) {
+  return <div className="my-2 border-l-[3px] border-clay py-3 pl-4 pr-1">{children}</div>;
+}
+
+// The two inline forms. Rendered identically whether editing a row or adding a
+// new one — the only difference is the footer that's passed in.
+function MaterialFields({
+  draft,
+  onPatch,
+  footer,
+}: {
+  draft: MatDraft;
+  onPatch: (p: Partial<MatDraft>) => void;
+  footer: React.ReactNode;
+}) {
+  return (
+    <EditShell>
+      <label className="block">
+        <FieldLabel>Material</FieldLabel>
+        <input
+          autoFocus
+          value={draft.name}
+          onChange={(e) => onPatch({ name: e.target.value })}
+          placeholder="e.g. Sterling silver sheet"
+          className={`${fieldInput} font-sans`}
+        />
+      </label>
+      <div className="mt-3 flex gap-2">
+        <label className="w-[64px]">
+          <FieldLabel>Qty</FieldLabel>
+          <input
+            inputMode="decimal"
+            value={draft.quantity}
+            onChange={(e) => onPatch({ quantity: e.target.value })}
+            placeholder="0"
+            className={`${fieldInput} font-serif tabular-nums`}
+          />
+        </label>
+        <label className="w-[64px]">
+          <FieldLabel>Unit</FieldLabel>
+          <input
+            value={draft.unit}
+            onChange={(e) => onPatch({ unit: e.target.value })}
+            placeholder="g"
+            className={`${fieldInput} font-sans`}
+          />
+        </label>
+        <label className="flex-1">
+          <FieldLabel>Cost / unit</FieldLabel>
+          <MoneyInput value={draft.unitCost} onChange={(v) => onPatch({ unitCost: v })} />
+        </label>
+      </div>
+      {footer}
+    </EditShell>
+  );
+}
+
+function LabourFields({
+  draft,
+  onPatch,
+  footer,
+}: {
+  draft: LabDraft;
+  onPatch: (p: Partial<LabDraft>) => void;
+  footer: React.ReactNode;
+}) {
+  return (
+    <EditShell>
+      <label className="block">
+        <FieldLabel>Step</FieldLabel>
+        <input
+          autoFocus
+          value={draft.step}
+          onChange={(e) => onPatch({ step: e.target.value })}
+          placeholder="e.g. Soldering"
+          className={`${fieldInput} font-sans`}
+        />
+      </label>
+      <div className="mt-3 flex gap-2">
+        <label className="w-[96px]">
+          <FieldLabel>Minutes</FieldLabel>
+          <input
+            inputMode="numeric"
+            value={draft.minutes}
+            onChange={(e) => onPatch({ minutes: e.target.value })}
+            placeholder="0"
+            className={`${fieldInput} font-serif tabular-nums`}
+          />
+        </label>
+        <label className="flex-1">
+          <FieldLabel>Rate / hour</FieldLabel>
+          <MoneyInput
+            value={draft.rate}
+            onChange={(v) => onPatch({ rate: v })}
+            placeholder={String(BENCH_RATE)}
+          />
+        </label>
+      </div>
+      {footer}
+    </EditShell>
   );
 }
 
@@ -192,7 +278,9 @@ function MaterialForm({
 
 export function ProductEditor({ product }: { product: Product }) {
   const [materials, setMaterials] = useState<MaterialLine[]>(product.materials);
-  const [edit, setEdit] = useState<EditState | null>(null);
+  const [labour, setLabour] = useState<LabourLine[]>(product.labour);
+  const [editMat, setEditMat] = useState<EditState<MatDraft> | null>(null);
+  const [editLab, setEditLab] = useState<EditState<LabDraft> | null>(null);
 
   const options = {
     targetMarginPct: product.targetMarginPct,
@@ -200,9 +288,9 @@ export function ProductEditor({ product }: { product: Product }) {
     businessCostShare: product.businessCostShare,
   };
 
-  const labourTotal = product.labour.reduce((s, l) => s + labourLineCost(l), 0);
   const otherTotal = product.otherCosts.reduce((s, o) => s + o.cost, 0);
   const materialsTotal = materials.reduce((s, m) => s + materialLineCost(m), 0);
+  const labourTotal = labour.reduce((s, l) => s + labourLineCost(l), 0);
   const directCost = materialsTotal + labourTotal + otherTotal;
 
   const summary = computePricingFromDirect(directCost, { finalPrice: null, ...options });
@@ -221,59 +309,103 @@ export function ProductEditor({ product }: { product: Product }) {
   // follows cost edits with no effect. Once decoupled it's the user's own text.
   const priceText = decoupled ? manualPrice : (calculatedPrice?.toFixed(2) ?? "");
 
-  // draft parse + validation (no error states while typing — Save just gates)
-  const draft = edit?.draft;
-  const draftQty = draft ? Number(draft.quantity.replace(",", ".")) : NaN;
-  const draftCost = draft ? Number(draft.unitCost.replace(",", ".")) : NaN;
-  const draftLineCost =
-    Number.isFinite(draftQty) && Number.isFinite(draftCost) ? draftQty * draftCost : null;
-  const draftValid =
-    !!draft &&
-    draft.name.trim() !== "" &&
-    Number.isFinite(draftQty) &&
-    draftQty > 0 &&
-    Number.isFinite(draftCost) &&
-    draftCost > 0;
+  // ── material draft parse + validation (Save just gates; no error states) ──
+  const md = editMat?.draft;
+  const mQty = md ? num(md.quantity) : NaN;
+  const mCost = md ? num(md.unitCost) : NaN;
+  const mLine = Number.isFinite(mQty) && Number.isFinite(mCost) ? mQty * mCost : null;
+  const mValid = !!md && md.name.trim() !== "" && mQty > 0 && mCost > 0;
 
-  function saveEdit() {
-    if (!edit || !draftValid || !draft) return;
+  // ── labour draft parse + validation ──
+  const ld = editLab?.draft;
+  const lMin = ld ? num(ld.minutes) : NaN;
+  const lRate = ld ? num(ld.rate) : NaN;
+  const lLine = Number.isFinite(lMin) && Number.isFinite(lRate) ? (lMin / 60) * lRate : null;
+  const lValid = !!ld && ld.step.trim() !== "" && lMin > 0 && lRate > 0;
+
+  const openMat = (index: number | "new", draft: MatDraft) => {
+    setEditLab(null);
+    setEditMat({ index, draft, confirmingDelete: false });
+  };
+  const openLab = (index: number | "new", draft: LabDraft) => {
+    setEditMat(null);
+    setEditLab({ index, draft, confirmingDelete: false });
+  };
+
+  function saveMat() {
+    if (!editMat || !mValid || !md) return;
     const next: MaterialLine = {
-      name: draft.name.trim(),
-      quantity: draftQty,
-      unit: draft.unit.trim(),
-      unitCost: draftCost,
+      name: md.name.trim(),
+      quantity: mQty,
+      unit: md.unit.trim(),
+      unitCost: mCost,
     };
     setMaterials((prev) =>
-      edit.index === "new"
+      editMat.index === "new"
         ? [...prev, next]
-        : prev.map((m, i) => (i === edit.index ? { ...m, ...next } : m)),
+        : prev.map((m, i) => (i === editMat.index ? { ...m, ...next } : m)),
     );
-    setEdit(null);
+    setEditMat(null);
   }
-
-  function confirmDelete() {
-    if (edit && edit.index !== "new") {
-      setMaterials((prev) => prev.filter((_, i) => i !== edit.index));
+  function saveLab() {
+    if (!editLab || !lValid || !ld) return;
+    const next: LabourLine = { step: ld.step.trim(), minutes: lMin, rate: lRate };
+    setLabour((prev) =>
+      editLab.index === "new"
+        ? [...prev, next]
+        : prev.map((l, i) => (i === editLab.index ? { ...l, ...next } : l)),
+    );
+    setEditLab(null);
+  }
+  function deleteMat() {
+    if (editMat && editMat.index !== "new") {
+      setMaterials((prev) => prev.filter((_, i) => i !== editMat.index));
     }
-    setEdit(null);
+    setEditMat(null);
+  }
+  function deleteLab() {
+    if (editLab && editLab.index !== "new") {
+      setLabour((prev) => prev.filter((_, i) => i !== editLab.index));
+    }
+    setEditLab(null);
   }
 
-  const formProps = (isNew: boolean) => ({
-    draft: edit!.draft,
-    isNew,
-    lineCost: draftLineCost,
-    valid: draftValid,
-    confirmingDelete: edit!.confirmingDelete,
-    onPatch: (patch: Partial<MatDraft>) =>
-      setEdit((e) => (e ? { ...e, draft: { ...e.draft, ...patch } } : e)),
-    onSave: saveEdit,
-    onCancel: () => setEdit(null),
-    onAskDelete: () => setEdit((e) => (e ? { ...e, confirmingDelete: true } : e)),
-    onConfirmDelete: confirmDelete,
-    onCancelDelete: () => setEdit((e) => (e ? { ...e, confirmingDelete: false } : e)),
-  });
+  const matFooter = (isNew: boolean) => (
+    <FormFooter
+      lineCost={mLine}
+      valid={mValid}
+      isNew={isNew}
+      confirmingDelete={!!editMat?.confirmingDelete}
+      deleteCopy="Remove this material? The library item stays — only this line goes."
+      onSave={saveMat}
+      onCancel={() => setEditMat(null)}
+      onAskDelete={() => setEditMat((e) => (e ? { ...e, confirmingDelete: true } : e))}
+      onConfirmDelete={deleteMat}
+      onCancelDelete={() => setEditMat((e) => (e ? { ...e, confirmingDelete: false } : e))}
+    />
+  );
+  const labFooter = (isNew: boolean) => (
+    <FormFooter
+      lineCost={lLine}
+      valid={lValid}
+      isNew={isNew}
+      confirmingDelete={!!editLab?.confirmingDelete}
+      deleteCopy="Remove this step? It's only taken off this product."
+      onSave={saveLab}
+      onCancel={() => setEditLab(null)}
+      onAskDelete={() => setEditLab((e) => (e ? { ...e, confirmingDelete: true } : e))}
+      onConfirmDelete={deleteLab}
+      onCancelDelete={() => setEditLab((e) => (e ? { ...e, confirmingDelete: false } : e))}
+    />
+  );
 
-  const addingNew = edit?.index === "new";
+  const patchMat = (p: Partial<MatDraft>) =>
+    setEditMat((e) => (e ? { ...e, draft: { ...e.draft, ...p } } : e));
+  const patchLab = (p: Partial<LabDraft>) =>
+    setEditLab((e) => (e ? { ...e, draft: { ...e.draft, ...p } } : e));
+
+  const addingMat = editMat?.index === "new";
+  const addingLab = editLab?.index === "new";
 
   return (
     <main className="mx-auto w-full max-w-[430px] pb-24">
@@ -309,22 +441,23 @@ export function ProductEditor({ product }: { product: Product }) {
         {/* materials — editable */}
         <section className="pb-1.5 pt-[22px]">
           <SectionLabel
-            total={
-              materials.length > 0 ? (
-                <Price value={materialsTotal} variant="sectionTotal" />
-              ) : undefined
-            }
+            total={materials.length > 0 ? <Price value={materialsTotal} variant="sectionTotal" /> : undefined}
           >
             Materials
           </SectionLabel>
           {materials.map((m, i) =>
-            edit && edit.index === i ? (
-              <MaterialForm key={`edit-${i}`} {...formProps(false)} />
+            editMat && editMat.index === i ? (
+              <MaterialFields
+                key={`m-edit-${i}`}
+                draft={editMat.draft}
+                onPatch={patchMat}
+                footer={matFooter(false)}
+              />
             ) : (
               <button
                 key={i}
                 type="button"
-                onClick={() => setEdit({ index: i, draft: draftFrom(m), confirmingDelete: false })}
+                onClick={() => openMat(i, draftFromMat(m))}
                 className="block w-full text-left"
               >
                 <ListRow
@@ -336,12 +469,14 @@ export function ProductEditor({ product }: { product: Product }) {
               </button>
             ),
           )}
-          {addingNew && <MaterialForm {...formProps(true)} />}
-          {!addingNew && (
+          {addingMat && (
+            <MaterialFields draft={editMat!.draft} onPatch={patchMat} footer={matFooter(true)} />
+          )}
+          {!addingMat && (
             <Button
               variant="link"
               iconLeading={addIcon}
-              onClick={() => setEdit({ index: "new", draft: BLANK, confirmingDelete: false })}
+              onClick={() => openMat("new", BLANK_MAT)}
               className="pt-3 text-[13px] font-medium"
             >
               Add material
@@ -349,25 +484,49 @@ export function ProductEditor({ product }: { product: Product }) {
           )}
         </section>
 
-        {/* labour — read-only for now */}
+        {/* labour — editable */}
         <section className="border-t border-ink/7 pb-1.5 pt-[22px]">
           <SectionLabel
-            total={
-              product.labour.length > 0 ? (
-                <Price value={labourTotal} variant="sectionTotal" />
-              ) : undefined
-            }
+            total={labour.length > 0 ? <Price value={labourTotal} variant="sectionTotal" /> : undefined}
           >
             Labour
           </SectionLabel>
-          {product.labour.map((l) => (
-            <ListRow
-              key={l.step}
-              label={l.step}
-              meta={labourDetail(l)}
-              value={<Price value={labourLineCost(l)} variant="inline" />}
-            />
-          ))}
+          {labour.map((l, i) =>
+            editLab && editLab.index === i ? (
+              <LabourFields
+                key={`l-edit-${i}`}
+                draft={editLab.draft}
+                onPatch={patchLab}
+                footer={labFooter(false)}
+              />
+            ) : (
+              <button
+                key={i}
+                type="button"
+                onClick={() => openLab(i, draftFromLab(l))}
+                className="block w-full text-left"
+              >
+                <ListRow
+                  label={l.step}
+                  meta={labourDetail(l)}
+                  value={<Price value={labourLineCost(l)} variant="inline" />}
+                />
+              </button>
+            ),
+          )}
+          {addingLab && (
+            <LabourFields draft={editLab!.draft} onPatch={patchLab} footer={labFooter(true)} />
+          )}
+          {!addingLab && (
+            <Button
+              variant="link"
+              iconLeading={addIcon}
+              onClick={() => openLab("new", BLANK_LAB)}
+              className="pt-3 text-[13px] font-medium"
+            >
+              Add step
+            </Button>
+          )}
         </section>
 
         {/* other costs — read-only for now */}
@@ -390,7 +549,7 @@ export function ProductEditor({ product }: { product: Product }) {
               <Price value={materialsTotal} variant="summary" />
             </div>
           )}
-          {product.labour.length > 0 && (
+          {labour.length > 0 && (
             <div className="flex items-baseline justify-between py-[3px] text-[13px] text-ink/55">
               <span>Labour</span>
               <Price value={labourTotal} variant="summary" />
