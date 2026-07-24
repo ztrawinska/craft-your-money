@@ -16,6 +16,7 @@
  */
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { Diamond } from "lucide-react";
 
 /**
  * The left-stripe tones. The three coloured ones are the overview's urgency
@@ -78,12 +79,10 @@ export function ListRow({
         <span className={labelClass}>
           {label}
           {library && (
-            <span
-              className="ml-1 text-[8px] text-ink/30"
-              style={{ verticalAlign: "2px" }}
-            >
-              ◆
-            </span>
+            <Diamond
+              size={8}
+              className="ml-1 inline-block -translate-y-px fill-ink/30 text-ink/30"
+            />
           )}
         </span>
         {meta && (

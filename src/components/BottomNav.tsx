@@ -56,7 +56,7 @@ function Tab({ item, active }: { item: NavItem; active?: NavKey }) {
 
 export function BottomNav({ active }: { active?: NavKey }) {
   return (
-    <nav className="fixed inset-x-0 bottom-0 border-t border-ink/7 bg-page">
+    <nav className="sticky bottom-0 border-t border-ink/7 bg-page">
       <div className="mx-auto flex max-w-[430px] items-end justify-around px-2 pb-3.5 pt-[11px]">
         {LEFT.map((item) => (
           <Tab key={item.key} item={item} active={active} />

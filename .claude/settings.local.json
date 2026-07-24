@@ -5,7 +5,8 @@
       "Bash(npx eslint *)",
       "Bash(npm i *)",
       "Bash(npm test *)",
-      "Bash(node -e \"const l=require\\('lucide-react'\\); ['House','Home','Tag','Layers','Wallet','Plus','ChevronDown','ArrowUpDown'].forEach\\(n=>console.log\\(n, n in l ? 'ok' : 'MISSING'\\)\\)\")"
+      "Bash(node -e \"const l=require\\('lucide-react'\\); ['House','Home','Tag','Layers','Wallet','Plus','ChevronDown','ArrowUpDown'].forEach\\(n=>console.log\\(n, n in l ? 'ok' : 'MISSING'\\)\\)\")",
+      "Bash(npx tsx -e ' *)"
     ]
   }
 }
