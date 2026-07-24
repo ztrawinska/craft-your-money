@@ -33,41 +33,119 @@ export type Pricing = {
 
 const sum = (ns: number[]) => ns.reduce((a, b) => a + b, 0);
 
-export function computePricing(c: CostInputs): Pricing {
-  const directCost = sum(c.materials) + sum(c.labour) + sum(c.other);
+/** The options a price is evaluated against, once the direct cost is known. */
+export type PriceOptions = {
+  finalPrice: number | null;
+  targetMarginPct: number;
+  vatRatePct: number | null;
+  businessCostShare: number | null;
+};
 
+/**
+ * The core, given a direct cost. Split out so the interactive pricing panel can
+ * recompute on every keystroke from a fixed direct cost without re-summing the
+ * (unchanged) cost lines.
+ */
+export function computePricingFromDirect(
+  directCost: number,
+  o: PriceOptions,
+): Pricing {
   // Fixed costs are optional. When set, margin/profit evaluate against full cost.
-  const fullCost = c.businessCostShare == null ? null : directCost + c.businessCostShare;
+  const fullCost = o.businessCostShare == null ? null : directCost + o.businessCostShare;
   const relevantCost = fullCost ?? directCost;
 
   // final_price is GROSS; margin and profit run on NET.
   const net =
-    c.finalPrice == null
+    o.finalPrice == null
       ? null
-      : c.vatRatePct
-        ? c.finalPrice / (1 + c.vatRatePct / 100)
-        : c.finalPrice;
+      : o.vatRatePct
+        ? o.finalPrice / (1 + o.vatRatePct / 100)
+        : o.finalPrice;
 
   const profit = net == null ? null : net - relevantCost;
   const marginPct = net == null || net <= 0 ? null : (profit as number) / net;
 
   // The suggestion is ALWAYS from direct cost, never full cost (§6).
   const calculatedBeforeVat =
-    directCost <= 0 ? null : directCost / (1 - c.targetMarginPct / 100);
+    directCost <= 0 ? null : directCost / (1 - o.targetMarginPct / 100);
   const calculatedPrice =
     calculatedBeforeVat == null
       ? null
-      : c.vatRatePct
-        ? calculatedBeforeVat * (1 + c.vatRatePct / 100)
+      : o.vatRatePct
+        ? calculatedBeforeVat * (1 + o.vatRatePct / 100)
         : calculatedBeforeVat;
 
-  return {
-    directCost,
-    fullCost,
-    net,
-    profit,
-    marginPct,
-    calculatedBeforeVat,
-    calculatedPrice,
-  };
+  return { directCost, fullCost, net, profit, marginPct, calculatedBeforeVat, calculatedPrice };
+}
+
+export function computePricing(c: CostInputs): Pricing {
+  const directCost = sum(c.materials) + sum(c.labour) + sum(c.other);
+  return computePricingFromDirect(directCost, {
+    finalPrice: c.finalPrice,
+    targetMarginPct: c.targetMarginPct,
+    vatRatePct: c.vatRatePct,
+    businessCostShare: c.businessCostShare,
+  });
+}
+
+/**
+ * Price warnings (PRD §6) — one calm, plain-language helper, or none. Ordered by
+ * severity: a real loss first, then break-even, then below the margin target.
+ * These are helpers, never alarms — the wording never says "error" or "invalid".
+ */
+export type PriceWarning = {
+  text: string;
+  severity: "loss" | "below-target" | "note";
+};
+
+export function priceWarning(
+  p: Pricing,
+  o: { finalPrice: number; targetMarginPct: number; vatRatePct: number | null },
+): PriceWarning | null {
+  if (p.net == null || p.profit == null) return null;
+  const EPS = 0.005;
+  const relevantCost = p.fullCost ?? p.directCost;
+
+  if (p.profit < -EPS) {
+    const loss = (-p.profit).toFixed(2);
+    const grossProfit = o.finalPrice - relevantCost;
+    // Profitable before VAT, a loss after it (the sneakiest case).
+    if (o.vatRatePct && grossProfit >= -EPS) {
+      return {
+        text: `This is profitable before VAT — but a loss after. You lose £${loss} on each piece.`,
+        severity: "loss",
+      };
+    }
+    // Covers direct cost, but fixed costs tip it into a loss.
+    if (p.fullCost != null && o.finalPrice >= p.directCost) {
+      return {
+        text: `This looks profitable before overhead — but fixed costs make it a £${loss} loss per piece.`,
+        severity: "loss",
+      };
+    }
+    return {
+      text: `Your price is below your costs. You'd lose £${loss} on every sale.`,
+      severity: "loss",
+    };
+  }
+
+  if (Math.abs(p.profit) <= EPS) {
+    return { text: "You're breaking even — no profit on this product.", severity: "note" };
+  }
+
+  if (o.targetMarginPct === 0) {
+    return {
+      text: "A 0% margin target means no profit. Is this intentional?",
+      severity: "note",
+    };
+  }
+
+  if (p.marginPct != null && p.marginPct < o.targetMarginPct / 100) {
+    return {
+      text: `Your price covers costs but is below your ${o.targetMarginPct}% margin target.`,
+      severity: "below-target",
+    };
+  }
+
+  return null;
 }

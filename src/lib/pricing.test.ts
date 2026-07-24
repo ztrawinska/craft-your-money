@@ -5,7 +5,7 @@
  * Run with: npm test
  */
 import { test, expect } from "vitest";
-import { computePricing } from "./pricing";
+import { computePricing, computePricingFromDirect, priceWarning } from "./pricing";
 
 test("the flagship product's numbers are internally consistent (§6)", () => {
   const p = computePricing({
@@ -71,4 +71,65 @@ test("a price below cost is a real loss (negative margin)", () => {
   });
   expect(p.profit! < 0).toBe(true);
   expect(p.marginPct! < 0).toBe(true);
+});
+
+// ── price warnings (§6) ───────────────────────────────────────────────────
+
+test("warns of a real loss when the price is below cost", () => {
+  const p = computePricingFromDirect(30, {
+    finalPrice: 20,
+    targetMarginPct: 40,
+    vatRatePct: null,
+    businessCostShare: null,
+  });
+  const w = priceWarning(p, { finalPrice: 20, targetMarginPct: 40, vatRatePct: null });
+  expect(w?.severity).toBe("loss");
+  expect(w?.text).toMatch(/below your costs/);
+});
+
+test("VAT can turn a gross profit into a net loss", () => {
+  // final 38 gross, direct 34.23, 20% VAT → net 31.67 < cost
+  const p = computePricingFromDirect(34.23, {
+    finalPrice: 38,
+    targetMarginPct: 40,
+    vatRatePct: 20,
+    businessCostShare: null,
+  });
+  const w = priceWarning(p, { finalPrice: 38, targetMarginPct: 40, vatRatePct: 20 });
+  expect(w?.severity).toBe("loss");
+  expect(w?.text).toMatch(/before VAT/);
+});
+
+test("fixed costs can turn a direct-cost profit into a loss", () => {
+  // direct 30, final 33 (no VAT), business share 5 → full 35 > 33
+  const p = computePricingFromDirect(30, {
+    finalPrice: 33,
+    targetMarginPct: 40,
+    vatRatePct: null,
+    businessCostShare: 5,
+  });
+  const w = priceWarning(p, { finalPrice: 33, targetMarginPct: 40, vatRatePct: null });
+  expect(w?.severity).toBe("loss");
+  expect(w?.text).toMatch(/overhead/);
+});
+
+test("profitable but below the margin target is a gentle caution", () => {
+  const p = computePricingFromDirect(35.75, {
+    finalPrice: 55,
+    targetMarginPct: 40,
+    vatRatePct: 20,
+    businessCostShare: null,
+  });
+  const w = priceWarning(p, { finalPrice: 55, targetMarginPct: 40, vatRatePct: 20 });
+  expect(w?.severity).toBe("below-target");
+});
+
+test("a healthy price above target has no warning", () => {
+  const p = computePricingFromDirect(25.55, {
+    finalPrice: 68,
+    targetMarginPct: 40,
+    vatRatePct: 20,
+    businessCostShare: null,
+  });
+  expect(priceWarning(p, { finalPrice: 68, targetMarginPct: 40, vatRatePct: 20 })).toBe(null);
 });
