@@ -8,7 +8,8 @@
       "Bash(node -e \"const l=require\\('lucide-react'\\); ['House','Home','Tag','Layers','Wallet','Plus','ChevronDown','ArrowUpDown'].forEach\\(n=>console.log\\(n, n in l ? 'ok' : 'MISSING'\\)\\)\")",
       "Bash(npx tsx -e ' *)",
       "Bash(node -e \"const p=require\\('./.data/products.json'\\); console.log\\(p.map\\(x=>x.id\\).join\\(', '\\), '\\('+p.length+'\\)'\\)\")",
-      "Bash(node -e \"const p=require\\('./.data/products.json'\\); const h=p.find\\(x=>x.id==='hammered-band'\\); console.log\\('hammered-band finalPrice in store:', h.finalPrice, '| workflow:', h.workflow\\)\")"
+      "Bash(node -e \"const p=require\\('./.data/products.json'\\); const h=p.find\\(x=>x.id==='hammered-band'\\); console.log\\('hammered-band finalPrice in store:', h.finalPrice, '| workflow:', h.workflow\\)\")",
+      "Bash(grep -n \"openLab\\(\\\\\"new\\\\\", BLANK_LAB\\)\\\\|<LabourFields\\\\|targetMarginPct={product\\\\|vatRatePct={product\" src/components/ProductEditor.tsx)"
     ]
   }
 }

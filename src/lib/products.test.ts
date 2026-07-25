@@ -5,6 +5,7 @@
 import { test, expect } from "vitest";
 import { labourLineCost, materialLineCost, pricingFor } from "./products";
 import { seedProducts } from "./seed";
+import { DEFAULT_SETTINGS } from "./settings";
 
 const seed = (id: string) => seedProducts.find((p) => p.id === id)!;
 
@@ -14,7 +15,7 @@ test("line-cost helpers price a row correctly", () => {
 });
 
 test("the flagship still reduces to its known figures", () => {
-  const p = pricingFor(seed("hammered-band"));
+  const p = pricingFor(seed("hammered-band"), DEFAULT_SETTINGS);
   expect(p.directCost).toBeCloseTo(14.06, 2);
   expect(p.fullCost).toBeCloseTo(16.8, 2);
   expect(p.profit).toBeCloseTo(18.2, 2);
@@ -22,5 +23,5 @@ test("the flagship still reduces to its known figures", () => {
 });
 
 test("stacking set is still a real loss", () => {
-  expect(pricingFor(seed("stacking-set")).profit! < 0).toBe(true);
+  expect(pricingFor(seed("stacking-set"), DEFAULT_SETTINGS).profit! < 0).toBe(true);
 });

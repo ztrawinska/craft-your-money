@@ -11,8 +11,6 @@ export const seedProducts: Product[] = [
     type: "Ring",
     workflow: "active",
     finalPrice: 38,
-    targetMarginPct: 40,
-    vatRatePct: 20,
     businessCostShare: null,
     materials: [
       { name: "Sterling silver sheet", quantity: 14, unit: "g", unitCost: 0.62, fromLibrary: true },
@@ -31,8 +29,6 @@ export const seedProducts: Product[] = [
     type: "Earrings",
     workflow: "active",
     finalPrice: 55,
-    targetMarginPct: 40,
-    vatRatePct: 20,
     businessCostShare: null,
     materials: [
       { name: "Freshwater pearls", quantity: 2, unit: "", unitCost: 6.5, fromLibrary: true },
@@ -50,8 +46,6 @@ export const seedProducts: Product[] = [
     type: "Necklace",
     workflow: "active",
     finalPrice: 68,
-    targetMarginPct: 40,
-    vatRatePct: 20,
     businessCostShare: null,
     materials: [
       { name: "Silver wire", quantity: 10, unit: "g", unitCost: 0.72, fromLibrary: true },
@@ -69,8 +63,6 @@ export const seedProducts: Product[] = [
     type: "Bracelet",
     workflow: "active",
     finalPrice: null,
-    targetMarginPct: 40,
-    vatRatePct: 20,
     businessCostShare: null,
     materials: [{ name: "Copper sheet", quantity: 20, unit: "g", unitCost: 0.09 }],
     labour: [
@@ -87,8 +79,6 @@ export const seedProducts: Product[] = [
     type: "Ring",
     workflow: "draft",
     finalPrice: 42,
-    targetMarginPct: 40,
-    vatRatePct: 20,
     businessCostShare: 2.74,
     materials: [
       { name: "Sterling silver sheet", quantity: 4, unit: "g", unitCost: 0.62, fromLibrary: true },
@@ -107,8 +97,6 @@ export const seedProducts: Product[] = [
     type: "Ring",
     workflow: "draft",
     finalPrice: null,
-    targetMarginPct: 40,
-    vatRatePct: 20,
     businessCostShare: null,
     materials: [{ name: "Silver wire", quantity: 6, unit: "g", unitCost: 0.72, fromLibrary: true }],
     labour: [],

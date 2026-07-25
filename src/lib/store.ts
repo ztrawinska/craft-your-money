@@ -15,9 +15,11 @@ import fs from "node:fs";
 import path from "node:path";
 import { seedProducts } from "@/lib/seed";
 import type { Product, ProductType } from "@/lib/products";
+import { DEFAULT_SETTINGS, type Settings } from "@/lib/settings";
 
 const DATA_DIR = path.join(process.cwd(), ".data");
 const FILE = path.join(DATA_DIR, "products.json");
+const SETTINGS_FILE = path.join(DATA_DIR, "settings.json");
 
 function readAll(): Product[] {
   try {
@@ -75,8 +77,6 @@ export function createDraft(name: string, type: ProductType): Product {
     type,
     workflow: "draft",
     finalPrice: null,
-    targetMarginPct: 40,
-    vatRatePct: 20,
     businessCostShare: null,
     materials: [],
     labour: [],
@@ -84,4 +84,28 @@ export function createDraft(name: string, type: ProductType): Product {
   };
   saveProduct(product);
   return product;
+}
+
+// ── account settings ──────────────────────────────────────────────────────
+
+export function getSettings(): Settings {
+  try {
+    if (!fs.existsSync(SETTINGS_FILE)) {
+      writeSettings(DEFAULT_SETTINGS);
+      return DEFAULT_SETTINGS;
+    }
+    // spread over defaults so a new field added later still has a value
+    return { ...DEFAULT_SETTINGS, ...JSON.parse(fs.readFileSync(SETTINGS_FILE, "utf8")) };
+  } catch {
+    return DEFAULT_SETTINGS;
+  }
+}
+
+function writeSettings(s: Settings): void {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+  fs.writeFileSync(SETTINGS_FILE, JSON.stringify(s, null, 2));
+}
+
+export function saveSettings(s: Settings): void {
+  writeSettings(s);
 }

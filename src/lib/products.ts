@@ -9,6 +9,7 @@
  * is computed at read time (PRD §14: never store calculated values).
  */
 import { computePricing, type Pricing } from "@/lib/pricing";
+import { effectiveVatRate, type Settings } from "@/lib/settings";
 import type { ProductStatusInput } from "@/lib/status";
 
 export type ProductType = "Ring" | "Necklace" | "Earrings" | "Bracelet" | "Other";
@@ -40,8 +41,7 @@ export type Product = {
   type: ProductType;
   workflow: "draft" | "active";
   finalPrice: number | null; // gross
-  targetMarginPct: number;
-  vatRatePct: number | null;
+  // target margin and VAT are account settings, not product fields (§14).
   businessCostShare: number | null; // fixed-cost allocation, if configured
   materials: MaterialLine[];
   labour: LabourLine[];
@@ -70,23 +70,23 @@ export function labourDetail(l: LabourLine): string {
 
 // ── lenses the screens read through ───────────────────────────────────────
 
-export function pricingFor(p: Product): Pricing {
+export function pricingFor(p: Product, s: Settings): Pricing {
   return computePricing({
     materials: p.materials.map(materialLineCost),
     labour: p.labour.map(labourLineCost),
     other: p.otherCosts.map((o) => o.cost),
     finalPrice: p.finalPrice,
-    targetMarginPct: p.targetMarginPct,
-    vatRatePct: p.vatRatePct,
+    targetMarginPct: s.targetMarginPct,
+    vatRatePct: effectiveVatRate(s),
     businessCostShare: p.businessCostShare,
   });
 }
 
 /** A product as the status model sees it — margin is computed, not stored. */
-export function statusInputFor(p: Product): ProductStatusInput {
+export function statusInputFor(p: Product, s: Settings): ProductStatusInput {
   return {
     workflow: p.workflow,
     hasPrice: p.finalPrice !== null,
-    marginPct: pricingFor(p).marginPct,
+    marginPct: pricingFor(p, s).marginPct,
   };
 }

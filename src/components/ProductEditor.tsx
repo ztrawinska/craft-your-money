@@ -30,6 +30,7 @@ import { Price } from "@/components/Price";
 import { PricingPanel } from "@/components/PricingPanel";
 import { SectionLabel } from "@/components/SectionLabel";
 import { computePricingFromDirect } from "@/lib/pricing";
+import { effectiveVatRate, type Settings } from "@/lib/settings";
 import {
   labourDetail,
   labourLineCost,
@@ -42,7 +43,6 @@ import {
 } from "@/lib/products";
 
 const addIcon = <Plus size={14} strokeWidth={2} />;
-const BENCH_RATE = 15; // default hourly rate for a new labour step (PRD §14)
 
 // ── drafts (all strings until saved) ──────────────────────────────────────
 
@@ -51,8 +51,9 @@ type LabDraft = { step: string; minutes: string; rate: string };
 type OtherDraft = { label: string; amount: string };
 
 const BLANK_MAT: MatDraft = { name: "", quantity: "", unit: "", unitCost: "" };
-const BLANK_LAB: LabDraft = { step: "", minutes: "", rate: String(BENCH_RATE) };
 const BLANK_OTHER: OtherDraft = { label: "", amount: "" };
+// A new labour step defaults to the account's bench rate (PRD §14).
+const blankLab = (benchRate: number): LabDraft => ({ step: "", minutes: "", rate: String(benchRate) });
 
 const draftFromMat = (m: MaterialLine): MatDraft => ({
   name: m.name,
@@ -127,10 +128,12 @@ function LabourFields({
   draft,
   onPatch,
   footer,
+  ratePlaceholder,
 }: {
   draft: LabDraft;
   onPatch: (p: Partial<LabDraft>) => void;
   footer: React.ReactNode;
+  ratePlaceholder: string;
 }) {
   return (
     <EditShell>
@@ -160,7 +163,7 @@ function LabourFields({
           <MoneyInput
             value={draft.rate}
             onChange={(v) => onPatch({ rate: v })}
-            placeholder={String(BENCH_RATE)}
+            placeholder={ratePlaceholder}
           />
         </label>
       </div>
@@ -203,7 +206,7 @@ function OtherFields({
 
 // ── the editor ────────────────────────────────────────────────────────────
 
-export function ProductEditor({ product }: { product: Product }) {
+export function ProductEditor({ product, settings }: { product: Product; settings: Settings }) {
   const [materials, setMaterials] = useState<MaterialLine[]>(product.materials);
   const [labour, setLabour] = useState<LabourLine[]>(product.labour);
   const [otherCosts, setOtherCosts] = useState<OtherLine[]>(product.otherCosts);
@@ -212,8 +215,8 @@ export function ProductEditor({ product }: { product: Product }) {
   const [editOther, setEditOther] = useState<EditState<OtherDraft> | null>(null);
 
   const options = {
-    targetMarginPct: product.targetMarginPct,
-    vatRatePct: product.vatRatePct,
+    targetMarginPct: settings.targetMarginPct,
+    vatRatePct: effectiveVatRate(settings),
     businessCostShare: product.businessCostShare,
   };
 
@@ -492,6 +495,7 @@ export function ProductEditor({ product }: { product: Product }) {
                 draft={editLab.draft}
                 onPatch={patchLab}
                 footer={labFooter(false)}
+                ratePlaceholder={String(settings.benchRate)}
               />
             ) : (
               <button
@@ -509,13 +513,18 @@ export function ProductEditor({ product }: { product: Product }) {
             ),
           )}
           {addingLab && (
-            <LabourFields draft={editLab!.draft} onPatch={patchLab} footer={labFooter(true)} />
+            <LabourFields
+              draft={editLab!.draft}
+              onPatch={patchLab}
+              footer={labFooter(true)}
+              ratePlaceholder={String(settings.benchRate)}
+            />
           )}
           {!addingLab && (
             <Button
               variant="link"
               iconLeading={addIcon}
-              onClick={() => openLab("new", BLANK_LAB)}
+              onClick={() => openLab("new", blankLab(settings.benchRate))}
               className="pt-3 text-[13px] font-medium"
             >
               Add step
@@ -613,8 +622,8 @@ export function ProductEditor({ product }: { product: Product }) {
       <PricingPanel
         workflow={product.workflow}
         directCost={directCost}
-        targetMarginPct={product.targetMarginPct}
-        vatRatePct={product.vatRatePct}
+        targetMarginPct={settings.targetMarginPct}
+        vatRatePct={effectiveVatRate(settings)}
         businessCostShare={product.businessCostShare}
         priceText={priceText}
         onPriceChange={(v) => {

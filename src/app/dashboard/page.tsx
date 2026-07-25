@@ -20,7 +20,7 @@ import { ListRow } from "@/components/ListRow";
 import { Price } from "@/components/Price";
 import { SectionLabel } from "@/components/SectionLabel";
 import { pricingFor, statusInputFor } from "@/lib/products";
-import { listProducts } from "@/lib/store";
+import { getSettings, listProducts } from "@/lib/store";
 import { statusChip } from "@/lib/status";
 
 const HEALTHY_MIN = 0.3; // "below your 30% target"
@@ -31,6 +31,7 @@ const greeting = { date: "Tuesday, 21 July", text: "Good afternoon, Zuza", initi
 export default function Dashboard() {
   // Everything below is derived from the stored product list, at request time.
   const products = listProducts();
+  const settings = getSettings();
   const active = products.filter((p) => p.workflow === "active");
   const activePriced = active.filter((p) => p.finalPrice !== null);
 
@@ -38,26 +39,26 @@ export default function Dashboard() {
   const activeTotal = active.length;
   const avgProfit =
     pricedDone > 0
-      ? activePriced.reduce((s, p) => s + (pricingFor(p).profit ?? 0), 0) / pricedDone
+      ? activePriced.reduce((s, p) => s + (pricingFor(p, settings).profit ?? 0), 0) / pricedDone
       : 0;
   const belowTarget = activePriced.filter((p) => {
-    const m = pricingFor(p).marginPct;
+    const m = pricingFor(p, settings).marginPct;
     return m !== null && m < HEALTHY_MIN;
   }).length;
 
   const weakest = [...activePriced].sort(
-    (a, b) => (pricingFor(a).marginPct ?? 0) - (pricingFor(b).marginPct ?? 0),
+    (a, b) => (pricingFor(a, settings).marginPct ?? 0) - (pricingFor(b, settings).marginPct ?? 0),
   )[0];
 
   // Attention: active risky first, then active no-price. Drafts never appear.
   const risky = active.filter((p) => {
-    const m = pricingFor(p).marginPct;
+    const m = pricingFor(p, settings).marginPct;
     return m !== null && m < RISKY_MAX;
   });
   const noPrice = active.filter((p) => p.finalPrice === null);
   const attention = [
     ...risky.map((p) => {
-      const profit = pricingFor(p).profit ?? 0;
+      const profit = pricingFor(p, settings).profit ?? 0;
       return {
         p,
         stripe: "risky" as const,
@@ -91,9 +92,13 @@ export default function Dashboard() {
               {greeting.text}
             </h1>
           </div>
-          <div className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-clay-deep font-serif text-[15px] text-[#FDFBF9]">
+          <Link
+            href="/settings"
+            aria-label="Settings"
+            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-clay-deep font-serif text-[15px] text-[#FDFBF9]"
+          >
             {greeting.initial}
-          </div>
+          </Link>
         </div>
 
         {/* briefing — assembled from real numbers, in plain language */}
@@ -158,7 +163,7 @@ export default function Dashboard() {
             </div>
             <div className="divide-y divide-ink/7 border-t border-ink/7">
               {attention.map(({ p, stripe, note, action }) => {
-                const chip = statusChip(statusInputFor(p));
+                const chip = statusChip(statusInputFor(p, settings));
                 return (
                   <ListRow
                     key={p.id}
