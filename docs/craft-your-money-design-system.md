@@ -355,7 +355,7 @@ Holds destructive and secondary actions for an object (the ⋯ menu). **A bottom
 
 Add and edit never open a modal.
 
-- The row expands in place; a **3px clay left stripe** marks edit mode; content below shifts down.
+- The row expands in place; a **3px clay left stripe** plus a **faint `ink` 3.5% tint** (rounded on the right, like the assistant inset in §2.9) mark edit mode; content below shifts down. Inputs stay `page`-coloured so they lift off the tint.
 - Inputs: `page` background, `1px ink-14` border, 5px radius, 15px Lora for values (tabular).
 - Focus: clay border + `0 0 0 3px rgba(clay, 0.12)` ring.
 - Live line cost above the actions, on a dashed rule.

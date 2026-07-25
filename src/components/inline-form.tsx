@@ -131,7 +131,12 @@ export function FormFooter({
   );
 }
 
-/** The 3px clay left stripe marks edit mode; content below shifts down. */
+/** Edit mode is marked by a 3px clay left stripe and a faint ink tint (rounded
+ *  on the right, like the assistant inset in §2.9); content below shifts down. */
 export function EditShell({ children }: { children: ReactNode }) {
-  return <div className="my-2 border-l-[3px] border-clay py-3 pl-4 pr-1">{children}</div>;
+  return (
+    <div className="my-2 rounded-r-[6px] border-l-[3px] border-clay bg-ink/[0.035] px-4 py-3">
+      {children}
+    </div>
+  );
 }
