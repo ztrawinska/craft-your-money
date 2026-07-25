@@ -16,6 +16,15 @@ import { ArrowLeft, ChevronDown, Ellipsis, Plus } from "lucide-react";
 import Link from "next/link";
 import { saveProductAction } from "@/app/products/actions";
 import { Button } from "@/components/Button";
+import {
+  EditShell,
+  FieldLabel,
+  FormFooter,
+  MoneyInput,
+  fieldInput,
+  num,
+  type EditState,
+} from "@/components/inline-form";
 import { ListRow } from "@/components/ListRow";
 import { Price } from "@/components/Price";
 import { PricingPanel } from "@/components/PricingPanel";
@@ -35,15 +44,11 @@ import {
 const addIcon = <Plus size={14} strokeWidth={2} />;
 const BENCH_RATE = 15; // default hourly rate for a new labour step (PRD §14)
 
-const fieldInput =
-  "w-full rounded-[5px] border border-ink/14 bg-page px-3 py-2.5 text-[16px] text-ink outline-none focus:border-clay focus:ring-[3px] focus:ring-clay/12";
-
 // ── drafts (all strings until saved) ──────────────────────────────────────
 
 type MatDraft = { name: string; quantity: string; unit: string; unitCost: string };
 type LabDraft = { step: string; minutes: string; rate: string };
 type OtherDraft = { label: string; amount: string };
-type EditState<D> = { index: number | "new"; draft: D; confirmingDelete: boolean };
 
 const BLANK_MAT: MatDraft = { name: "", quantity: "", unit: "", unitCost: "" };
 const BLANK_LAB: LabDraft = { step: "", minutes: "", rate: String(BENCH_RATE) };
@@ -64,124 +69,6 @@ const draftFromOther = (o: OtherLine): OtherDraft => ({
   label: o.label,
   amount: o.cost.toFixed(2),
 });
-
-const num = (s: string) => Number(s.replace(",", "."));
-
-// ── small shared form pieces ──────────────────────────────────────────────
-
-function FieldLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="mb-1 block text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/42">
-      {children}
-    </span>
-  );
-}
-
-function MoneyInput({
-  value,
-  onChange,
-  placeholder = "0.00",
-}: {
-  value: string;
-  onChange: (v: string) => void;
-  placeholder?: string;
-}) {
-  return (
-    <div className="relative">
-      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 font-serif text-[15px] text-ink/42">
-        £
-      </span>
-      <input
-        inputMode="decimal"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        className={`${fieldInput} pl-6 font-serif tabular-nums`}
-      />
-    </div>
-  );
-}
-
-/** Shared footer for both inline forms: live line cost, then either the
- *  Save/Cancel/Delete actions or the inline delete confirm. */
-function FormFooter({
-  lineCost,
-  valid,
-  isNew,
-  confirmingDelete,
-  deleteCopy,
-  onSave,
-  onCancel,
-  onAskDelete,
-  onConfirmDelete,
-  onCancelDelete,
-}: {
-  lineCost: number | null;
-  valid: boolean;
-  isNew: boolean;
-  confirmingDelete: boolean;
-  deleteCopy: string;
-  onSave: () => void;
-  onCancel: () => void;
-  onAskDelete: () => void;
-  onConfirmDelete: () => void;
-  onCancelDelete: () => void;
-}) {
-  return (
-    <>
-      <div className="mt-3 flex items-baseline justify-between border-t border-dashed border-ink/14 pt-2.5">
-        <span className="text-[11px] font-light text-ink/55">Line cost</span>
-        <span className="font-serif text-[15px] tabular-nums text-ink">
-          {lineCost != null ? `£${lineCost.toFixed(2)}` : "—"}
-        </span>
-      </div>
-
-      {confirmingDelete ? (
-        <div className="mt-3">
-          <p className="mb-2 text-[12px] font-light leading-[1.5] text-ink/70">{deleteCopy}</p>
-          <div className="flex items-center gap-5">
-            <button type="button" onClick={onCancelDelete} className="text-[13px] text-ink/55">
-              Keep it
-            </button>
-            <button
-              type="button"
-              onClick={onConfirmDelete}
-              className="text-[13px] font-semibold text-status-red"
-            >
-              Delete
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div className="mt-3 flex items-center gap-4">
-          <button
-            type="button"
-            onClick={onSave}
-            disabled={!valid}
-            className={`rounded-[7px] px-4 py-2 text-[13px] font-semibold ${
-              valid ? "bg-clay-deep text-[#FDFBF9]" : "bg-ink/10 text-ink/30"
-            }`}
-          >
-            Save
-          </button>
-          <button type="button" onClick={onCancel} className="text-[13px] text-ink/55">
-            Cancel
-          </button>
-          {!isNew && (
-            <button type="button" onClick={onAskDelete} className="ml-auto text-[13px] text-status-red">
-              Delete
-            </button>
-          )}
-        </div>
-      )}
-    </>
-  );
-}
-
-// the 3px clay left stripe marks edit mode; content below shifts down
-function EditShell({ children }: { children: React.ReactNode }) {
-  return <div className="my-2 border-l-[3px] border-clay py-3 pl-4 pr-1">{children}</div>;
-}
 
 // The two inline forms. Rendered identically whether editing a row or adding a
 // new one — the only difference is the footer that's passed in.

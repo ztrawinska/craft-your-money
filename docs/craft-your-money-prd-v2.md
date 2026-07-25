@@ -328,7 +328,7 @@ Identity → materials → labour → other costs → reconciling summary → **
 Inline edit, optional stock layer (ghost "no stock tracked"), safe delete — products keep their own cost copies.
 
 ### Business costs (`/costs`)
-Costs → total → allocation method (two radio cards: per-unit vs bench-time) → result with a real product example. Zero volume blocks the result with an amber inline message. **Never says "overhead"** — always "business costs".
+Costs → total → allocation method (two radio cards: per-unit vs bench-time) → result with a real product example. Zero volume blocks the result with a quiet inline message — plain ink in a tinted band, never a coloured alarm (see design system §4). **Never says "overhead"** — always "business costs".
 
 ### Settings
 Groups: bench rate, target margin, currency, VAT, thresholds (read-only in MVP), account. Ripple rules stated as helper copy:

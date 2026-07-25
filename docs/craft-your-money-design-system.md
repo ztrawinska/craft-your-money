@@ -400,6 +400,8 @@ Add and edit never open a modal.
 
 **Warnings are helpers, not alarms.** Calm, plain, and they suggest a direction. "Error" and "invalid" are reserved for genuine system failures — never for a low margin.
 
+**Warnings and notices stay monochrome ink** — never a coloured band or coloured text. A notice that needs setting off sits in a tinted band (§2.8), still in ink. Colour lives only in chips and the clay accent; a warning introducing amber or red would make colour mean two things. (The status verdict a warning refers to is already carried, in colour, by its chip.)
+
 **The tool has opinions but does not lecture.** One chip, one plain sentence. No modal advice chains. The user runs the business; the tool informs.
 
 **Briefing voice** (dashboard): warm, specific, assembled from real numbers, written as if by someone who knows the business. Never generic encouragement.
