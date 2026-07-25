@@ -13,13 +13,15 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { seedProducts } from "@/lib/seed";
+import { seedMaterials, seedProducts } from "@/lib/seed";
+import type { LibraryMaterial } from "@/lib/materials";
 import type { Product, ProductType } from "@/lib/products";
 import { DEFAULT_SETTINGS, type Settings } from "@/lib/settings";
 
 const DATA_DIR = path.join(process.cwd(), ".data");
 const FILE = path.join(DATA_DIR, "products.json");
 const SETTINGS_FILE = path.join(DATA_DIR, "settings.json");
+const MATERIALS_FILE = path.join(DATA_DIR, "materials.json");
 
 function readAll(): Product[] {
   try {
@@ -108,4 +110,39 @@ function writeSettings(s: Settings): void {
 
 export function saveSettings(s: Settings): void {
   writeSettings(s);
+}
+
+// ── materials library ───────────────────────────────────────────────────────
+
+function readMaterials(): LibraryMaterial[] {
+  try {
+    if (!fs.existsSync(MATERIALS_FILE)) {
+      writeMaterials(seedMaterials);
+      return seedMaterials;
+    }
+    return JSON.parse(fs.readFileSync(MATERIALS_FILE, "utf8")) as LibraryMaterial[];
+  } catch {
+    return seedMaterials;
+  }
+}
+
+function writeMaterials(materials: LibraryMaterial[]): void {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+  fs.writeFileSync(MATERIALS_FILE, JSON.stringify(materials, null, 2));
+}
+
+export function listMaterials(): LibraryMaterial[] {
+  return readMaterials();
+}
+
+export function saveMaterial(material: LibraryMaterial): void {
+  const all = readMaterials();
+  const i = all.findIndex((m) => m.id === material.id);
+  if (i >= 0) all[i] = material;
+  else all.push(material);
+  writeMaterials(all);
+}
+
+export function deleteMaterial(id: string): void {
+  writeMaterials(readMaterials().filter((m) => m.id !== id));
 }

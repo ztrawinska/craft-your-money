@@ -16,6 +16,7 @@ import { ArrowLeft, ChevronDown, Ellipsis, Plus } from "lucide-react";
 import Link from "next/link";
 import { saveProductAction } from "@/app/products/actions";
 import { Button } from "@/components/Button";
+import { Combobox } from "@/components/Combobox";
 import {
   EditShell,
   FieldLabel,
@@ -30,6 +31,7 @@ import { Price } from "@/components/Price";
 import { PricingPanel } from "@/components/PricingPanel";
 import { SectionLabel } from "@/components/SectionLabel";
 import { computePricingFromDirect } from "@/lib/pricing";
+import { materialUnitLabel, type LibraryMaterial } from "@/lib/materials";
 import { effectiveVatRate, type Settings } from "@/lib/settings";
 import {
   labourDetail,
@@ -46,11 +48,17 @@ const addIcon = <Plus size={14} strokeWidth={2} />;
 
 // ── drafts (all strings until saved) ──────────────────────────────────────
 
-type MatDraft = { name: string; quantity: string; unit: string; unitCost: string };
+type MatDraft = {
+  name: string;
+  quantity: string;
+  unit: string;
+  unitCost: string;
+  fromLibrary: boolean;
+};
 type LabDraft = { step: string; minutes: string; rate: string };
 type OtherDraft = { label: string; amount: string };
 
-const BLANK_MAT: MatDraft = { name: "", quantity: "", unit: "", unitCost: "" };
+const BLANK_MAT: MatDraft = { name: "", quantity: "", unit: "", unitCost: "", fromLibrary: false };
 const BLANK_OTHER: OtherDraft = { label: "", amount: "" };
 // A new labour step defaults to the account's bench rate (PRD §14).
 const blankLab = (benchRate: number): LabDraft => ({ step: "", minutes: "", rate: String(benchRate) });
@@ -60,6 +68,7 @@ const draftFromMat = (m: MaterialLine): MatDraft => ({
   quantity: String(m.quantity),
   unit: m.unit,
   unitCost: m.unitCost.toFixed(2),
+  fromLibrary: !!m.fromLibrary,
 });
 const draftFromLab = (l: LabourLine): LabDraft => ({
   step: l.step,
@@ -77,21 +86,35 @@ function MaterialFields({
   draft,
   onPatch,
   footer,
+  library,
 }: {
   draft: MatDraft;
   onPatch: (p: Partial<MatDraft>) => void;
   footer: React.ReactNode;
+  library: LibraryMaterial[];
 }) {
   return (
     <EditShell>
       <label className="block">
         <FieldLabel>Material</FieldLabel>
-        <input
+        {/* type to autofill from the library; picking one fills the unit cost */}
+        <Combobox
           autoFocus
           value={draft.name}
-          onChange={(e) => onPatch({ name: e.target.value })}
           placeholder="e.g. Sterling silver sheet"
-          className={`${fieldInput} font-sans`}
+          options={library.map((m) => ({
+            id: m.id,
+            label: m.name,
+            hint: materialUnitLabel(m),
+          }))}
+          onType={(t) => onPatch({ name: t, fromLibrary: false })}
+          onUseAsNew={() => onPatch({ fromLibrary: false })}
+          onPick={(o) => {
+            const m = library.find((x) => x.id === o.id);
+            if (m) {
+              onPatch({ name: m.name, unit: m.unit, unitCost: m.unitCost.toFixed(2), fromLibrary: true });
+            }
+          }}
         />
       </label>
       <div className="mt-3 flex gap-2">
@@ -206,7 +229,15 @@ function OtherFields({
 
 // ── the editor ────────────────────────────────────────────────────────────
 
-export function ProductEditor({ product, settings }: { product: Product; settings: Settings }) {
+export function ProductEditor({
+  product,
+  settings,
+  library,
+}: {
+  product: Product;
+  settings: Settings;
+  library: LibraryMaterial[];
+}) {
   const [materials, setMaterials] = useState<MaterialLine[]>(product.materials);
   const [labour, setLabour] = useState<LabourLine[]>(product.labour);
   const [otherCosts, setOtherCosts] = useState<OtherLine[]>(product.otherCosts);
@@ -285,6 +316,7 @@ export function ProductEditor({ product, settings }: { product: Product; setting
       quantity: mQty,
       unit: md.unit.trim(),
       unitCost: mCost,
+      fromLibrary: md.fromLibrary || undefined,
     };
     setMaterials((prev) =>
       editMat.index === "new"
@@ -449,6 +481,7 @@ export function ProductEditor({ product, settings }: { product: Product; setting
                 draft={editMat.draft}
                 onPatch={patchMat}
                 footer={matFooter(false)}
+                library={library}
               />
             ) : (
               <button
@@ -467,7 +500,12 @@ export function ProductEditor({ product, settings }: { product: Product; setting
             ),
           )}
           {addingMat && (
-            <MaterialFields draft={editMat!.draft} onPatch={patchMat} footer={matFooter(true)} />
+            <MaterialFields
+              draft={editMat!.draft}
+              onPatch={patchMat}
+              footer={matFooter(true)}
+              library={library}
+            />
           )}
           {!addingMat && (
             <Button

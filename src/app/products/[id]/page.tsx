@@ -5,7 +5,7 @@
  */
 import { notFound } from "next/navigation";
 import { ProductEditor } from "@/components/ProductEditor";
-import { getProduct, getSettings } from "@/lib/store";
+import { getProduct, getSettings, listMaterials } from "@/lib/store";
 
 export default async function ProductDetail({
   params,
@@ -16,5 +16,7 @@ export default async function ProductDetail({
   const product = getProduct(id);
   if (!product) notFound();
 
-  return <ProductEditor product={product} settings={getSettings()} />;
+  return (
+    <ProductEditor product={product} settings={getSettings()} library={listMaterials()} />
+  );
 }

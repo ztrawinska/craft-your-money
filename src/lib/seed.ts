@@ -2,7 +2,19 @@
  * Seed data — the sample products the store starts from on first run. Once the
  * store's file exists, this is no longer read; it's just the initial contents.
  */
+import type { LibraryMaterial } from "@/lib/materials";
 import type { Product } from "@/lib/products";
+
+/** The materials library the store starts from. Covers the library items the
+ *  sample products reference, plus stock on some (and none on others). */
+export const seedMaterials: LibraryMaterial[] = [
+  { id: "m-silver-sheet", name: "Sterling silver sheet", unit: "g", unitCost: 0.62, stock: 120 },
+  { id: "m-solder-wire", name: "Solder wire", unit: "g", unitCost: 1.1, stock: 40 },
+  { id: "m-silver-wire", name: "Silver wire", unit: "g", unitCost: 0.72, stock: null },
+  { id: "m-pearls", name: "Freshwater pearls", unit: "", unitCost: 6.5, stock: 8 },
+  { id: "m-ear-wires", name: "Silver ear wires", unit: "pair", unitCost: 2.75, stock: null },
+  { id: "m-copper-sheet", name: "Copper sheet", unit: "g", unitCost: 0.09, stock: 200 },
+];
 
 export const seedProducts: Product[] = [
   {

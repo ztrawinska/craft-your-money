@@ -9,7 +9,8 @@
       "Bash(npx tsx -e ' *)",
       "Bash(node -e \"const p=require\\('./.data/products.json'\\); console.log\\(p.map\\(x=>x.id\\).join\\(', '\\), '\\('+p.length+'\\)'\\)\")",
       "Bash(node -e \"const p=require\\('./.data/products.json'\\); const h=p.find\\(x=>x.id==='hammered-band'\\); console.log\\('hammered-band finalPrice in store:', h.finalPrice, '| workflow:', h.workflow\\)\")",
-      "Bash(grep -n \"openLab\\(\\\\\"new\\\\\", BLANK_LAB\\)\\\\|<LabourFields\\\\|targetMarginPct={product\\\\|vatRatePct={product\" src/components/ProductEditor.tsx)"
+      "Bash(grep -n \"openLab\\(\\\\\"new\\\\\", BLANK_LAB\\)\\\\|<LabourFields\\\\|targetMarginPct={product\\\\|vatRatePct={product\" src/components/ProductEditor.tsx)",
+      "Bash(node -e \"const m=require\\('./.data/materials.json'\\); console.log\\(m.length+' materials:', m.map\\(x=>x.name+' \\('+\\(x.stock==null?'no stock':x.stock+x.unit\\)+'\\)'\\).join\\(', '\\)\\)\")"
     ]
   }
 }
