@@ -19,6 +19,7 @@ const GLINT_PATH =
 type AssistantSlotProps = {
   children: ReactNode;
   href?: string;
+  onClick?: () => void;
   /** Centered with no trailing arrow (the pricing-block "Check this price"). */
   centered?: boolean;
   className?: string;
@@ -27,6 +28,7 @@ type AssistantSlotProps = {
 export function AssistantSlot({
   children,
   href,
+  onClick,
   centered = false,
   className = "",
 }: AssistantSlotProps) {
@@ -55,6 +57,13 @@ export function AssistantSlot({
       <Link href={href} className={cls}>
         {inner}
       </Link>
+    );
+  }
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className={`w-full ${cls}`}>
+        {inner}
+      </button>
     );
   }
   return <div className={cls}>{inner}</div>;

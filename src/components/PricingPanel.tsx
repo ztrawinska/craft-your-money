@@ -12,10 +12,10 @@
  */
 "use client";
 
-import { AssistantSlot } from "@/components/AssistantSlot";
 import { Chip } from "@/components/Chip";
 import { FramedSurface } from "@/components/FramedSurface";
 import { Price } from "@/components/Price";
+import { PriceCheck } from "@/components/PriceCheck";
 import { computePricingFromDirect, priceWarning } from "@/lib/pricing";
 import { profitTone, profitabilityFromMargin, statusChip } from "@/lib/status";
 
@@ -58,6 +58,22 @@ export function PricingPanel({
   const chip = statusChip({ workflow, hasPrice: finalPrice != null, marginPct: pricing.marginPct });
   const tone = pricing.marginPct != null ? profitTone(profitabilityFromMargin(pricing.marginPct)) : null;
   const warning = finalPrice != null ? priceWarning(pricing, { finalPrice, targetMarginPct, vatRatePct }) : null;
+
+  // Everything the Price Check needs — only when there's a price to review.
+  const reviewCtx =
+    finalPrice != null && pricing.net != null && pricing.profit != null && pricing.marginPct != null
+      ? {
+          finalPrice,
+          net: pricing.net,
+          profit: pricing.profit,
+          marginPct: pricing.marginPct,
+          directCost: pricing.directCost,
+          fullCost: pricing.fullCost,
+          calculatedPrice,
+          targetMarginPct,
+          vatRatePct,
+        }
+      : null;
 
   const diverged =
     finalPrice != null &&
@@ -147,9 +163,7 @@ export function PricingPanel({
         </p>
       )}
 
-      <AssistantSlot centered className="mt-5">
-        Check this price
-      </AssistantSlot>
+      <PriceCheck ctx={reviewCtx} />
     </FramedSurface>
   );
 }
