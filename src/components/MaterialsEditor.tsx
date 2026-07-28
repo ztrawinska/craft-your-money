@@ -172,25 +172,26 @@ export function MaterialsEditor({ initial }: { initial: LibraryMaterial[] }) {
           </span>
         </div>
 
+        {/* one gutter for the whole section — rows align to it like the product
+            calculator's material/cost lines (no stripe, no extra padding) */}
         <div className="px-6">
           <SectionLabel>Your library</SectionLabel>
-        </div>
-
-        <div className="divide-y divide-ink/7">
           {materials.map((m, i) =>
             edit && edit.index === i ? (
-              <div key={`edit-${m.id}`} className="px-6">
-                <MaterialFields draft={edit.draft} onPatch={patch} footer={footer(false)} />
-              </div>
+              <MaterialFields
+                key={`edit-${m.id}`}
+                draft={edit.draft}
+                onPatch={patch}
+                footer={footer(false)}
+              />
             ) : (
               <button
                 key={m.id}
                 type="button"
                 onClick={() => open(i, draftFrom(m))}
-                className="block w-full px-6 text-left"
+                className="block w-full text-left"
               >
                 <ListRow
-                  emphasis="product"
                   label={m.name}
                   meta={
                     m.stock == null ? (
@@ -208,9 +209,6 @@ export function MaterialsEditor({ initial }: { initial: LibraryMaterial[] }) {
               </button>
             ),
           )}
-        </div>
-
-        <div className="px-6">
           {addingNew ? (
             <MaterialFields draft={edit!.draft} onPatch={patch} footer={footer(true)} />
           ) : (
@@ -218,7 +216,7 @@ export function MaterialsEditor({ initial }: { initial: LibraryMaterial[] }) {
               variant="link"
               iconLeading={addIcon}
               onClick={() => open("new", BLANK)}
-              className="pt-4 text-[13px] font-medium"
+              className="pt-3 text-[13px] font-medium"
             >
               Add material
             </Button>
