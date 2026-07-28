@@ -2,8 +2,17 @@
  * Seed data — the sample products the store starts from on first run. Once the
  * store's file exists, this is no longer read; it's just the initial contents.
  */
+import type { FixedCost, FixedCostConfig } from "@/lib/fixed-costs";
 import type { LibraryMaterial } from "@/lib/materials";
 import type { Product } from "@/lib/products";
+
+/** The business-cost layer the store starts from: £274/month spread across
+ *  100 pieces → £2.74 per piece, applied to every product. */
+export const seedFixedCosts: FixedCost[] = [
+  { id: "fc-rent", label: "Studio rent", amount: 220, period: "monthly", monthsActive: 12 },
+  { id: "fc-tools", label: "Insurance & tools", amount: 54, period: "monthly", monthsActive: 12 },
+];
+export const seedFixedCostConfig: FixedCostConfig = { method: "per-unit", volume: 100 };
 
 /** The materials library the store starts from. Covers the library items the
  *  sample products reference, plus stock on some (and none on others). */
@@ -23,7 +32,6 @@ export const seedProducts: Product[] = [
     type: "Ring",
     workflow: "active",
     finalPrice: 38,
-    businessCostShare: null,
     materials: [
       { name: "Sterling silver sheet", quantity: 14, unit: "g", unitCost: 0.62, fromLibrary: true },
       { name: "Solder wire", quantity: 0.5, unit: "g", unitCost: 1.1, fromLibrary: true },
@@ -41,7 +49,6 @@ export const seedProducts: Product[] = [
     type: "Earrings",
     workflow: "active",
     finalPrice: 55,
-    businessCostShare: null,
     materials: [
       { name: "Freshwater pearls", quantity: 2, unit: "", unitCost: 6.5, fromLibrary: true },
       { name: "Silver ear wires", quantity: 1, unit: "pair", unitCost: 2.75, fromLibrary: true },
@@ -58,7 +65,6 @@ export const seedProducts: Product[] = [
     type: "Necklace",
     workflow: "active",
     finalPrice: 68,
-    businessCostShare: null,
     materials: [
       { name: "Silver wire", quantity: 10, unit: "g", unitCost: 0.72, fromLibrary: true },
       { name: "Chain", quantity: 45, unit: "cm", unitCost: 0.18 },
@@ -75,7 +81,6 @@ export const seedProducts: Product[] = [
     type: "Bracelet",
     workflow: "active",
     finalPrice: null,
-    businessCostShare: null,
     materials: [{ name: "Copper sheet", quantity: 20, unit: "g", unitCost: 0.09 }],
     labour: [
       { step: "Forging", minutes: 35, rate: 15 },
@@ -91,7 +96,6 @@ export const seedProducts: Product[] = [
     type: "Ring",
     workflow: "draft",
     finalPrice: 42,
-    businessCostShare: 2.74,
     materials: [
       { name: "Sterling silver sheet", quantity: 4, unit: "g", unitCost: 0.62, fromLibrary: true },
       { name: "Solder wire", quantity: 0.3, unit: "g", unitCost: 1.1, fromLibrary: true },
@@ -109,7 +113,6 @@ export const seedProducts: Product[] = [
     type: "Ring",
     workflow: "draft",
     finalPrice: null,
-    businessCostShare: null,
     materials: [{ name: "Silver wire", quantity: 6, unit: "g", unitCost: 0.72, fromLibrary: true }],
     labour: [],
     otherCosts: [],

@@ -10,7 +10,10 @@
       "Bash(node -e \"const p=require\\('./.data/products.json'\\); console.log\\(p.map\\(x=>x.id\\).join\\(', '\\), '\\('+p.length+'\\)'\\)\")",
       "Bash(node -e \"const p=require\\('./.data/products.json'\\); const h=p.find\\(x=>x.id==='hammered-band'\\); console.log\\('hammered-band finalPrice in store:', h.finalPrice, '| workflow:', h.workflow\\)\")",
       "Bash(grep -n \"openLab\\(\\\\\"new\\\\\", BLANK_LAB\\)\\\\|<LabourFields\\\\|targetMarginPct={product\\\\|vatRatePct={product\" src/components/ProductEditor.tsx)",
-      "Bash(node -e \"const m=require\\('./.data/materials.json'\\); console.log\\(m.length+' materials:', m.map\\(x=>x.name+' \\('+\\(x.stock==null?'no stock':x.stock+x.unit\\)+'\\)'\\).join\\(', '\\)\\)\")"
+      "Bash(node -e \"const m=require\\('./.data/materials.json'\\); console.log\\(m.length+' materials:', m.map\\(x=>x.name+' \\('+\\(x.stock==null?'no stock':x.stock+x.unit\\)+'\\)'\\).join\\(', '\\)\\)\")",
+      "Bash(perl -ni -e 'print unless /^\\\\s*businessCostShare:/' src/lib/seed.ts src/lib/store.ts)",
+      "Bash(perl -pi -e 's/pricingFor\\\\\\(p, settings\\\\\\)/pricingFor\\(p, settings, shareOf\\(p\\)\\)/g; s/statusInputFor\\\\\\(p, settings\\\\\\)/statusInputFor\\(p, settings, shareOf\\(p\\)\\)/g;' src/app/dashboard/page.tsx)",
+      "Bash(perl -pi -e 's/\\\\\\(pricingFor\\\\\\(a, settings\\\\\\)\\\\.marginPct \\\\?\\\\? 0\\\\\\) - \\\\\\(pricingFor\\\\\\(b, settings\\\\\\)\\\\.marginPct \\\\?\\\\? 0\\\\\\)/\\(pricingFor\\(a, settings, shareOf\\(a\\)\\).marginPct ?? 0\\) - \\(pricingFor\\(b, settings, shareOf\\(b\\)\\).marginPct ?? 0\\)/g' src/app/dashboard/page.tsx)"
     ]
   }
 }

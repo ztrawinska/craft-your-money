@@ -41,8 +41,8 @@ export type Product = {
   type: ProductType;
   workflow: "draft" | "active";
   finalPrice: number | null; // gross
-  // target margin and VAT are account settings, not product fields (§14).
-  businessCostShare: number | null; // fixed-cost allocation, if configured
+  // target margin, VAT and the business-cost share are account-level (§14): the
+  // share is computed from the fixed-cost layer, not stored on the product.
   materials: MaterialLine[];
   labour: LabourLine[];
   otherCosts: OtherLine[];
@@ -68,9 +68,18 @@ export function labourDetail(l: LabourLine): string {
   return `${l.minutes} min · £${l.rate}/hr`;
 }
 
+/** Total labour hours for a product — the input to bench-time cost allocation. */
+export function productLabourHours(p: Product): number {
+  return p.labour.reduce((sum, l) => sum + l.minutes, 0) / 60;
+}
+
 // ── lenses the screens read through ───────────────────────────────────────
 
-export function pricingFor(p: Product, s: Settings): Pricing {
+export function pricingFor(
+  p: Product,
+  s: Settings,
+  businessCostShare: number | null,
+): Pricing {
   return computePricing({
     materials: p.materials.map(materialLineCost),
     labour: p.labour.map(labourLineCost),
@@ -78,15 +87,19 @@ export function pricingFor(p: Product, s: Settings): Pricing {
     finalPrice: p.finalPrice,
     targetMarginPct: s.targetMarginPct,
     vatRatePct: effectiveVatRate(s),
-    businessCostShare: p.businessCostShare,
+    businessCostShare,
   });
 }
 
 /** A product as the status model sees it — margin is computed, not stored. */
-export function statusInputFor(p: Product, s: Settings): ProductStatusInput {
+export function statusInputFor(
+  p: Product,
+  s: Settings,
+  businessCostShare: number | null,
+): ProductStatusInput {
   return {
     workflow: p.workflow,
     hasPrice: p.finalPrice !== null,
-    marginPct: pricingFor(p, s).marginPct,
+    marginPct: pricingFor(p, s, businessCostShare).marginPct,
   };
 }

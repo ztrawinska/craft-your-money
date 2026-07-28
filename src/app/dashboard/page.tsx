@@ -19,8 +19,9 @@ import { Chip } from "@/components/Chip";
 import { ListRow } from "@/components/ListRow";
 import { Price } from "@/components/Price";
 import { SectionLabel } from "@/components/SectionLabel";
-import { pricingFor, statusInputFor } from "@/lib/products";
-import { getSettings, listProducts } from "@/lib/store";
+import { fixedCostPerUnit } from "@/lib/fixed-costs";
+import { pricingFor, productLabourHours, statusInputFor, type Product } from "@/lib/products";
+import { getFixedCostConfig, getFixedCosts, getSettings, listProducts } from "@/lib/store";
 import { statusChip } from "@/lib/status";
 
 const HEALTHY_MIN = 0.3; // "below your 30% target"
@@ -32,6 +33,10 @@ export default function Dashboard() {
   // Everything below is derived from the stored product list, at request time.
   const products = listProducts();
   const settings = getSettings();
+  const fixedCosts = getFixedCosts();
+  const config = getFixedCostConfig();
+  const shareOf = (p: Product) => fixedCostPerUnit(fixedCosts, config, productLabourHours(p));
+
   const active = products.filter((p) => p.workflow === "active");
   const activePriced = active.filter((p) => p.finalPrice !== null);
 
@@ -39,26 +44,26 @@ export default function Dashboard() {
   const activeTotal = active.length;
   const avgProfit =
     pricedDone > 0
-      ? activePriced.reduce((s, p) => s + (pricingFor(p, settings).profit ?? 0), 0) / pricedDone
+      ? activePriced.reduce((s, p) => s + (pricingFor(p, settings, shareOf(p)).profit ?? 0), 0) / pricedDone
       : 0;
   const belowTarget = activePriced.filter((p) => {
-    const m = pricingFor(p, settings).marginPct;
+    const m = pricingFor(p, settings, shareOf(p)).marginPct;
     return m !== null && m < HEALTHY_MIN;
   }).length;
 
   const weakest = [...activePriced].sort(
-    (a, b) => (pricingFor(a, settings).marginPct ?? 0) - (pricingFor(b, settings).marginPct ?? 0),
+    (a, b) => (pricingFor(a, settings, shareOf(a)).marginPct ?? 0) - (pricingFor(b, settings, shareOf(b)).marginPct ?? 0),
   )[0];
 
   // Attention: active risky first, then active no-price. Drafts never appear.
   const risky = active.filter((p) => {
-    const m = pricingFor(p, settings).marginPct;
+    const m = pricingFor(p, settings, shareOf(p)).marginPct;
     return m !== null && m < RISKY_MAX;
   });
   const noPrice = active.filter((p) => p.finalPrice === null);
   const attention = [
     ...risky.map((p) => {
-      const profit = pricingFor(p, settings).profit ?? 0;
+      const profit = pricingFor(p, settings, shareOf(p)).profit ?? 0;
       return {
         p,
         stripe: "risky" as const,
@@ -163,7 +168,7 @@ export default function Dashboard() {
             </div>
             <div className="divide-y divide-ink/7 border-t border-ink/7">
               {attention.map(({ p, stripe, note, action }) => {
-                const chip = statusChip(statusInputFor(p, settings));
+                const chip = statusChip(statusInputFor(p, settings, shareOf(p)));
                 return (
                   <ListRow
                     key={p.id}

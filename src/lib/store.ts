@@ -13,7 +13,8 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { seedMaterials, seedProducts } from "@/lib/seed";
+import { seedFixedCostConfig, seedFixedCosts, seedMaterials, seedProducts } from "@/lib/seed";
+import type { FixedCost, FixedCostConfig } from "@/lib/fixed-costs";
 import type { LibraryMaterial } from "@/lib/materials";
 import type { Product, ProductType } from "@/lib/products";
 import { DEFAULT_SETTINGS, type Settings } from "@/lib/settings";
@@ -22,6 +23,7 @@ const DATA_DIR = path.join(process.cwd(), ".data");
 const FILE = path.join(DATA_DIR, "products.json");
 const SETTINGS_FILE = path.join(DATA_DIR, "settings.json");
 const MATERIALS_FILE = path.join(DATA_DIR, "materials.json");
+const COSTS_FILE = path.join(DATA_DIR, "costs.json");
 
 function readAll(): Product[] {
   try {
@@ -79,7 +81,6 @@ export function createDraft(name: string, type: ProductType): Product {
     type,
     workflow: "draft",
     finalPrice: null,
-    businessCostShare: null,
     materials: [],
     labour: [],
     otherCosts: [],
@@ -145,4 +146,51 @@ export function saveMaterial(material: LibraryMaterial): void {
 
 export function deleteMaterial(id: string): void {
   writeMaterials(readMaterials().filter((m) => m.id !== id));
+}
+
+// ── fixed / business costs ──────────────────────────────────────────────────
+
+type CostsFile = { costs: FixedCost[]; config: FixedCostConfig };
+
+function readCosts(): CostsFile {
+  try {
+    if (!fs.existsSync(COSTS_FILE)) {
+      const seed = { costs: seedFixedCosts, config: seedFixedCostConfig };
+      writeCosts(seed);
+      return seed;
+    }
+    return JSON.parse(fs.readFileSync(COSTS_FILE, "utf8")) as CostsFile;
+  } catch {
+    return { costs: seedFixedCosts, config: seedFixedCostConfig };
+  }
+}
+
+function writeCosts(data: CostsFile): void {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+  fs.writeFileSync(COSTS_FILE, JSON.stringify(data, null, 2));
+}
+
+export function getFixedCosts(): FixedCost[] {
+  return readCosts().costs;
+}
+
+export function getFixedCostConfig(): FixedCostConfig {
+  return readCosts().config;
+}
+
+export function saveFixedCost(cost: FixedCost): void {
+  const data = readCosts();
+  const i = data.costs.findIndex((c) => c.id === cost.id);
+  if (i >= 0) data.costs[i] = cost;
+  else data.costs.push(cost);
+  writeCosts(data);
+}
+
+export function deleteFixedCost(id: string): void {
+  const data = readCosts();
+  writeCosts({ ...data, costs: data.costs.filter((c) => c.id !== id) });
+}
+
+export function saveFixedCostConfig(config: FixedCostConfig): void {
+  writeCosts({ ...readCosts(), config });
 }

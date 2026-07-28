@@ -14,8 +14,8 @@ test("line-cost helpers price a row correctly", () => {
   expect(labourLineCost({ step: "x", minutes: 20, rate: 15 })).toBeCloseTo(5, 2);
 });
 
-test("the flagship still reduces to its known figures", () => {
-  const p = pricingFor(seed("hammered-band"), DEFAULT_SETTINGS);
+test("the flagship still reduces to its known figures (with a £2.74 share)", () => {
+  const p = pricingFor(seed("hammered-band"), DEFAULT_SETTINGS, 2.74);
   expect(p.directCost).toBeCloseTo(14.06, 2);
   expect(p.fullCost).toBeCloseTo(16.8, 2);
   expect(p.profit).toBeCloseTo(18.2, 2);
@@ -23,5 +23,5 @@ test("the flagship still reduces to its known figures", () => {
 });
 
 test("stacking set is still a real loss", () => {
-  expect(pricingFor(seed("stacking-set"), DEFAULT_SETTINGS).profit! < 0).toBe(true);
+  expect(pricingFor(seed("stacking-set"), DEFAULT_SETTINGS, null).profit! < 0).toBe(true);
 });

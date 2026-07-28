@@ -31,6 +31,11 @@ import { Price } from "@/components/Price";
 import { PricingPanel } from "@/components/PricingPanel";
 import { SectionLabel } from "@/components/SectionLabel";
 import { computePricingFromDirect } from "@/lib/pricing";
+import {
+  fixedCostPerUnit,
+  type FixedCost,
+  type FixedCostConfig,
+} from "@/lib/fixed-costs";
 import { materialUnitLabel, type LibraryMaterial } from "@/lib/materials";
 import { effectiveVatRate, type Settings } from "@/lib/settings";
 import {
@@ -233,10 +238,14 @@ export function ProductEditor({
   product,
   settings,
   library,
+  fixedCosts,
+  fixedCostConfig,
 }: {
   product: Product;
   settings: Settings;
   library: LibraryMaterial[];
+  fixedCosts: FixedCost[];
+  fixedCostConfig: FixedCostConfig;
 }) {
   const [materials, setMaterials] = useState<MaterialLine[]>(product.materials);
   const [labour, setLabour] = useState<LabourLine[]>(product.labour);
@@ -245,16 +254,21 @@ export function ProductEditor({
   const [editLab, setEditLab] = useState<EditState<LabDraft> | null>(null);
   const [editOther, setEditOther] = useState<EditState<OtherDraft> | null>(null);
 
-  const options = {
-    targetMarginPct: settings.targetMarginPct,
-    vatRatePct: effectiveVatRate(settings),
-    businessCostShare: product.businessCostShare,
-  };
-
   const otherTotal = otherCosts.reduce((s, o) => s + o.cost, 0);
   const materialsTotal = materials.reduce((s, m) => s + materialLineCost(m), 0);
   const labourTotal = labour.reduce((s, l) => s + labourLineCost(l), 0);
   const directCost = materialsTotal + labourTotal + otherTotal;
+
+  // The business-cost share is computed from the fixed-cost layer. Under
+  // bench-time allocation it depends on labour hours, so it reacts live.
+  const labourHours = labour.reduce((s, l) => s + l.minutes, 0) / 60;
+  const businessCostShare = fixedCostPerUnit(fixedCosts, fixedCostConfig, labourHours);
+
+  const options = {
+    targetMarginPct: settings.targetMarginPct,
+    vatRatePct: effectiveVatRate(settings),
+    businessCostShare,
+  };
 
   const summary = computePricingFromDirect(directCost, { finalPrice: null, ...options });
   const calculatedPrice = summary.calculatedPrice;
@@ -641,15 +655,15 @@ export function ProductEditor({
             </span>
             <Price value={directCost} variant="figure" />
           </div>
-          {product.businessCostShare !== null && (
+          {businessCostShare !== null && (
             <div className="mt-[11px] border-t border-dashed border-ink/14 pt-[10px]">
               <div className="flex items-baseline justify-between py-[3px] text-[12px] text-ink/55">
                 <span className="font-light italic">Share of business costs</span>
-                <Price value={product.businessCostShare} variant="summary" />
+                <Price value={businessCostShare} variant="summary" />
               </div>
               <div className="flex items-baseline justify-between py-[3px] text-[12px]">
                 <span className="font-medium text-ink/70">Full cost</span>
-                <Price value={directCost + product.businessCostShare} variant="inline" />
+                <Price value={directCost + businessCostShare} variant="inline" />
               </div>
             </div>
           )}
@@ -662,7 +676,7 @@ export function ProductEditor({
         directCost={directCost}
         targetMarginPct={settings.targetMarginPct}
         vatRatePct={effectiveVatRate(settings)}
-        businessCostShare={product.businessCostShare}
+        businessCostShare={businessCostShare}
         priceText={priceText}
         onPriceChange={(v) => {
           setManualPrice(v);

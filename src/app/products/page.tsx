@@ -12,8 +12,9 @@ import { Chip } from "@/components/Chip";
 import { Dropdown } from "@/components/Dropdown";
 import { ListRow } from "@/components/ListRow";
 import { TintedBand } from "@/components/TintedBand";
-import { statusInputFor, type Product } from "@/lib/products";
-import { getSettings, listProducts } from "@/lib/store";
+import { fixedCostPerUnit } from "@/lib/fixed-costs";
+import { productLabourHours, statusInputFor, type Product } from "@/lib/products";
+import { getFixedCostConfig, getFixedCosts, getSettings, listProducts } from "@/lib/store";
 import { compareByStatus, statusChip, stripeTone } from "@/lib/status";
 
 function metaPrice(p: Product): string {
@@ -24,8 +25,13 @@ function metaPrice(p: Product): string {
 export default function ProductsOverview() {
   const products = listProducts();
   const settings = getSettings();
+  const fixedCosts = getFixedCosts();
+  const config = getFixedCostConfig();
+  // each product's share of the business-cost layer (§6)
+  const shareOf = (p: Product) => fixedCostPerUnit(fixedCosts, config, productLabourHours(p));
+
   const sorted = [...products].sort((a, b) =>
-    compareByStatus(statusInputFor(a, settings), statusInputFor(b, settings)),
+    compareByStatus(statusInputFor(a, settings, shareOf(a)), statusInputFor(b, settings, shareOf(b))),
   );
 
   const activeCount = products.filter((p) => p.workflow === "active").length;
@@ -72,7 +78,7 @@ export default function ProductsOverview() {
         {/* the list — hairline-separated rows, problems first */}
         <div className="divide-y divide-ink/7">
           {sorted.map((p) => {
-            const input = statusInputFor(p, settings);
+            const input = statusInputFor(p, settings, shareOf(p));
             const chip = statusChip(input);
             return (
               <ListRow

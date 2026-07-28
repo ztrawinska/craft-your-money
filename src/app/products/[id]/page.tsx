@@ -5,7 +5,13 @@
  */
 import { notFound } from "next/navigation";
 import { ProductEditor } from "@/components/ProductEditor";
-import { getProduct, getSettings, listMaterials } from "@/lib/store";
+import {
+  getFixedCostConfig,
+  getFixedCosts,
+  getProduct,
+  getSettings,
+  listMaterials,
+} from "@/lib/store";
 
 export default async function ProductDetail({
   params,
@@ -17,6 +23,12 @@ export default async function ProductDetail({
   if (!product) notFound();
 
   return (
-    <ProductEditor product={product} settings={getSettings()} library={listMaterials()} />
+    <ProductEditor
+      product={product}
+      settings={getSettings()}
+      library={listMaterials()}
+      fixedCosts={getFixedCosts()}
+      fixedCostConfig={getFixedCostConfig()}
+    />
   );
 }
