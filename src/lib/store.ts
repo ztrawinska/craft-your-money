@@ -59,6 +59,33 @@ export function saveProduct(product: Product): void {
   writeAll(all);
 }
 
+export function deleteProduct(id: string): void {
+  writeAll(readAll().filter((p) => p.id !== id));
+}
+
+export function setArchived(id: string, archived: boolean): void {
+  const p = getProduct(id);
+  if (p) saveProduct({ ...p, archived });
+}
+
+/** A full copy, saved as a new draft named "… (copy)" (product-actions spec). */
+export function duplicateProduct(id: string): Product | undefined {
+  const p = getProduct(id);
+  if (!p) return undefined;
+  const copy: Product = {
+    ...p,
+    id: `${slugify(p.name)}-${Date.now().toString(36)}`,
+    name: `${p.name} (copy)`,
+    workflow: "draft",
+    archived: false,
+    materials: p.materials.map((m) => ({ ...m })),
+    labour: p.labour.map((l) => ({ ...l })),
+    otherCosts: p.otherCosts.map((o) => ({ ...o })),
+  };
+  saveProduct(copy);
+  return copy;
+}
+
 function slugify(name: string): string {
   return (
     name

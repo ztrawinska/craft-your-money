@@ -41,6 +41,7 @@ export type Product = {
   type: ProductType;
   workflow: "draft" | "active";
   finalPrice: number | null; // gross
+  archived?: boolean; // "I stopped making this" — kept, but out of the range
   // target margin, VAT and the business-cost share are account-level (§14): the
   // share is computed from the fixed-cost layer, not stored on the product.
   materials: MaterialLine[];

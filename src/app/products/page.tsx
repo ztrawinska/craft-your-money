@@ -23,7 +23,8 @@ function metaPrice(p: Product): string {
 }
 
 export default function ProductsOverview() {
-  const products = listProducts();
+  // Default view excludes archived products (reachable via the status filter).
+  const products = listProducts().filter((p) => !p.archived);
   const settings = getSettings();
   const fixedCosts = getFixedCosts();
   const config = getFixedCostConfig();

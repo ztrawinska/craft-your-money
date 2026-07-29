@@ -40,3 +40,35 @@ export async function createProductAction(formData: FormData): Promise<void> {
   revalidatePath("/dashboard");
   redirect(`/products/${product.id}`);
 }
+
+// ── the ⋯ menu actions (product-actions spec) ─────────────────────────────
+
+/** A full copy as a new draft; opens it to edit. */
+export async function duplicateProductAction(id: string): Promise<void> {
+  const { duplicateProduct } = await import("@/lib/store");
+  const copy = duplicateProduct(id);
+  revalidatePath("/products");
+  if (copy) redirect(`/products/${copy.id}`);
+}
+
+/** Stop making it — keeps the record, leaves the overview and metrics. */
+export async function archiveProductAction(id: string): Promise<void> {
+  const { setArchived } = await import("@/lib/store");
+  setArchived(id, true);
+  revalidateProduct(id);
+  redirect("/products");
+}
+
+export async function restoreProductAction(id: string): Promise<void> {
+  const { setArchived } = await import("@/lib/store");
+  setArchived(id, false);
+  revalidateProduct(id);
+}
+
+/** Remove permanently. */
+export async function deleteProductAction(id: string): Promise<void> {
+  const { deleteProduct } = await import("@/lib/store");
+  deleteProduct(id);
+  revalidateProduct(id);
+  redirect("/products");
+}

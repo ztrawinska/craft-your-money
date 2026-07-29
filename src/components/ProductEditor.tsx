@@ -12,9 +12,16 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { ArrowLeft, ChevronDown, Ellipsis, Plus } from "lucide-react";
+import { Archive, ArrowLeft, ChevronDown, Copy, Ellipsis, Plus, RotateCcw, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { saveProductAction } from "@/app/products/actions";
+import {
+  archiveProductAction,
+  deleteProductAction,
+  duplicateProductAction,
+  restoreProductAction,
+  saveProductAction,
+} from "@/app/products/actions";
+import { ActionSheet, type SheetAction } from "@/components/ActionSheet";
 import { Button } from "@/components/Button";
 import { Combobox } from "@/components/Combobox";
 import {
@@ -450,6 +457,57 @@ export function ProductEditor({
       });
     });
 
+  // ── the ⋯ menu (duplicate / archive / delete) ──
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const run = (action: () => Promise<void>) => startSaving(() => action());
+
+  const menuActions: SheetAction[] = [
+    {
+      id: "duplicate",
+      label: "Duplicate",
+      sublabel: "Full copy, saved as a new draft",
+      icon: <Copy size={18} />,
+      onSelect: () => run(() => duplicateProductAction(product.id)),
+    },
+    product.archived
+      ? {
+          id: "restore",
+          label: "Restore",
+          sublabel: "Bring it back to your range",
+          icon: <RotateCcw size={18} />,
+          onSelect: () => run(() => restoreProductAction(product.id)),
+        }
+      : {
+          id: "archive",
+          label: "Archive",
+          sublabel: "Stop making it — keeps the record",
+          icon: <Archive size={18} />,
+          onSelect: () => run(() => archiveProductAction(product.id)),
+        },
+    {
+      id: "delete",
+      label: "Delete",
+      sublabel: "Remove permanently",
+      icon: <Trash2 size={18} />,
+      danger: true,
+      onSelect: () => run(() => deleteProductAction(product.id)),
+      confirm: {
+        title: "Delete this product?",
+        body: (
+          <>
+            <strong className="font-medium text-ink">{product.name}</strong> and all its costs
+            will be removed permanently. This can&rsquo;t be undone.
+            <br />
+            <br />
+            If you&rsquo;ve just stopped making it,{" "}
+            <strong className="font-medium text-ink">archive</strong> keeps the record instead.
+          </>
+        ),
+        confirmLabel: "Delete",
+      },
+    },
+  ];
+
   return (
     <main className="mx-auto w-full max-w-[430px] pb-24">
       {/* ── header: back · workflow stamp · more ── */}
@@ -457,17 +515,28 @@ export function ProductEditor({
         <Link href="/products" aria-label="Back" className="-ml-1.5 text-ink/55">
           <ArrowLeft size={18} strokeWidth={2} />
         </Link>
-        {product.workflow === "draft" ? (
+        {product.archived ? (
+          <span className="rounded-[2px] border border-ink/30 px-[11px] pb-[3px] pt-1 text-[9.5px] font-semibold uppercase tracking-[0.22em] text-ink/55">
+            Archived
+          </span>
+        ) : product.workflow === "draft" ? (
           <span className="rounded-[2px] border border-ink/30 px-[11px] pb-[3px] pt-1 text-[9.5px] font-semibold uppercase tracking-[0.22em] text-ink/55">
             Draft
           </span>
         ) : (
           <span />
         )}
-        <button type="button" aria-label="More" className="text-ink/42">
+        <button
+          type="button"
+          aria-label="More actions"
+          onClick={() => setSheetOpen(true)}
+          className="text-ink/42"
+        >
           <Ellipsis size={18} />
         </button>
       </div>
+
+      <ActionSheet open={sheetOpen} onClose={() => setSheetOpen(false)} actions={menuActions} />
 
       {/* ── identity ── */}
       <div className="px-6 pb-2 pt-5">

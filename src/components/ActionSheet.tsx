@@ -1,0 +1,127 @@
+/**
+ * ActionSheet — the ⋯ menu (design system §2.11). A bottom sheet, never a
+ * floating popover: page background, a grab handle, full-width 44px+ rows.
+ *
+ * Dividers mark a change in kind, not every row — constructive actions sit
+ * together, one hairline sets off the destructive one, which is last and red.
+ * A destructive confirm swaps the sheet's content in place (never a modal on a
+ * modal) and points at the gentler alternative.
+ */
+"use client";
+
+import { useState, type ReactNode } from "react";
+
+export type SheetAction = {
+  id: string;
+  label: string;
+  sublabel?: string;
+  icon: ReactNode;
+  danger?: boolean;
+  onSelect: () => void;
+  /** When set, tapping opens an inline confirm inside the sheet. */
+  confirm?: { title: string; body: ReactNode; confirmLabel: string };
+};
+
+export function ActionSheet({
+  open,
+  onClose,
+  actions,
+}: {
+  open: boolean;
+  onClose: () => void;
+  actions: SheetAction[];
+}) {
+  const [confirming, setConfirming] = useState<SheetAction | null>(null);
+  if (!open) return null;
+
+  const close = () => {
+    setConfirming(null);
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 z-50">
+      <button
+        type="button"
+        aria-label="Close"
+        onClick={close}
+        className="absolute inset-0 bg-ink/28"
+      />
+      <div className="absolute inset-x-0 bottom-0 mx-auto max-w-[430px] rounded-t-[14px] border-t border-ink/14 bg-page pb-4 pt-2 shadow-[0_-10px_30px_-12px_rgba(30,25,22,0.25)]">
+        <div className="mx-auto mb-1.5 h-[3px] w-[34px] rounded-full bg-ink/14" />
+
+        {confirming ? (
+          <div className="px-5 pb-1 pt-2">
+            <p className="mb-1.5 font-serif text-[15px] font-medium text-status-red">
+              {confirming.confirm!.title}
+            </p>
+            <p className="mb-3.5 font-sans text-[12px] font-light leading-[1.55] text-ink/55">
+              {confirming.confirm!.body}
+            </p>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setConfirming(null)}
+                className="flex-1 rounded-[7px] border border-ink/14 py-[11px] font-sans text-[13.5px] font-medium text-ink/55"
+              >
+                Keep
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const a = confirming;
+                  close();
+                  a.onSelect();
+                }}
+                className="flex-1 rounded-[7px] bg-status-red py-[11px] font-sans text-[13.5px] font-semibold text-[#FDFBF9]"
+              >
+                {confirming.confirm!.confirmLabel}
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            {actions.map((a, i) => {
+              const firstDanger = a.danger && !(i > 0 && actions[i - 1].danger);
+              return (
+                <button
+                  key={a.id}
+                  type="button"
+                  onClick={() => {
+                    if (a.confirm) setConfirming(a);
+                    else {
+                      onClose();
+                      a.onSelect();
+                    }
+                  }}
+                  className={`flex w-full items-center gap-3 px-5 py-[15px] text-left font-sans text-[14.5px] font-medium ${
+                    a.danger ? "text-status-red" : "text-ink"
+                  } ${firstDanger ? "border-t border-ink/7" : ""}`}
+                >
+                  <span className={a.danger ? "text-status-red" : "text-ink/55"}>{a.icon}</span>
+                  <span>
+                    {a.label}
+                    {a.sublabel && (
+                      <span className="mt-0.5 block text-[11px] font-light text-ink/42">
+                        {a.sublabel}
+                      </span>
+                    )}
+                  </span>
+                </button>
+              );
+            })}
+            <div className="px-5 pt-3">
+              <button
+                type="button"
+                onClick={close}
+                className="w-full rounded-[7px] border border-ink/14 py-[13px] font-sans text-[14px] font-medium text-ink/55"
+              >
+                Cancel
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

@@ -31,7 +31,8 @@ const greeting = { date: "Tuesday, 21 July", text: "Good afternoon, Zuza", initi
 
 export default function Dashboard() {
   // Everything below is derived from the stored product list, at request time.
-  const products = listProducts();
+  // Archived products are kept but never counted (product-actions spec).
+  const products = listProducts().filter((p) => !p.archived);
   const settings = getSettings();
   const fixedCosts = getFixedCosts();
   const config = getFixedCostConfig();

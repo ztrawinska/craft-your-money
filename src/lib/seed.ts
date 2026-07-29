@@ -117,4 +117,16 @@ export const seedProducts: Product[] = [
     labour: [],
     otherCosts: [],
   },
+  {
+    // Archived: kept as a record, out of the default overview and metrics.
+    id: "copper-hoop",
+    name: "Copper hoop earrings",
+    type: "Earrings",
+    workflow: "active",
+    finalPrice: 32,
+    archived: true,
+    materials: [{ name: "Copper wire", quantity: 8, unit: "g", unitCost: 0.11 }],
+    labour: [{ step: "Forming & finishing", minutes: 30, rate: 15 }],
+    otherCosts: [],
+  },
 ];
