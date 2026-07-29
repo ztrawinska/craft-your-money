@@ -81,6 +81,7 @@ export function duplicateProduct(id: string): Product | undefined {
     materials: p.materials.map((m) => ({ ...m })),
     labour: p.labour.map((l) => ({ ...l })),
     otherCosts: p.otherCosts.map((o) => ({ ...o })),
+    benchmark: (p.benchmark ?? []).map((b) => ({ ...b })),
   };
   saveProduct(copy);
   return copy;
@@ -111,6 +112,7 @@ export function createDraft(name: string, type: ProductType): Product {
     materials: [],
     labour: [],
     otherCosts: [],
+    benchmark: [],
   };
   saveProduct(product);
   return product;

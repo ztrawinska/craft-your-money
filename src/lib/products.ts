@@ -8,6 +8,7 @@
  * — each line's cost, direct cost, the calculated suggestion, profit, margin —
  * is computed at read time (PRD §14: never store calculated values).
  */
+import type { BenchmarkPrice } from "@/lib/benchmark";
 import { computePricing, type Pricing } from "@/lib/pricing";
 import { effectiveVatRate, type Settings } from "@/lib/settings";
 import type { ProductStatusInput } from "@/lib/status";
@@ -47,6 +48,9 @@ export type Product = {
   materials: MaterialLine[];
   labour: LabourLine[];
   otherCosts: OtherLine[];
+  // A few competitor prices the maker has seen (§11) — optional, entered by
+  // hand. Absent on older records; treat as empty.
+  benchmark?: BenchmarkPrice[];
 };
 
 // ── line costs — the one definition of what a row costs ───────────────────

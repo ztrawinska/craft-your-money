@@ -66,6 +66,11 @@ function buildPrompt(ctx: ReviewContext, topic: ReviewTopic | null): string {
           .join(", ")}`
       : `No cost lines yet`,
     ctx.topLine ? `Single biggest cost line: ${ctx.topLine.label} at ${money(ctx.topLine.amount)}` : null,
+    ctx.market
+      ? `Competitor prices the maker noted: ${ctx.market.count}, running ${money(ctx.market.min)}–${money(
+          ctx.market.max,
+        )}, median ${money(ctx.market.median)}; this price sits ${ctx.market.position} them`
+      : `No competitor prices entered — you cannot see the market`,
   ]
     .filter(Boolean)
     .join("\n");

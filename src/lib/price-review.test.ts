@@ -22,6 +22,7 @@ const flagship: ReviewContext = {
     { label: "Other", amount: 0 },
   ],
   topLine: { label: "Shaping", amount: 5 },
+  market: null,
 };
 
 test("margin at another price is computed on the net", () => {
@@ -55,8 +56,20 @@ test("a loss reframes the placement finding to 'get the price up first'", () => 
   expect(placement).toMatch(/under what each piece costs/);
 });
 
-test("the market follow-up admits the limit it can't know", () => {
+test("the market follow-up admits the limit when there are no entered prices", () => {
   expect(generateReview(flagship, "market").verdict).toMatch(/can't see|can.t know/i);
+});
+
+test("the market follow-up positions against entered prices when they exist", () => {
+  const withMarket = {
+    ...flagship,
+    market: { min: 38, max: 52, median: 45, count: 3, position: "within" as const },
+  };
+  const review = generateReview(withMarket, "market");
+  expect(review.verdict).toMatch(/3 prices you noted/);
+  expect(review.verdict).toMatch(/inside the range/);
+  // £42 vs median £45 → ~7% below
+  expect(review.findings[0]).toMatch(/below the median of £45\.00/);
 });
 
 test("scenarios exclude the current price", () => {

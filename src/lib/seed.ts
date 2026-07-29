@@ -106,6 +106,11 @@ export const seedProducts: Product[] = [
       { step: "Polishing", minutes: 10, rate: 15 },
     ],
     otherCosts: [],
+    benchmark: [
+      { label: "Etsy — similar band", price: 38 },
+      { label: "Local maker", price: 45 },
+      { label: "Instagram shop", price: 52 },
+    ],
   },
   {
     id: "new-ring",

@@ -16,6 +16,7 @@ import { Chip } from "@/components/Chip";
 import { FramedSurface } from "@/components/FramedSurface";
 import { Price } from "@/components/Price";
 import { PriceCheck } from "@/components/PriceCheck";
+import type { MarketRead } from "@/lib/benchmark";
 import { computePricingFromDirect, priceWarning } from "@/lib/pricing";
 import type { CostPart } from "@/lib/price-review";
 import { profitTone, profitabilityFromMargin, statusChip } from "@/lib/status";
@@ -29,6 +30,8 @@ type PricingPanelProps = {
   // The make-cost split + biggest line, for the Price Check's findings.
   costParts: CostPart[];
   topLine: CostPart | null;
+  // The market read against the maker's entered competitor prices (or null).
+  market: MarketRead | null;
   priceText: string;
   onPriceChange: (value: string) => void;
   onReset: () => void;
@@ -46,6 +49,7 @@ export function PricingPanel({
   businessCostShare,
   costParts,
   topLine,
+  market,
   priceText,
   onPriceChange,
   onReset,
@@ -80,6 +84,7 @@ export function PricingPanel({
           vatRatePct,
           costParts,
           topLine,
+          market,
         }
       : null;
 

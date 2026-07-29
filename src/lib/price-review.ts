@@ -8,6 +8,8 @@
  *
  * Pure — safe to import anywhere, and testable.
  */
+import type { MarketRead } from "@/lib/benchmark";
+
 export type CostPart = { label: string; amount: number };
 
 export type ReviewContext = {
@@ -25,6 +27,9 @@ export type ReviewContext = {
   // show: what you're really selling, and where the risk sits.
   costParts: CostPart[];
   topLine: CostPart | null;
+  // The market read against the maker's entered competitor prices (§11), or
+  // null when they haven't noted any — then the review admits it can't see.
+  market: MarketRead | null;
 };
 
 export type Scenario = { price: number; marginPct: number };
@@ -86,10 +91,33 @@ export function generateReview(ctx: ReviewContext, topic: ReviewTopic | null): R
     };
   }
   if (topic === "market") {
+    const m = ctx.market;
+    if (m) {
+      const range = m.min === m.max ? money(m.min) : `${money(m.min)}–${money(m.max)}`;
+      const vsMedian = ((ctx.finalPrice - m.median) / m.median) * 100;
+      const medianLine =
+        Math.abs(vsMedian) < 3
+          ? `right around the median of ${money(m.median)}`
+          : `${Math.abs(Math.round(vsMedian))}% ${vsMedian > 0 ? "above" : "below"} the median of ${money(m.median)}`;
+      const posLine =
+        m.position === "above"
+          ? `you're above all ${m.count} — the premium spot, which only holds if the piece looks it.`
+          : m.position === "below"
+            ? `you're under all ${m.count} — there's likely room to ask more.`
+            : "you sit inside the range — a defensible place to be.";
+      return {
+        verdict: `Against the ${m.count} price${m.count === 1 ? "" : "s"} you noted (${range}), ${posLine}`,
+        findings: [
+          `At ${money(ctx.finalPrice)} you're ${medianLine}.`,
+          "Handmade often earns a premium — sitting high can be right when the work shows it.",
+          "These are the prices you entered, not the live market — I still can't see what buyers actually pay.",
+        ],
+      };
+    }
     return {
       verdict: "I can't see what the market charges — that's the one thing I can't know.",
       findings: [
-        "Add a few competitor prices in Market benchmark and I can compare.",
+        "Add a few prices you've seen in Market benchmark below, and I'll position you against them.",
         "Handmade often earns a premium; only you know your buyers.",
         "A price above cost and target is a sound floor to negotiate up from.",
       ],

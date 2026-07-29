@@ -12,7 +12,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Archive, ArrowLeft, ChevronDown, Copy, Ellipsis, Plus, RotateCcw, Trash2 } from "lucide-react";
+import { Archive, ArrowLeft, Copy, Ellipsis, Plus, RotateCcw, Trash2 } from "lucide-react";
 import Link from "next/link";
 import {
   archiveProductAction,
@@ -22,6 +22,7 @@ import {
   saveProductAction,
 } from "@/app/products/actions";
 import { ActionSheet, type SheetAction } from "@/components/ActionSheet";
+import { BenchmarkSection } from "@/components/BenchmarkSection";
 import { Button } from "@/components/Button";
 import { Combobox } from "@/components/Combobox";
 import {
@@ -44,6 +45,7 @@ import {
   type FixedCostConfig,
 } from "@/lib/fixed-costs";
 import { materialUnitLabel, type LibraryMaterial } from "@/lib/materials";
+import { marketRead, type BenchmarkPrice } from "@/lib/benchmark";
 import { effectiveVatRate, type Settings } from "@/lib/settings";
 import {
   labourDetail,
@@ -257,6 +259,7 @@ export function ProductEditor({
   const [materials, setMaterials] = useState<MaterialLine[]>(product.materials);
   const [labour, setLabour] = useState<LabourLine[]>(product.labour);
   const [otherCosts, setOtherCosts] = useState<OtherLine[]>(product.otherCosts);
+  const [benchmark, setBenchmark] = useState<BenchmarkPrice[]>(product.benchmark ?? []);
   const [editMat, setEditMat] = useState<EditState<MatDraft> | null>(null);
   const [editLab, setEditLab] = useState<EditState<LabDraft> | null>(null);
   const [editOther, setEditOther] = useState<EditState<OtherDraft> | null>(null);
@@ -458,6 +461,10 @@ export function ProductEditor({
   const parsedFinal = num(priceText);
   const finalPrice = priceText.trim() !== "" && Number.isFinite(parsedFinal) ? parsedFinal : null;
 
+  // The market read against the entered competitor prices — for the benchmark
+  // section's summary and for the Price Check.
+  const market = marketRead(finalPrice, benchmark);
+
   const save = (workflow: "draft" | "active") =>
     startSaving(async () => {
       await saveProductAction({
@@ -467,6 +474,7 @@ export function ProductEditor({
         materials,
         labour,
         otherCosts,
+        benchmark,
       });
     });
 
@@ -761,6 +769,7 @@ export function ProductEditor({
         businessCostShare={businessCostShare}
         costParts={costParts}
         topLine={topLine}
+        market={market}
         priceText={priceText}
         onPriceChange={(v) => {
           setManualPrice(v);
@@ -773,13 +782,8 @@ export function ProductEditor({
         onUseSuggested={() => setDecoupled(false)}
       />
 
-      {/* ── market benchmark: collapsed by default ── */}
-      <div className="px-6 pt-5">
-        <div className="flex items-center justify-between border-b border-t border-ink/7 py-[15px]">
-          <span className="text-[13.5px] font-medium text-ink/55">Market benchmark</span>
-          <ChevronDown size={14} className="text-ink/30" />
-        </div>
-      </div>
+      {/* ── market benchmark: light, collapsed by default (§11) ── */}
+      <BenchmarkSection benchmark={benchmark} onChange={setBenchmark} market={market} />
 
       {/* ── save bar ── */}
       <div className="mt-[22px] border-t border-ink/7 bg-page px-6 pb-5 pt-[14px] shadow-[0_-6px_18px_-12px_rgba(30,25,22,0.12)]">

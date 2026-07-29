@@ -1,0 +1,144 @@
+/**
+ * BenchmarkSection — the collapsed "Market benchmark" tab on the product detail
+ * (PRD §11, kept in the r2 bordered-tab treatment per the design system).
+ *
+ * Deliberately light: a few prices you've seen for similar pieces, entered by
+ * hand. It shows the range, the median and where you sit — but the real payoff
+ * is in Price Check, whose "Compare to market" answer turns from "I can't see
+ * the market" into a real positioning read once you've noted a price or two.
+ *
+ * Data lives on the product (owned by ProductEditor), so it saves with the rest.
+ */
+"use client";
+
+import { useState } from "react";
+import { ChevronDown, Plus, X } from "lucide-react";
+import { Button } from "@/components/Button";
+import { FieldLabel, MoneyInput, fieldInput, num } from "@/components/inline-form";
+import type { BenchmarkPrice, MarketRead } from "@/lib/benchmark";
+
+const positionPhrase: Record<MarketRead["position"], string> = {
+  below: "you're below the range",
+  within: "you're within the range",
+  above: "you're above the range",
+};
+
+export function BenchmarkSection({
+  benchmark,
+  onChange,
+  market,
+}: {
+  benchmark: BenchmarkPrice[];
+  onChange: (next: BenchmarkPrice[]) => void;
+  market: MarketRead | null;
+}) {
+  const [open, setOpen] = useState(false);
+  const [label, setLabel] = useState("");
+  const [price, setPrice] = useState("");
+
+  const parsed = num(price);
+  const valid = Number.isFinite(parsed) && parsed > 0;
+
+  const add = () => {
+    if (!valid) return;
+    onChange([...benchmark, { label: label.trim(), price: parsed }]);
+    setLabel("");
+    setPrice("");
+  };
+  const remove = (i: number) => onChange(benchmark.filter((_, idx) => idx !== i));
+
+  return (
+    <div className="px-6 pt-5">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="flex w-full items-center justify-between border-b border-t border-ink/7 py-[15px] text-left"
+      >
+        <span className="font-sans text-[13.5px] font-medium text-ink/55">
+          Market benchmark
+          {benchmark.length > 0 && (
+            <span className="font-light text-ink/30"> · {benchmark.length}</span>
+          )}
+        </span>
+        <ChevronDown
+          size={14}
+          className={`text-ink/30 transition-transform ${open ? "rotate-180" : ""}`}
+        />
+      </button>
+
+      {open && (
+        <div className="pb-1 pt-4">
+          <p className="font-sans text-[12px] font-light leading-[1.6] text-ink/55">
+            A few prices you&rsquo;ve seen for similar pieces — three is plenty.
+          </p>
+
+          {benchmark.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              {benchmark.map((b, i) => (
+                <span
+                  key={i}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-ink/14 py-1 pl-3 pr-1.5 font-serif text-[13px] tabular-nums text-ink"
+                >
+                  £{b.price.toFixed(2)}
+                  {b.label && (
+                    <span className="font-sans text-[11px] font-light not-italic text-ink/42">
+                      {b.label}
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => remove(i)}
+                    aria-label={`Remove ${b.label || `£${b.price.toFixed(2)}`}`}
+                    className="text-ink/30 hover:text-ink/55"
+                  >
+                    <X size={13} />
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* light add row: price required, where optional */}
+          <div className="mt-3 flex items-end gap-2">
+            <label className="w-[100px]">
+              <FieldLabel>Price</FieldLabel>
+              <MoneyInput value={price} onChange={setPrice} />
+            </label>
+            <label className="flex-1">
+              <FieldLabel>Where (optional)</FieldLabel>
+              <input
+                value={label}
+                onChange={(e) => setLabel(e.target.value)}
+                placeholder="e.g. Etsy"
+                onKeyDown={(e) => e.key === "Enter" && add()}
+                className={`${fieldInput} font-sans`}
+              />
+            </label>
+          </div>
+          <Button
+            variant="link"
+            iconLeading={<Plus size={14} strokeWidth={2} />}
+            onClick={add}
+            disabled={!valid}
+            className="pt-3 text-[13px] font-medium"
+          >
+            Add price
+          </Button>
+
+          {market && (
+            <p className="mt-3 border-t border-ink/7 pt-3 font-sans text-[12px] font-light leading-[1.6] text-ink/55">
+              {market.count} price{market.count === 1 ? "" : "s"} ·{" "}
+              <span className="tabular-nums">
+                {market.min === market.max
+                  ? `£${market.min.toFixed(2)}`
+                  : `£${market.min.toFixed(2)}–£${market.max.toFixed(2)}`}
+                , median £{market.median.toFixed(2)}
+              </span>{" "}
+              — <span className="text-ink/70">{positionPhrase[market.position]}</span>.
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
