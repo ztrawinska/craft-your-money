@@ -4,7 +4,8 @@
 import { test, expect } from "vitest";
 import { generateReview, marginAtPrice, reviewScenarios, type ReviewContext } from "./price-review";
 
-// the flagship: £42 gross, 20% VAT, £16.80 full cost → 52% margin
+// the flagship: £42 gross, 20% VAT, £16.80 full cost → 52% margin.
+// Make cost £14.06 = £2.81 materials + £11.25 labour; labour dominates.
 const flagship: ReviewContext = {
   finalPrice: 42,
   net: 35,
@@ -15,6 +16,12 @@ const flagship: ReviewContext = {
   calculatedPrice: 28.12,
   targetMarginPct: 40,
   vatRatePct: 20,
+  costParts: [
+    { label: "Materials", amount: 2.81 },
+    { label: "Labour", amount: 11.25 },
+    { label: "Other", amount: 0 },
+  ],
+  topLine: { label: "Shaping", amount: 5 },
 };
 
 test("margin at another price is computed on the net", () => {
@@ -30,6 +37,22 @@ test("the opening verdict reflects the margin band", () => {
 
 test("the opening review has exactly three findings", () => {
   expect(generateReview(flagship, null).findings).toHaveLength(3);
+});
+
+test("the opening findings synthesise rather than restate the numbers", () => {
+  const [composition, placement, sensitivity] = generateReview(flagship, null).findings;
+  // labour is 80% of the make cost → "selling your time"
+  expect(composition).toMatch(/selling your time/i);
+  // £42 sits above the calculated £28.12 → a cushion
+  expect(placement).toMatch(/above the £28\.12/);
+  expect(placement).toMatch(/cushion/);
+  // sensitivity names the single biggest line
+  expect(sensitivity).toMatch(/Shaping is your single biggest cost/);
+});
+
+test("a loss reframes the placement finding to 'get the price up first'", () => {
+  const [, placement] = generateReview({ ...flagship, profit: -3, marginPct: -0.05 }, null).findings;
+  expect(placement).toMatch(/under what each piece costs/);
 });
 
 test("the market follow-up admits the limit it can't know", () => {

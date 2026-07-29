@@ -8,6 +8,8 @@
  *
  * Pure — safe to import anywhere, and testable.
  */
+export type CostPart = { label: string; amount: number };
+
 export type ReviewContext = {
   finalPrice: number;
   net: number;
@@ -18,6 +20,11 @@ export type ReviewContext = {
   calculatedPrice: number | null;
   targetMarginPct: number;
   vatRatePct: number | null;
+  // The make-cost split (Materials / Labour / Other) and the single largest
+  // cost line — so the review can say something the numbers above don't already
+  // show: what you're really selling, and where the risk sits.
+  costParts: CostPart[];
+  topLine: CostPart | null;
 };
 
 export type Scenario = { price: number; marginPct: number };
@@ -107,7 +114,8 @@ export function generateReview(ctx: ReviewContext, topic: ReviewTopic | null): R
     };
   }
 
-  // the opening review
+  // the opening review — the verdict names the band; the findings say things
+  // the numbers above don't already show.
   const verdict =
     ctx.profit < 0
       ? "This price loses money — it's below what the piece costs you."
@@ -119,16 +127,60 @@ export function generateReview(ctx: ReviewContext, topic: ReviewTopic | null): R
             ? "This price is thin — worth a second look."
             : "This price is risky — barely above cost.";
 
-  return {
-    verdict,
-    findings: [
-      `At ${money(ctx.finalPrice)}, your margin is ${pct(ctx.marginPct)} — ${overTarget ? "above" : "below"} your ${ctx.targetMarginPct}% target.`,
-      ctx.fullCost != null
-        ? `It costs ${money(ctx.directCost)} to make, ${money(ctx.fullCost)} once business costs are shared in.`
-        : `It costs ${money(ctx.directCost)} to make.`,
-      ctx.vatRatePct
-        ? `After ${ctx.vatRatePct}% VAT you keep ${money(ctx.net)}, leaving ${money(ctx.profit)} profit.`
-        : `You keep ${money(ctx.net)}, leaving ${money(ctx.profit)} profit.`,
-    ],
-  };
+  return { verdict, findings: [composition(ctx), placement(ctx), sensitivity(ctx)] };
+}
+
+/** What you're really selling — the part that dominates the make cost. */
+function composition(ctx: ReviewContext): string {
+  const parts = ctx.costParts.filter((p) => p.amount > 0);
+  if (ctx.directCost <= 0 || parts.length === 0) {
+    return `This piece costs almost nothing to make — the price is nearly all margin.`;
+  }
+  const top = parts.reduce((a, b) => (b.amount > a.amount ? b : a));
+  const share = top.amount / ctx.directCost;
+  if (share < 0.55) {
+    return `Your cost is split fairly evenly — no single part dominates, so there's no one lever to pull first.`;
+  }
+  if (top.label === "Labour") {
+    return `Labour is ${pct(share)} of what it costs to make — you're mostly selling your time, so your hourly rate is what really sets this price.`;
+  }
+  if (top.label === "Materials") {
+    return `Materials are ${pct(share)} of the make cost — this price leans more on what you pay for supplies than on your time.`;
+  }
+  return `${top.label} is ${pct(share)} of what it costs to make — that's where this price is really decided.`;
+}
+
+/** Where the price sits versus the one the costs and target imply. */
+function placement(ctx: ReviewContext): string {
+  if (ctx.profit < 0) {
+    return `You're ${money(-ctx.profit)} under what each piece costs — the price needs to come up before anything else matters.`;
+  }
+  if (ctx.calculatedPrice == null) {
+    return `Each piece leaves you ${money(ctx.profit)} after every cost.`;
+  }
+  const diff = ctx.finalPrice - ctx.calculatedPrice;
+  const rel = diff / ctx.calculatedPrice;
+  if (diff > ctx.calculatedPrice * 0.02) {
+    return `You've set ${money(ctx.finalPrice)} — ${money(diff)} (${pct(rel)}) above the ${money(ctx.calculatedPrice)} your costs and target imply. That cushion is why the margin's comfortable; it holds while buyers see the piece as worth it.`;
+  }
+  if (diff < -ctx.calculatedPrice * 0.02) {
+    return `You've priced ${money(-diff)} below the ${money(ctx.calculatedPrice)} your costs and target imply — there's room to ask more and still hit your target.`;
+  }
+  return `You're sitting right on the price your costs and target imply — the margin comes straight from the target, with no extra cushion.`;
+}
+
+/** The risk — what a rise in the single biggest cost would do to the margin. */
+function sensitivity(ctx: ReviewContext): string {
+  const line = ctx.topLine;
+  if (line == null || line.amount <= 0 || ctx.net <= 0) {
+    return ctx.vatRatePct
+      ? `After ${ctx.vatRatePct}% VAT you keep ${money(ctx.net)}, leaving ${money(ctx.profit)} profit.`
+      : `You keep ${money(ctx.net)}, leaving ${money(ctx.profit)} profit.`;
+  }
+  const newMargin = (ctx.net - (relevantCost(ctx) + line.amount * 0.1)) / ctx.net;
+  const tail =
+    newMargin < ctx.targetMarginPct / 100
+      ? " — that'd tip you under target."
+      : " — you could absorb it.";
+  return `${line.label} is your single biggest cost at ${money(line.amount)}. If it rose 10%, your margin would move from ${pct(ctx.marginPct)} to ${pct(newMargin)}${tail}`;
 }

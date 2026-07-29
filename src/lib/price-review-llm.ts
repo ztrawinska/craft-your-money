@@ -24,7 +24,7 @@ const SYSTEM = `You are the assistant inside "Craft Your Money", a pricing app f
 
 Voice: calm, plain, encouraging. No finance jargon — say "what it costs to make", "what you keep", "your profit". A warning is a quiet helper, never an alarm.
 
-You are given the real numbers. Ground every sentence in them. Be honest about what you cannot know: you can't see the live market or what buyers will actually pay.
+You are given the real numbers. Ground every sentence in them — but say something they don't already show on the screen: what the maker is really selling (the cost that dominates), where the price sits versus the one the costs imply, and where the risk is (what a rise in the biggest cost would do). Don't just restate the margin and the profit; those are already visible. Be honest about what you cannot know: you can't see the live market or what buyers will actually pay.
 
 Return a one-sentence verdict and exactly three short findings, each grounded in the numbers.`;
 
@@ -59,7 +59,16 @@ function buildPrompt(ctx: ReviewContext, topic: ReviewTopic | null): string {
     ctx.calculatedPrice != null
       ? `The price the app calculates from your costs and target: ${money(ctx.calculatedPrice)}`
       : `No calculated suggestion`,
-  ].join("\n");
+    ctx.costParts.filter((p) => p.amount > 0).length > 0
+      ? `Make-cost split: ${ctx.costParts
+          .filter((p) => p.amount > 0)
+          .map((p) => `${p.label} ${money(p.amount)}`)
+          .join(", ")}`
+      : `No cost lines yet`,
+    ctx.topLine ? `Single biggest cost line: ${ctx.topLine.label} at ${money(ctx.topLine.amount)}` : null,
+  ]
+    .filter(Boolean)
+    .join("\n");
 
   const question = topic ? REVIEW_TOPICS.find((t) => t.id === topic)?.label : null;
 

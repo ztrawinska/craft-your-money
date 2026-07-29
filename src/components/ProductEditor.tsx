@@ -266,6 +266,19 @@ export function ProductEditor({
   const labourTotal = labour.reduce((s, l) => s + labourLineCost(l), 0);
   const directCost = materialsTotal + labourTotal + otherTotal;
 
+  // The make-cost split and the single biggest line — for the Price Check.
+  const costParts = [
+    { label: "Materials", amount: materialsTotal },
+    { label: "Labour", amount: labourTotal },
+    { label: "Other", amount: otherTotal },
+  ];
+  const allLines = [
+    ...materials.map((m) => ({ label: m.name, amount: materialLineCost(m) })),
+    ...labour.map((l) => ({ label: l.step, amount: labourLineCost(l) })),
+    ...otherCosts.map((o) => ({ label: o.label, amount: o.cost })),
+  ].filter((line) => line.amount > 0 && line.label.trim() !== "");
+  const topLine = allLines.length > 0 ? allLines.reduce((a, b) => (b.amount > a.amount ? b : a)) : null;
+
   // The business-cost share is computed from the fixed-cost layer. Under
   // bench-time allocation it depends on labour hours, so it reacts live.
   const labourHours = labour.reduce((s, l) => s + l.minutes, 0) / 60;
@@ -746,6 +759,8 @@ export function ProductEditor({
         targetMarginPct={settings.targetMarginPct}
         vatRatePct={effectiveVatRate(settings)}
         businessCostShare={businessCostShare}
+        costParts={costParts}
+        topLine={topLine}
         priceText={priceText}
         onPriceChange={(v) => {
           setManualPrice(v);

@@ -17,6 +17,7 @@ import { FramedSurface } from "@/components/FramedSurface";
 import { Price } from "@/components/Price";
 import { PriceCheck } from "@/components/PriceCheck";
 import { computePricingFromDirect, priceWarning } from "@/lib/pricing";
+import type { CostPart } from "@/lib/price-review";
 import { profitTone, profitabilityFromMargin, statusChip } from "@/lib/status";
 
 type PricingPanelProps = {
@@ -25,6 +26,9 @@ type PricingPanelProps = {
   targetMarginPct: number;
   vatRatePct: number | null;
   businessCostShare: number | null;
+  // The make-cost split + biggest line, for the Price Check's findings.
+  costParts: CostPart[];
+  topLine: CostPart | null;
   priceText: string;
   onPriceChange: (value: string) => void;
   onReset: () => void;
@@ -40,6 +44,8 @@ export function PricingPanel({
   targetMarginPct,
   vatRatePct,
   businessCostShare,
+  costParts,
+  topLine,
   priceText,
   onPriceChange,
   onReset,
@@ -72,6 +78,8 @@ export function PricingPanel({
           calculatedPrice,
           targetMarginPct,
           vatRatePct,
+          costParts,
+          topLine,
         }
       : null;
 
