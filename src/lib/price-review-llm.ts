@@ -15,9 +15,10 @@ import {
   type ReviewTopic,
 } from "./price-review";
 
-// Anthropic's default tier. One place to change it — for a cheaper per-check
-// cost, swap to "claude-haiku-4-5" (a bounded review is well within its reach).
-const MODEL = "claude-opus-5";
+// Haiku is the cheapest tier ($1/$5 per MTok) and handles this bounded review
+// comfortably. One place to change it — swap up to "claude-opus-5" for the
+// premium tier if a check ever needs deeper reasoning.
+const MODEL = "claude-haiku-4-5";
 
 const SYSTEM = `You are the assistant inside "Craft Your Money", a pricing app for handmade jewellery makers. You review one product's price. You never set or recommend a specific number — you help the maker see what their price means and decide for themselves.
 
@@ -82,10 +83,10 @@ export async function liveReview(ctx: ReviewContext, topic: ReviewTopic | null):
     model: MODEL,
     max_tokens: 2048,
     system: SYSTEM,
+    // Structured output — verdict + findings as validated JSON. (No `effort`
+    // here: Haiku 4.5 rejects it. If you swap MODEL up to an Opus tier, you can
+    // add `effort: "low"` alongside `format` to keep it fast and cheap.)
     output_config: {
-      // A short, bounded review — low effort keeps it fast and cheap while
-      // still strong on Opus 5.
-      effort: "low",
       format: { type: "json_schema", schema: SCHEMA },
     },
     messages: [{ role: "user", content: buildPrompt(ctx, topic) }],
