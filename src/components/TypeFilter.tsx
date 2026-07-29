@@ -1,7 +1,7 @@
 /**
- * StatusFilter — the overview's status filter (§2.4). Ghost-button trigger; it
- * opens a bottom sheet of options (not a floating popover, §2.11) that navigate
- * to ?status=…. "Archived" is one option beside the rest — no new screen.
+ * TypeFilter — the overview's category filter (§2.4). Ghost-button trigger that
+ * opens a bottom sheet of the product types actually in use (not a floating
+ * popover, §2.11) and navigates to ?type=…, preserving the current status.
  */
 "use client";
 
@@ -10,21 +10,19 @@ import { ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { productsHref } from "@/lib/products-query";
 
-const OPTIONS = [
-  { value: "all", label: "All statuses" },
-  { value: "healthy", label: "Healthy" },
-  { value: "caution", label: "Caution" },
-  { value: "risky", label: "Risky" },
-  { value: "no-price", label: "No price" },
-  { value: "draft", label: "Draft" },
-  { value: "archived", label: "Archived" },
-];
-
-export function StatusFilter({ current, type }: { current: string; type: string }) {
+export function TypeFilter({
+  current,
+  status,
+  types,
+}: {
+  current: string;
+  status: string;
+  types: string[];
+}) {
   const [open, setOpen] = useState(false);
-  const label = OPTIONS.find((o) => o.value === current)?.label ?? "All statuses";
   const filtered = current !== "all";
-  const href = (v: string) => productsHref({ status: v, type });
+  const label = filtered ? current : "All types";
+  const options = ["all", ...types];
 
   return (
     <>
@@ -56,18 +54,18 @@ export function StatusFilter({ current, type }: { current: string; type: string 
           <div className="absolute inset-x-0 bottom-0 mx-auto max-w-[430px] rounded-t-[14px] border-t border-ink/14 bg-page pb-4 pt-2 shadow-[0_-10px_30px_-12px_rgba(30,25,22,0.25)]">
             <div className="mx-auto mb-1.5 h-[3px] w-[34px] rounded-full bg-ink/14" />
             <p className="px-5 pb-1 pt-1 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/42">
-              Show
+              Type
             </p>
-            {OPTIONS.map((o) => (
+            {options.map((t) => (
               <Link
-                key={o.value}
-                href={href(o.value)}
+                key={t}
+                href={productsHref({ status, type: t })}
                 onClick={() => setOpen(false)}
                 className={`block px-5 py-3 font-sans text-[14.5px] ${
-                  o.value === current ? "font-semibold text-clay-deep" : "text-ink"
+                  t === current ? "font-semibold text-clay-deep" : "text-ink"
                 }`}
               >
-                {o.label}
+                {t === "all" ? "All types" : t}
               </Link>
             ))}
           </div>

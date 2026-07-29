@@ -9,13 +9,13 @@
 import { ArrowUpDown } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
 import { Chip } from "@/components/Chip";
-import { Dropdown } from "@/components/Dropdown";
 import { ListRow } from "@/components/ListRow";
 import { RestoreButton } from "@/components/RestoreButton";
 import { StatusFilter } from "@/components/StatusFilter";
+import { TypeFilter } from "@/components/TypeFilter";
 import { TintedBand } from "@/components/TintedBand";
 import { fixedCostPerUnit } from "@/lib/fixed-costs";
-import { productLabourHours, statusInputFor, type Product } from "@/lib/products";
+import { PRODUCT_TYPES, productLabourHours, statusInputFor, type Product } from "@/lib/products";
 import { getFixedCostConfig, getFixedCosts, getSettings, listProducts } from "@/lib/store";
 import { compareByStatus, sortKey, statusChip, stripeTone } from "@/lib/status";
 
@@ -27,9 +27,11 @@ function metaPrice(p: Product): string {
 export default async function ProductsOverview({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; type?: string }>;
 }) {
-  const status = (await searchParams).status ?? "all";
+  const params = await searchParams;
+  const status = params.status ?? "all";
+  const type = params.type ?? "all";
   const settings = getSettings();
   const fixedCosts = getFixedCosts();
   const config = getFixedCostConfig();
@@ -37,13 +39,17 @@ export default async function ProductsOverview({
 
   const all = listProducts();
   const active = all.filter((p) => !p.archived);
+  // Categories to offer — only the ones actually in use, in canonical order.
+  const typesInUse = PRODUCT_TYPES.filter((t) => all.some((p) => p.type === t));
 
   // Filter by the status segment. "Archived" is its own view; the rest filter
-  // the live range by the same key the chip and sort use.
+  // the live range by the same key the chip and sort use. The type filter then
+  // narrows whichever set that produced (the two compose).
   const showingArchived = status === "archived";
-  const visible = showingArchived
+  const byStatus = showingArchived
     ? all.filter((p) => p.archived)
     : active.filter((p) => status === "all" || sortKey(statusInputFor(p, settings, shareOf(p))) === status);
+  const visible = type === "all" ? byStatus : byStatus.filter((p) => p.type === type);
 
   const sorted = showingArchived
     ? visible
@@ -53,9 +59,10 @@ export default async function ProductsOverview({
 
   const activeCount = active.filter((p) => p.workflow === "active").length;
   const draftCount = active.length - activeCount;
+  const filtered = status !== "all" || type !== "all";
   const count = showingArchived
     ? `${visible.length} archived`
-    : status === "all"
+    : !filtered
       ? `${activeCount} active · ${draftCount} draft${draftCount === 1 ? "" : "s"}`
       : `${visible.length} shown`;
 
@@ -72,8 +79,8 @@ export default async function ProductsOverview({
           </span>
         </div>
 
-        {/* deterministic insight — only on the default view */}
-        {status === "all" && (
+        {/* deterministic insight — only on the unfiltered default view */}
+        {!filtered && (
           <TintedBand className="mx-6 mb-5">
             <p className="font-serif text-[13px] italic leading-[1.5] text-ink/70">
               <strong className="font-medium not-italic text-ink">
@@ -87,8 +94,8 @@ export default async function ProductsOverview({
 
         {/* controls: filters (dropdowns) left, sort (bare icon) right */}
         <div className="flex items-center gap-2 px-6 pb-3.5 pt-1">
-          <StatusFilter current={status} />
-          <Dropdown>All types</Dropdown>
+          <StatusFilter current={status} type={type} />
+          <TypeFilter current={type} status={status} types={typesInUse} />
           <button
             type="button"
             aria-label="Sort"
