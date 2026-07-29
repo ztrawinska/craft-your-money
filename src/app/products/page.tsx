@@ -11,33 +11,53 @@ import { BottomNav } from "@/components/BottomNav";
 import { Chip } from "@/components/Chip";
 import { Dropdown } from "@/components/Dropdown";
 import { ListRow } from "@/components/ListRow";
+import { RestoreButton } from "@/components/RestoreButton";
+import { StatusFilter } from "@/components/StatusFilter";
 import { TintedBand } from "@/components/TintedBand";
 import { fixedCostPerUnit } from "@/lib/fixed-costs";
 import { productLabourHours, statusInputFor, type Product } from "@/lib/products";
 import { getFixedCostConfig, getFixedCosts, getSettings, listProducts } from "@/lib/store";
-import { compareByStatus, statusChip, stripeTone } from "@/lib/status";
+import { compareByStatus, sortKey, statusChip, stripeTone } from "@/lib/status";
 
 function metaPrice(p: Product): string {
   if (p.finalPrice !== null) return `£${p.finalPrice.toFixed(2)}`;
   return p.workflow === "draft" ? "in progress" : "no price set";
 }
 
-export default function ProductsOverview() {
-  // Default view excludes archived products (reachable via the status filter).
-  const products = listProducts().filter((p) => !p.archived);
+export default async function ProductsOverview({
+  searchParams,
+}: {
+  searchParams: Promise<{ status?: string }>;
+}) {
+  const status = (await searchParams).status ?? "all";
   const settings = getSettings();
   const fixedCosts = getFixedCosts();
   const config = getFixedCostConfig();
-  // each product's share of the business-cost layer (§6)
   const shareOf = (p: Product) => fixedCostPerUnit(fixedCosts, config, productLabourHours(p));
 
-  const sorted = [...products].sort((a, b) =>
-    compareByStatus(statusInputFor(a, settings, shareOf(a)), statusInputFor(b, settings, shareOf(b))),
-  );
+  const all = listProducts();
+  const active = all.filter((p) => !p.archived);
 
-  const activeCount = products.filter((p) => p.workflow === "active").length;
-  const draftCount = products.length - activeCount;
-  const count = `${activeCount} active · ${draftCount} draft${draftCount === 1 ? "" : "s"}`;
+  // Filter by the status segment. "Archived" is its own view; the rest filter
+  // the live range by the same key the chip and sort use.
+  const showingArchived = status === "archived";
+  const visible = showingArchived
+    ? all.filter((p) => p.archived)
+    : active.filter((p) => status === "all" || sortKey(statusInputFor(p, settings, shareOf(p))) === status);
+
+  const sorted = showingArchived
+    ? visible
+    : [...visible].sort((a, b) =>
+        compareByStatus(statusInputFor(a, settings, shareOf(a)), statusInputFor(b, settings, shareOf(b))),
+      );
+
+  const activeCount = active.filter((p) => p.workflow === "active").length;
+  const draftCount = active.length - activeCount;
+  const count = showingArchived
+    ? `${visible.length} archived`
+    : status === "all"
+      ? `${activeCount} active · ${draftCount} draft${draftCount === 1 ? "" : "s"}`
+      : `${visible.length} shown`;
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -52,20 +72,22 @@ export default function ProductsOverview() {
           </span>
         </div>
 
-        {/* deterministic insight — no AI, no iris */}
-        <TintedBand className="mx-6 mb-5">
-          <p className="font-serif text-[13px] italic leading-[1.5] text-ink/70">
-            <strong className="font-medium not-italic text-ink">
-              Stacking set × 3
-            </strong>{" "}
-            has your weakest margin — you&rsquo;re losing money on it. Two
-            products sit below your 30% target.
-          </p>
-        </TintedBand>
+        {/* deterministic insight — only on the default view */}
+        {status === "all" && (
+          <TintedBand className="mx-6 mb-5">
+            <p className="font-serif text-[13px] italic leading-[1.5] text-ink/70">
+              <strong className="font-medium not-italic text-ink">
+                Stacking set × 3
+              </strong>{" "}
+              has your weakest margin — you&rsquo;re losing money on it. Two
+              products sit below your 30% target.
+            </p>
+          </TintedBand>
+        )}
 
         {/* controls: filters (dropdowns) left, sort (bare icon) right */}
-        <div className="flex items-center gap-2 px-6 pb-3.5">
-          <Dropdown>All statuses</Dropdown>
+        <div className="flex items-center gap-2 px-6 pb-3.5 pt-1">
+          <StatusFilter current={status} />
           <Dropdown>All types</Dropdown>
           <button
             type="button"
@@ -85,19 +107,31 @@ export default function ProductsOverview() {
               <ListRow
                 key={p.id}
                 emphasis="product"
-                href={`/products/${p.id}`}
-                stripe={stripeTone(input)}
-                muted={p.workflow === "draft"}
+                href={showingArchived ? undefined : `/products/${p.id}`}
+                stripe={showingArchived ? null : stripeTone(input)}
+                muted={showingArchived || p.workflow === "draft"}
                 label={p.name}
                 meta={
                   <>
-                    <span className="text-ink/55">{p.type}</span> · {metaPrice(p)}
+                    <span className="text-ink/55">{p.type}</span> ·{" "}
+                    {showingArchived ? "archived" : metaPrice(p)}
                   </>
                 }
-                value={<Chip tone={chip.tone}>{chip.label}</Chip>}
+                value={
+                  showingArchived ? (
+                    <RestoreButton id={p.id} />
+                  ) : (
+                    <Chip tone={chip.tone}>{chip.label}</Chip>
+                  )
+                }
               />
             );
           })}
+          {sorted.length === 0 && (
+            <p className="px-6 py-8 font-sans text-[13px] font-light text-ink/55">
+              Nothing here.
+            </p>
+          )}
         </div>
       </main>
 

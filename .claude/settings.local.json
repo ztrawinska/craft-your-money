@@ -15,7 +15,8 @@
       "Bash(perl -pi -e 's/pricingFor\\\\\\(p, settings\\\\\\)/pricingFor\\(p, settings, shareOf\\(p\\)\\)/g; s/statusInputFor\\\\\\(p, settings\\\\\\)/statusInputFor\\(p, settings, shareOf\\(p\\)\\)/g;' src/app/dashboard/page.tsx)",
       "Bash(perl -pi -e 's/\\\\\\(pricingFor\\\\\\(a, settings\\\\\\)\\\\.marginPct \\\\?\\\\? 0\\\\\\) - \\\\\\(pricingFor\\\\\\(b, settings\\\\\\)\\\\.marginPct \\\\?\\\\? 0\\\\\\)/\\(pricingFor\\(a, settings, shareOf\\(a\\)\\).marginPct ?? 0\\) - \\(pricingFor\\(b, settings, shareOf\\(b\\)\\).marginPct ?? 0\\)/g' src/app/dashboard/page.tsx)",
       "Bash(node -e \"console.log\\(require\\('./.data/costs.json'\\).config\\)\")",
-      "Bash(node -e \"const p=require\\('./.data/products.json'\\); const t=p.find\\(x=>x.id==='twisted-pendant'\\); console.log\\('twisted-pendant archived:', t?.archived\\); console.log\\('archived products:', p.filter\\(x=>x.archived\\).map\\(x=>x.name\\).join\\(', '\\)\\)\")"
+      "Bash(node -e \"const p=require\\('./.data/products.json'\\); const t=p.find\\(x=>x.id==='twisted-pendant'\\); console.log\\('twisted-pendant archived:', t?.archived\\); console.log\\('archived products:', p.filter\\(x=>x.archived\\).map\\(x=>x.name\\).join\\(', '\\)\\)\")",
+      "Bash(node -e \"const p=require\\('./.data/products.json'\\); const c=p.find\\(x=>x.id==='copper-hoop'\\); console.log\\('copper-hoop archived:', c?.archived\\); console.log\\('archived count:', p.filter\\(x=>x.archived\\).length\\)\")"
     ]
   }
 }
