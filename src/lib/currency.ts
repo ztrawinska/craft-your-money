@@ -6,23 +6,30 @@
  * Pure and tiny — safe to import anywhere. The symbol is a prefix on every
  * figure (£12.00, €12.00, zł12.00); this MVP doesn't do per-currency suffixing.
  */
-export type Currency = { code: string; name: string; symbol: string };
+// `suffix` currencies read after the number, with a space ("12.00 zł"); the
+// rest prefix it ("£12.00").
+export type Currency = { code: string; name: string; symbol: string; suffix?: boolean };
 
 export const CURRENCIES: Currency[] = [
   { code: "GBP", name: "British Pound", symbol: "£" },
   { code: "EUR", name: "Euro", symbol: "€" },
   { code: "USD", name: "US Dollar", symbol: "$" },
-  { code: "PLN", name: "Polish Złoty", symbol: "zł" },
+  { code: "PLN", name: "Polish Złoty", symbol: "zł", suffix: true },
   { code: "CHF", name: "Swiss Franc", symbol: "CHF" },
-  { code: "SEK", name: "Swedish Krona", symbol: "kr" },
-  { code: "NOK", name: "Norwegian Krone", symbol: "kr" },
-  { code: "DKK", name: "Danish Krone", symbol: "kr" },
-  { code: "CZK", name: "Czech Koruna", symbol: "Kč" },
+  { code: "SEK", name: "Swedish Krona", symbol: "kr", suffix: true },
+  { code: "NOK", name: "Norwegian Krone", symbol: "kr", suffix: true },
+  { code: "DKK", name: "Danish Krone", symbol: "kr", suffix: true },
+  { code: "CZK", name: "Czech Koruna", symbol: "Kč", suffix: true },
   { code: "CAD", name: "Canadian Dollar", symbol: "$" },
   { code: "AUD", name: "Australian Dollar", symbol: "$" },
   { code: "NZD", name: "New Zealand Dollar", symbol: "$" },
   { code: "JPY", name: "Japanese Yen", symbol: "¥" },
 ];
+
+/** The resolved symbol + placement for the account — the unit every money
+ *  display needs. `formatMoney` and the layout components read it. */
+export type Cur = { symbol: string; suffix: boolean };
+export const GBP_CUR: Cur = { symbol: "£", suffix: false };
 
 export const DEFAULT_CURRENCY = "GBP";
 
@@ -44,4 +51,17 @@ export function currencySymbol(value: string): string {
 /** The full currency for a stored value, or undefined if it isn't a known code. */
 export function currencyByCode(code: string): Currency | undefined {
   return BY_CODE.get(code);
+}
+
+/** The symbol + placement for a stored currency value (code or legacy symbol). */
+export function currencyCur(value: string): Cur {
+  const c = BY_CODE.get(value);
+  if (c) return { symbol: c.symbol, suffix: c.suffix ?? false };
+  return { symbol: currencySymbol(value), suffix: false };
+}
+
+/** Format an amount in the account currency: "£12.00" or "12.00 zł". */
+export function formatMoney(value: number, cur: Cur): string {
+  const n = value.toFixed(2);
+  return cur.suffix ? `${n} ${cur.symbol}` : `${cur.symbol}${n}`;
 }

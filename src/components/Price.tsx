@@ -13,6 +13,7 @@
 
 import type { ReactNode } from "react";
 import { useCurrency } from "@/components/CurrencyContext";
+import { formatMoney } from "@/lib/currency";
 import type { StatusTone } from "@/lib/status";
 
 type PriceVariant =
@@ -56,24 +57,26 @@ type PriceProps = {
 };
 
 export function Price({ value, variant = "inline", tone }: PriceProps): ReactNode {
-  const CURRENCY = useCurrency();
-  // The final price splits so the eye lands on the pounds: whole number large,
-  // decimals and currency smaller and lifted, over the clay underline.
+  const cur = useCurrency();
+  // The final price splits so the eye lands on the whole number, with the
+  // currency smaller and lifted — before it, or after it for suffix currencies.
   if (variant === "primary") {
     const [whole, dec] = value.toFixed(2).split(".");
-    return (
+    const sym = (
       <span
-        className={`${base} inline-flex items-baseline border-b-2 border-clay pb-[5px]`}
+        className={`${cur.suffix ? "ml-[4px]" : "mr-[2px]"} -translate-y-[15px] text-[22px] text-ink/42`}
       >
-        <span className="mr-[2px] -translate-y-[15px] text-[22px] text-ink/42">
-          {CURRENCY}
-        </span>
+        {cur.symbol}
+      </span>
+    );
+    return (
+      <span className={`${base} inline-flex items-baseline border-b-2 border-clay pb-[5px]`}>
+        {!cur.suffix && sym}
         <span className="text-[56px] font-medium leading-[0.86] tracking-[-0.025em]">
           {whole}
         </span>
-        <span className="ml-[2px] -translate-y-[15px] text-[25px] text-ink/70">
-          .{dec}
-        </span>
+        <span className="ml-[2px] -translate-y-[15px] text-[25px] text-ink/70">.{dec}</span>
+        {cur.suffix && sym}
       </span>
     );
   }
@@ -81,26 +84,27 @@ export function Price({ value, variant = "inline", tone }: PriceProps): ReactNod
   // The dashboard hero is a single calm figure — currency smaller, but the
   // number whole (no decimal split). Fully monochrome; it needs no anchor.
   if (variant === "hero") {
+    const sym = (
+      <span
+        className={`text-[29px] text-ink/42 ${cur.suffix ? "ml-[3px]" : ""}`}
+        style={{ verticalAlign: "1px" }}
+      >
+        {cur.symbol}
+      </span>
+    );
     return (
       <span
         className={`${base} text-[46px] font-medium leading-[0.96] tracking-[-0.02em] text-ink`}
       >
-        <span
-          className="text-[29px] text-ink/42"
-          style={{ verticalAlign: "1px" }}
-        >
-          {CURRENCY}
-        </span>
+        {!cur.suffix && sym}
         {value.toFixed(2)}
+        {cur.suffix && sym}
       </span>
     );
   }
 
   const color = variant === "profit" && tone ? toneText[tone] : "";
   return (
-    <span className={`${base} ${variantClass[variant]} ${color}`}>
-      {CURRENCY}
-      {value.toFixed(2)}
-    </span>
+    <span className={`${base} ${variantClass[variant]} ${color}`}>{formatMoney(value, cur)}</span>
   );
 }

@@ -6,6 +6,8 @@
  *
  * Pure types + display helpers, safe to import anywhere.
  */
+import { formatMoney, GBP_CUR, type Cur } from "@/lib/currency";
+
 export type LibraryMaterial = {
   id: string;
   name: string;
@@ -17,10 +19,11 @@ export type LibraryMaterial = {
 /** "£0.62 / g" · "£6.50 each" — the unit-cost line. */
 export function materialUnitLabel(
   m: Pick<LibraryMaterial, "unit" | "unitCost">,
-  cur = "£",
+  cur: Cur = GBP_CUR,
 ): string {
   const u = m.unit.trim();
-  return u ? `${cur}${m.unitCost.toFixed(2)} / ${u}` : `${cur}${m.unitCost.toFixed(2)} each`;
+  const each = formatMoney(m.unitCost, cur);
+  return u ? `${each} / ${u}` : `${each} each`;
 }
 
 /** "120g in stock" · "no stock tracked". */

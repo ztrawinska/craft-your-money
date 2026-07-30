@@ -9,11 +9,13 @@
  * Pure — safe to import anywhere, and testable.
  */
 import type { MarketRead } from "@/lib/benchmark";
+import { formatMoney } from "@/lib/currency";
 
 export type CostPart = { label: string; amount: number };
 
 export type ReviewContext = {
   symbol: string; // the account currency symbol, so the review reads in it too
+  suffix: boolean; // whether the symbol reads after the number (zł, kr, …)
   finalPrice: number;
   net: number;
   profit: number;
@@ -45,7 +47,8 @@ export const REVIEW_TOPICS: { id: ReviewTopic; label: string }[] = [
 ];
 
 // Money is formatted in the account currency — each function binds it to ctx.
-const fmt = (ctx: ReviewContext) => (v: number) => `${ctx.symbol}${v.toFixed(2)}`;
+const fmt = (ctx: ReviewContext) => (v: number) =>
+  formatMoney(v, { symbol: ctx.symbol, suffix: ctx.suffix });
 const pct = (m: number) => `${Math.round(m * 100)}%`;
 const relevantCost = (ctx: ReviewContext) => ctx.fullCost ?? ctx.directCost;
 

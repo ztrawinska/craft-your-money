@@ -14,6 +14,7 @@ import { useState, useTransition } from "react";
 import { Plus } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
 import { useCurrency } from "@/components/CurrencyContext";
+import { formatMoney } from "@/lib/currency";
 import { Button } from "@/components/Button";
 import { ListRow } from "@/components/ListRow";
 import { Price } from "@/components/Price";
@@ -265,8 +266,8 @@ export function CostsEditor({
                   label={c.label}
                   meta={
                     c.period === "seasonal"
-                      ? `${cur}${c.amount.toFixed(2)} · ${c.monthsActive} months a year`
-                      : `${cur}${c.amount.toFixed(2)} / month`
+                      ? `${formatMoney(c.amount, cur)} · ${c.monthsActive} months a year`
+                      : `${formatMoney(c.amount, cur)} / month`
                   }
                   value={<Price value={monthlyEquivalent(c)} variant="inline" />}
                 />
@@ -347,7 +348,7 @@ export function CostsEditor({
                     : "This piece carries"}
               </p>
               <p className="mt-1 font-serif text-[28px] font-medium tabular-nums text-ink">
-                {cur}{share.toFixed(2)}
+                {formatMoney(share, cur)}
               </p>
               <p className="mt-1 font-sans text-[12px] font-light text-ink/55">
                 of business costs, added on top of its direct cost.

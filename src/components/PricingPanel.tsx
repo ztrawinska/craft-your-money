@@ -19,6 +19,7 @@ import { FramedSurface } from "@/components/FramedSurface";
 import { Price } from "@/components/Price";
 import { PriceCheck } from "@/components/PriceCheck";
 import type { MarketRead } from "@/lib/benchmark";
+import { formatMoney } from "@/lib/currency";
 import { computePricingFromDirect, priceWarning } from "@/lib/pricing";
 import type { CostPart } from "@/lib/price-review";
 import { profitTone, profitabilityFromMargin, statusChip } from "@/lib/status";
@@ -79,7 +80,8 @@ export function PricingPanel({
   const reviewCtx =
     finalPrice != null && pricing.net != null && pricing.profit != null && pricing.marginPct != null
       ? {
-          symbol: cur,
+          symbol: cur.symbol,
+          suffix: cur.suffix,
           finalPrice,
           net: pricing.net,
           profit: pricing.profit,
@@ -109,7 +111,7 @@ export function PricingPanel({
           <p className="text-[12.5px] text-clay-deep">Calculated price</p>
           {suggestion.calculatedBeforeVat != null && (
             <p className="mt-0.5 text-[11px] font-light text-ink/42">
-              {cur}{suggestion.calculatedBeforeVat.toFixed(2)} before VAT · {targetMarginPct}%
+              {formatMoney(suggestion.calculatedBeforeVat, cur)} before VAT · {targetMarginPct}%
               target
             </p>
           )}
@@ -126,17 +128,17 @@ export function PricingPanel({
         <span>Your price</span>
         {diverged ? (
           <button type="button" onClick={onReset} className={resetLinkClass}>
-            Reset to {cur}{calculatedPrice!.toFixed(2)}
+            Reset to {formatMoney(calculatedPrice!, cur)}
           </button>
         ) : finalPrice == null && calculatedPrice != null ? (
           <button type="button" onClick={onUseSuggested} className={resetLinkClass}>
-            Use {cur}{calculatedPrice.toFixed(2)}
+            Use {formatMoney(calculatedPrice, cur)}
           </button>
         ) : null}
       </div>
 
       <div className="mb-3 inline-flex items-baseline border-b-2 border-clay pb-[5px]">
-        <span className="mr-[2px] font-serif text-[22px] text-ink/42">{cur}</span>
+        {!cur.suffix && <span className="mr-[2px] font-serif text-[22px] text-ink/42">{cur.symbol}</span>}
         <input
           inputMode="decimal"
           aria-label="Your price"
@@ -146,6 +148,7 @@ export function PricingPanel({
           className="bg-transparent font-serif text-[44px] font-medium leading-none tracking-[-0.02em] tabular-nums text-ink caret-clay-deep outline-none placeholder:text-ink/25"
           style={{ width: `${Math.max(priceText.length, 4) + 0.5}ch` }}
         />
+        {cur.suffix && <span className="ml-[4px] font-serif text-[22px] text-ink/42">{cur.symbol}</span>}
       </div>
 
       {/* VAT — what you keep, reserved wording for VAT only */}
@@ -153,7 +156,7 @@ export function PricingPanel({
         <p className="mb-4 text-[13px] font-light text-ink/55">
           You keep{" "}
           <strong className="font-medium text-ink tabular-nums">
-            {cur}{pricing.net.toFixed(2)}
+            {formatMoney(pricing.net, cur)}
           </strong>{" "}
           after {vatRatePct}% VAT.
         </p>

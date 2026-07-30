@@ -49,7 +49,7 @@ export function EditableProfit({
     <span
       className={`inline-flex items-baseline border-b border-dashed border-ink/25 pb-[2px] font-serif text-[34px] font-medium leading-none tabular-nums ${color}`}
     >
-      <span className="mr-[1px]">{cur}</span>
+      {!cur.suffix && <span className="mr-[1px]">{cur.symbol}</span>}
       <input
         inputMode="decimal"
         aria-label="Set the profit you want per piece"
@@ -67,6 +67,7 @@ export function EditableProfit({
         className={`bg-transparent caret-clay-deep outline-none placeholder:text-ink/25 ${color}`}
         style={{ width: `${Math.max(shown.length, 4) + 0.3}ch` }}
       />
+      {cur.suffix && <span className="ml-[3px]">{cur.symbol}</span>}
     </span>
   );
 }

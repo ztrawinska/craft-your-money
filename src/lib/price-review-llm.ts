@@ -8,6 +8,7 @@
  */
 import "server-only";
 import Anthropic from "@anthropic-ai/sdk";
+import { formatMoney } from "@/lib/currency";
 import {
   REVIEW_TOPICS,
   type Review,
@@ -43,7 +44,7 @@ const SCHEMA: Record<string, unknown> = {
 const pct = (m: number) => `${Math.round(m * 100)}%`;
 
 function buildPrompt(ctx: ReviewContext, topic: ReviewTopic | null): string {
-  const money = (v: number) => `${ctx.symbol}${v.toFixed(2)}`;
+  const money = (v: number) => formatMoney(v, { symbol: ctx.symbol, suffix: ctx.suffix });
   const facts = [
     `Your price (what the buyer pays): ${money(ctx.finalPrice)}`,
     ctx.vatRatePct

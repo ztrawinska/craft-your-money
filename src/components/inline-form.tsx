@@ -11,6 +11,7 @@
 
 import type { ReactNode } from "react";
 import { useCurrency } from "@/components/CurrencyContext";
+import { formatMoney } from "@/lib/currency";
 
 /** Shared text-input styling. 16px prevents iOS auto-zoom (§2.12). */
 export const fieldInput =
@@ -43,15 +44,19 @@ export function MoneyInput({
   const cur = useCurrency();
   return (
     <div className="relative">
-      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 font-serif text-[15px] text-ink/42">
-        {cur}
+      <span
+        className={`pointer-events-none absolute top-1/2 -translate-y-1/2 font-serif text-[15px] text-ink/42 ${
+          cur.suffix ? "right-3" : "left-3"
+        }`}
+      >
+        {cur.symbol}
       </span>
       <input
         inputMode="decimal"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`${fieldInput} pl-6 font-serif tabular-nums`}
+        className={`${fieldInput} font-serif tabular-nums ${cur.suffix ? "pr-9" : "pl-6"}`}
       />
     </div>
   );
@@ -90,7 +95,7 @@ export function FormFooter({
       <div className="mt-3 flex items-baseline justify-between border-t border-dashed border-ink/14 pt-2.5">
         <span className="text-[11px] font-light text-ink/55">{costLabel}</span>
         <span className="font-serif text-[15px] tabular-nums text-ink">
-          {lineCost != null ? `${cur}${lineCost.toFixed(2)}` : "—"}
+          {lineCost != null ? formatMoney(lineCost, cur) : "—"}
         </span>
       </div>
 

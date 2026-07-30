@@ -9,6 +9,8 @@
  * the VAT/loss warnings — are interactive and come later. What's here is the
  * arithmetic, kept honest by tests so the screens can share one truth.
  */
+import { formatMoney, GBP_CUR, type Cur } from "@/lib/currency";
+
 export type CostInputs = {
   materials: number[];
   labour: number[];
@@ -115,32 +117,32 @@ export type PriceWarning = {
 
 export function priceWarning(
   p: Pricing,
-  o: { finalPrice: number; targetMarginPct: number; vatRatePct: number | null; cur?: string },
+  o: { finalPrice: number; targetMarginPct: number; vatRatePct: number | null; cur?: Cur },
 ): PriceWarning | null {
   if (p.net == null || p.profit == null) return null;
   const EPS = 0.005;
-  const cur = o.cur ?? "£";
+  const cur = o.cur ?? GBP_CUR;
   const relevantCost = p.fullCost ?? p.directCost;
 
   if (p.profit < -EPS) {
-    const loss = (-p.profit).toFixed(2);
+    const loss = formatMoney(-p.profit, cur);
     const grossProfit = o.finalPrice - relevantCost;
     // Profitable before VAT, a loss after it (the sneakiest case).
     if (o.vatRatePct && grossProfit >= -EPS) {
       return {
-        text: `This is profitable before VAT — but a loss after. You lose ${cur}${loss} on each piece.`,
+        text: `This is profitable before VAT — but a loss after. You lose ${loss} on each piece.`,
         severity: "loss",
       };
     }
     // Covers direct cost, but fixed costs tip it into a loss.
     if (p.fullCost != null && o.finalPrice >= p.directCost) {
       return {
-        text: `This looks profitable before overhead — but fixed costs make it a ${cur}${loss} loss per piece.`,
+        text: `This looks profitable before overhead — but fixed costs make it a ${loss} loss per piece.`,
         severity: "loss",
       };
     }
     return {
-      text: `Your price is below your costs. You'd lose ${cur}${loss} on every sale.`,
+      text: `Your price is below your costs. You'd lose ${loss} on every sale.`,
       severity: "loss",
     };
   }

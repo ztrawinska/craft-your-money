@@ -15,6 +15,7 @@ import { useState } from "react";
 import { ChevronDown, Plus, X } from "lucide-react";
 import { Button } from "@/components/Button";
 import { useCurrency } from "@/components/CurrencyContext";
+import { formatMoney } from "@/lib/currency";
 import { FieldLabel, MoneyInput, fieldInput, num } from "@/components/inline-form";
 import type { BenchmarkPrice, MarketRead } from "@/lib/benchmark";
 
@@ -81,7 +82,7 @@ export function BenchmarkSection({
                   key={i}
                   className="inline-flex items-center gap-1.5 rounded-full border border-ink/14 py-1 pl-3 pr-1.5 font-serif text-[13px] tabular-nums text-ink"
                 >
-                  {cur}{b.price.toFixed(2)}
+                  {formatMoney(b.price, cur)}
                   {b.label && (
                     <span className="font-sans text-[11px] font-light not-italic text-ink/42">
                       {b.label}
@@ -90,7 +91,7 @@ export function BenchmarkSection({
                   <button
                     type="button"
                     onClick={() => remove(i)}
-                    aria-label={`Remove ${b.label || `${cur}${b.price.toFixed(2)}`}`}
+                    aria-label={`Remove ${b.label || formatMoney(b.price, cur)}`}
                     className="text-ink/30 hover:text-ink/55"
                   >
                     <X size={13} />
@@ -132,9 +133,9 @@ export function BenchmarkSection({
               {market.count} price{market.count === 1 ? "" : "s"} ·{" "}
               <span className="tabular-nums">
                 {market.min === market.max
-                  ? `${cur}${market.min.toFixed(2)}`
-                  : `${cur}${market.min.toFixed(2)}–${cur}${market.max.toFixed(2)}`}
-                , median {cur}{market.median.toFixed(2)}
+                  ? formatMoney(market.min, cur)
+                  : `${formatMoney(market.min, cur)}–${formatMoney(market.max, cur)}`}
+                , median {formatMoney(market.median, cur)}
               </span>{" "}
               — <span className="text-ink/70">{positionPhrase[market.position]}</span>.
             </p>

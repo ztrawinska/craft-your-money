@@ -8,6 +8,7 @@ import { generateReview, marginAtPrice, reviewScenarios, type ReviewContext } fr
 // Make cost £14.06 = £2.81 materials + £11.25 labour; labour dominates.
 const flagship: ReviewContext = {
   symbol: "£",
+  suffix: false,
   finalPrice: 42,
   net: 35,
   profit: 18.2,

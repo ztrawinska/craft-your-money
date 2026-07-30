@@ -9,6 +9,7 @@
  * is computed at read time (PRD §14: never store calculated values).
  */
 import type { BenchmarkPrice } from "@/lib/benchmark";
+import { formatMoney, GBP_CUR, type Cur } from "@/lib/currency";
 import { computePricing, type Pricing } from "@/lib/pricing";
 import { effectiveVatRate, type Settings } from "@/lib/settings";
 import type { ProductStatusInput } from "@/lib/status";
@@ -59,18 +60,19 @@ export const materialLineCost = (m: MaterialLine): number => m.quantity * m.unit
 export const labourLineCost = (l: LabourLine): number => (l.minutes / 60) * l.rate;
 
 /** The quiet second line under a material name: "4g × £0.62/g", "2 × £6.50". */
-export function materialDetail(m: MaterialLine, cur = "£"): string {
+export function materialDetail(m: MaterialLine, cur: Cur = GBP_CUR): string {
   const unit = m.unit.trim();
+  const each = formatMoney(m.unitCost, cur);
   if (m.quantity === 1) {
-    return unit ? `${cur}${m.unitCost.toFixed(2)} / ${unit}` : `${cur}${m.unitCost.toFixed(2)}`;
+    return unit ? `${each} / ${unit}` : each;
   }
-  return unit
-    ? `${m.quantity}${unit} × ${cur}${m.unitCost.toFixed(2)}/${unit}`
-    : `${m.quantity} × ${cur}${m.unitCost.toFixed(2)}`;
+  return unit ? `${m.quantity}${unit} × ${each}/${unit}` : `${m.quantity} × ${each}`;
 }
 
-export function labourDetail(l: LabourLine, cur = "£"): string {
-  return `${l.minutes} min · ${cur}${l.rate}/hr`;
+export function labourDetail(l: LabourLine, cur: Cur = GBP_CUR): string {
+  // The rate keeps its plain form (no forced decimals): "£15/hr", "15 zł/hr".
+  const rate = cur.suffix ? `${l.rate} ${cur.symbol}` : `${cur.symbol}${l.rate}`;
+  return `${l.minutes} min · ${rate}/hr`;
 }
 
 /** Total labour hours for a product — the input to bench-time cost allocation. */

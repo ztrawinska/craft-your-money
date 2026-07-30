@@ -20,6 +20,7 @@ import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { AssistantSlot } from "@/components/AssistantSlot";
 import { useCurrency } from "@/components/CurrencyContext";
+import { formatMoney } from "@/lib/currency";
 import { reviewPriceAction } from "@/app/products/review-price-action";
 import {
   REVIEW_TOPICS,
@@ -137,7 +138,7 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
                   key={s.price}
                   className="rounded-full border border-ink/14 px-3 py-1 font-sans text-[11.5px] tabular-nums text-ink/70"
                 >
-                  at {cur}{s.price} → {Math.round(s.marginPct * 100)}%
+                  at {formatMoney(s.price, cur)} → {Math.round(s.marginPct * 100)}%
                 </span>
               ))}
             </div>

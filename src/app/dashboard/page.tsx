@@ -19,7 +19,7 @@ import { Chip } from "@/components/Chip";
 import { ListRow } from "@/components/ListRow";
 import { Price } from "@/components/Price";
 import { SectionLabel } from "@/components/SectionLabel";
-import { currencySymbol } from "@/lib/currency";
+import { currencyCur, formatMoney } from "@/lib/currency";
 import { fixedCostPerUnit } from "@/lib/fixed-costs";
 import { pricingFor, productLabourHours, statusInputFor, type Product } from "@/lib/products";
 import { getFixedCostConfig, getFixedCosts, getSettings, listProducts } from "@/lib/store";
@@ -35,7 +35,7 @@ export default function Dashboard() {
   // Archived products are kept but never counted (product-actions spec).
   const products = listProducts().filter((p) => !p.archived);
   const settings = getSettings();
-  const cur = currencySymbol(settings.currency);
+  const cur = currencyCur(settings.currency);
   const fixedCosts = getFixedCosts();
   const config = getFixedCostConfig();
   const shareOf = (p: Product) => fixedCostPerUnit(fixedCosts, config, productLabourHours(p));
@@ -72,8 +72,8 @@ export default function Dashboard() {
         stripe: "risky" as const,
         note:
           profit < 0
-            ? `losing ${cur}${Math.abs(profit).toFixed(2)} / sale`
-            : `only ${cur}${profit.toFixed(2)} / sale`,
+            ? `losing ${formatMoney(Math.abs(profit), cur)} / sale`
+            : `only ${formatMoney(profit, cur)} / sale`,
         action: "Reprice",
       };
     }),

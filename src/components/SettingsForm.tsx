@@ -17,7 +17,7 @@ import { SectionLabel } from "@/components/SectionLabel";
 import { Switch } from "@/components/Switch";
 import { fieldInput, num } from "@/components/inline-form";
 import { saveSettingsAction } from "@/app/settings/actions";
-import { currencySymbol, DEFAULT_CURRENCY } from "@/lib/currency";
+import { currencyCur, DEFAULT_CURRENCY } from "@/lib/currency";
 import type { Settings } from "@/lib/settings";
 
 function Row({
@@ -76,7 +76,7 @@ export function SettingsForm({ initial }: { initial: Settings }) {
   const [vatRate, setVatRate] = useState(String(initial.vatRatePct));
 
   const [isSaving, startSaving] = useTransition();
-  const symbol = currencySymbol(currency);
+  const cur = currencyCur(currency);
 
   const save = () =>
     startSaving(async () => {
@@ -107,7 +107,12 @@ export function SettingsForm({ initial }: { initial: Settings }) {
           <SectionLabel>Pricing</SectionLabel>
           <div className="divide-y divide-ink/7">
             <Row label="Bench rate" help="The default rate for a new labour step. Existing steps keep their own rate.">
-              <NumberField value={benchRate} onChange={setBenchRate} prefix={symbol} suffix="/ hr" />
+              <NumberField
+                value={benchRate}
+                onChange={setBenchRate}
+                prefix={cur.suffix ? undefined : cur.symbol}
+                suffix={cur.suffix ? `${cur.symbol} / hr` : "/ hr"}
+              />
             </Row>
             <Row
               label="Target margin"
