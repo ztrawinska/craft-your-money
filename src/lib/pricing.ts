@@ -89,6 +89,21 @@ export function computePricing(c: CostInputs): Pricing {
 }
 
 /**
+ * The inverse of profit (§6, "reach the price by the profit"): the gross price
+ * at which the profit lands exactly on `targetProfit`. Profit is net minus cost,
+ * so net = cost + profit; then VAT goes back on top. Mirrors the forward
+ * computation so the two can never disagree.
+ */
+export function grossForTargetProfit(
+  targetProfit: number,
+  relevantCost: number,
+  vatRatePct: number | null,
+): number {
+  const net = relevantCost + targetProfit;
+  return vatRatePct != null ? net * (1 + vatRatePct / 100) : net;
+}
+
+/**
  * Price warnings (PRD §6) — one calm, plain-language helper, or none. Ordered by
  * severity: a real loss first, then break-even, then below the margin target.
  * These are helpers, never alarms — the wording never says "error" or "invalid".

@@ -13,6 +13,7 @@
 "use client";
 
 import { Chip } from "@/components/Chip";
+import { EditableProfit } from "@/components/EditableProfit";
 import { FramedSurface } from "@/components/FramedSurface";
 import { Price } from "@/components/Price";
 import { PriceCheck } from "@/components/PriceCheck";
@@ -159,22 +160,27 @@ export function PricingPanel({
         </p>
       )}
 
-      {/* profit / loss — the last word. A loss never uses the word "profit". */}
-      {pricing.profit != null ? (
-        <div className="border-t border-ink/7 pt-[18px]">
-          <p className="mb-2 text-[12px] text-ink/55">
-            {isLoss ? "You lose on each piece" : "Profit per piece, after all costs"}
-          </p>
-          <div className="flex items-center justify-between gap-2.5">
-            <Price value={Math.abs(pricing.profit)} variant="profit" tone={tone ?? undefined} />
-            <Chip tone={chip.tone}>{chip.label}</Chip>
-          </div>
-        </div>
-      ) : (
-        <p className="border-t border-ink/7 pt-[18px] text-[12px] text-ink/55">
-          Set a price to see your profit and margin.
+      {/* profit / loss — the last word, and editable: type a target and the
+          price back-solves. A loss never uses the word "profit". */}
+      <div className="border-t border-ink/7 pt-[18px]">
+        <p className="mb-2 text-[12px] text-ink/55">
+          {pricing.profit == null
+            ? "Or set what you want to make per piece"
+            : isLoss
+              ? "You lose on each piece"
+              : "Profit per piece, after all costs"}
         </p>
-      )}
+        <div className="flex items-center justify-between gap-2.5">
+          <EditableProfit
+            profit={pricing.profit}
+            tone={tone ?? undefined}
+            relevantCost={pricing.fullCost ?? pricing.directCost}
+            vatRatePct={vatRatePct}
+            onPriceChange={onPriceChange}
+          />
+          {pricing.profit != null && <Chip tone={chip.tone}>{chip.label}</Chip>}
+        </div>
+      </div>
 
       <PriceCheck ctx={reviewCtx} />
     </FramedSurface>

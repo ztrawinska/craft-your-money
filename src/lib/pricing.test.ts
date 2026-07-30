@@ -5,7 +5,12 @@
  * Run with: npm test
  */
 import { test, expect } from "vitest";
-import { computePricing, computePricingFromDirect, priceWarning } from "./pricing";
+import {
+  computePricing,
+  computePricingFromDirect,
+  grossForTargetProfit,
+  priceWarning,
+} from "./pricing";
 
 test("the flagship product's numbers are internally consistent (§6)", () => {
   const p = computePricing({
@@ -24,6 +29,25 @@ test("the flagship product's numbers are internally consistent (§6)", () => {
   expect(p.marginPct).toBeCloseTo(0.52, 2); // 18.20 / 35
   expect(p.calculatedBeforeVat).toBeCloseTo(23.43, 2);
   expect(p.calculatedPrice).toBeCloseTo(28.12, 2); // 23.43 × 1.2
+});
+
+test("back-solving a price from a target profit round-trips (§6)", () => {
+  // flagship full cost £16.80, 20% VAT. Want £25 profit.
+  const gross = grossForTargetProfit(25, 16.8, 20);
+  expect(gross).toBeCloseTo(50.16, 2); // (16.80 + 25) × 1.2
+
+  // feeding it back through the forward computation yields exactly £25 profit
+  const p = computePricingFromDirect(14.06, {
+    finalPrice: gross,
+    targetMarginPct: 40,
+    vatRatePct: 20,
+    businessCostShare: 2.74,
+  });
+  expect(p.profit).toBeCloseTo(25, 2);
+});
+
+test("back-solving a target profit with VAT off adds nothing on top", () => {
+  expect(grossForTargetProfit(25, 16.8, null)).toBeCloseTo(41.8, 2);
 });
 
 test("no final price yields no net, profit, or margin — but still a suggestion", () => {
