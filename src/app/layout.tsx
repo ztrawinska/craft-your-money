@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Lora, IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
+import { CurrencyProvider } from "@/components/CurrencyContext";
+import { currencySymbol } from "@/lib/currency";
+import { getSettings } from "@/lib/store";
 
 const lora = Lora({
   variable: "--font-lora",
@@ -27,13 +30,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Resolve the account currency symbol once, provide it to the whole tree.
+  const symbol = currencySymbol(getSettings().currency);
   return (
     <html
       lang="en"
       className={`${lora.variable} ${ibmPlexSans.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-page text-ink font-sans">
-        {children}
+        <CurrencyProvider symbol={symbol}>{children}</CurrencyProvider>
       </body>
     </html>
   );

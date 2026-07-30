@@ -6,9 +6,9 @@
  * the pricing lens (pricingFor) takes them as an argument.
  */
 export type Settings = {
-  benchRate: number; // £/hr — the default rate for a new labour step
+  benchRate: number; // in the account currency /hr — default rate for a new step
   targetMarginPct: number; // the margin the calculated price aims for
-  currency: string; // symbol only, no conversion (§9)
+  currency: string; // ISO code (e.g. "GBP"); only the symbol changes, no conversion (§9)
   vatEnabled: boolean;
   vatRatePct: number;
 };
@@ -18,7 +18,7 @@ export type Settings = {
 export const DEFAULT_SETTINGS: Settings = {
   benchRate: 15,
   targetMarginPct: 40,
-  currency: "£",
+  currency: "GBP",
   vatEnabled: true,
   vatRatePct: 20,
 };

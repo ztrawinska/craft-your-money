@@ -14,6 +14,7 @@ import { useState, useTransition } from "react";
 import { Plus } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
 import { Button } from "@/components/Button";
+import { useCurrency } from "@/components/CurrencyContext";
 import { ListRow } from "@/components/ListRow";
 import { SectionLabel } from "@/components/SectionLabel";
 import {
@@ -95,6 +96,7 @@ function MaterialFields({
 }
 
 export function MaterialsEditor({ initial }: { initial: LibraryMaterial[] }) {
+  const cur = useCurrency();
   const [materials, setMaterials] = useState<LibraryMaterial[]>(initial);
   const [edit, setEdit] = useState<EditState<Draft> | null>(null);
   const [, startSaving] = useTransition();
@@ -202,7 +204,7 @@ export function MaterialsEditor({ initial }: { initial: LibraryMaterial[] }) {
                   }
                   value={
                     <span className="font-serif text-[15.5px] tabular-nums text-ink">
-                      {materialUnitLabel(m)}
+                      {materialUnitLabel(m, cur)}
                     </span>
                   }
                 />

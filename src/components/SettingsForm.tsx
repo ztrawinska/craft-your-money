@@ -12,10 +12,12 @@ import { useState, useTransition } from "react";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/Button";
+import { CurrencySelect } from "@/components/CurrencySelect";
 import { SectionLabel } from "@/components/SectionLabel";
 import { Switch } from "@/components/Switch";
 import { fieldInput, num } from "@/components/inline-form";
 import { saveSettingsAction } from "@/app/settings/actions";
+import { currencySymbol, DEFAULT_CURRENCY } from "@/lib/currency";
 import type { Settings } from "@/lib/settings";
 
 function Row({
@@ -74,13 +76,14 @@ export function SettingsForm({ initial }: { initial: Settings }) {
   const [vatRate, setVatRate] = useState(String(initial.vatRatePct));
 
   const [isSaving, startSaving] = useTransition();
+  const symbol = currencySymbol(currency);
 
   const save = () =>
     startSaving(async () => {
       await saveSettingsAction({
         benchRate: num(benchRate) || 0,
         targetMarginPct: num(targetMargin) || 0,
-        currency: currency.trim() || "£",
+        currency: currency.trim() || DEFAULT_CURRENCY,
         vatEnabled,
         vatRatePct: num(vatRate) || 0,
       });
@@ -104,7 +107,7 @@ export function SettingsForm({ initial }: { initial: Settings }) {
           <SectionLabel>Pricing</SectionLabel>
           <div className="divide-y divide-ink/7">
             <Row label="Bench rate" help="The default rate for a new labour step. Existing steps keep their own rate.">
-              <NumberField value={benchRate} onChange={setBenchRate} prefix="£" suffix="/ hr" />
+              <NumberField value={benchRate} onChange={setBenchRate} prefix={symbol} suffix="/ hr" />
             </Row>
             <Row
               label="Target margin"
@@ -120,7 +123,7 @@ export function SettingsForm({ initial }: { initial: Settings }) {
           <SectionLabel>Money</SectionLabel>
           <div className="divide-y divide-ink/7">
             <Row label="Currency" help="The symbol shown on every figure. No conversion — it only changes the symbol.">
-              <NumberField value={currency} onChange={setCurrency} width="w-[52px]" />
+              <CurrencySelect value={currency} onChange={setCurrency} />
             </Row>
             <Row label="I'm VAT registered" help="Your price is the gross tag price; margins run on the net.">
               <Switch checked={vatEnabled} onChange={setVatEnabled} label="I'm VAT registered" />

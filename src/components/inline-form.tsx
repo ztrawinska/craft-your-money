@@ -7,7 +7,10 @@
  * delete confirms inline. Presentational only — the owning client component
  * holds the draft state and passes handlers in.
  */
+"use client";
+
 import type { ReactNode } from "react";
+import { useCurrency } from "@/components/CurrencyContext";
 
 /** Shared text-input styling. 16px prevents iOS auto-zoom (§2.12). */
 export const fieldInput =
@@ -37,10 +40,11 @@ export function MoneyInput({
   onChange: (v: string) => void;
   placeholder?: string;
 }) {
+  const cur = useCurrency();
   return (
     <div className="relative">
       <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 font-serif text-[15px] text-ink/42">
-        £
+        {cur}
       </span>
       <input
         inputMode="decimal"
@@ -80,12 +84,13 @@ export function FormFooter({
   onConfirmDelete: () => void;
   onCancelDelete: () => void;
 }) {
+  const cur = useCurrency();
   return (
     <>
       <div className="mt-3 flex items-baseline justify-between border-t border-dashed border-ink/14 pt-2.5">
         <span className="text-[11px] font-light text-ink/55">{costLabel}</span>
         <span className="font-serif text-[15px] tabular-nums text-ink">
-          {lineCost != null ? `£${lineCost.toFixed(2)}` : "—"}
+          {lineCost != null ? `${cur}${lineCost.toFixed(2)}` : "—"}
         </span>
       </div>
 

@@ -14,13 +14,14 @@ import { RestoreButton } from "@/components/RestoreButton";
 import { StatusFilter } from "@/components/StatusFilter";
 import { TypeFilter } from "@/components/TypeFilter";
 import { TintedBand } from "@/components/TintedBand";
+import { currencySymbol } from "@/lib/currency";
 import { fixedCostPerUnit } from "@/lib/fixed-costs";
 import { PRODUCT_TYPES, productLabourHours, statusInputFor, type Product } from "@/lib/products";
 import { getFixedCostConfig, getFixedCosts, getSettings, listProducts } from "@/lib/store";
 import { compareByStatus, sortKey, statusChip, stripeTone } from "@/lib/status";
 
-function metaPrice(p: Product): string {
-  if (p.finalPrice !== null) return `£${p.finalPrice.toFixed(2)}`;
+function metaPrice(p: Product, cur: string): string {
+  if (p.finalPrice !== null) return `${cur}${p.finalPrice.toFixed(2)}`;
   return p.workflow === "draft" ? "in progress" : "no price set";
 }
 
@@ -33,6 +34,7 @@ export default async function ProductsOverview({
   const status = params.status ?? "all";
   const type = params.type ?? "all";
   const settings = getSettings();
+  const cur = currencySymbol(settings.currency);
   const fixedCosts = getFixedCosts();
   const config = getFixedCostConfig();
   const shareOf = (p: Product) => fixedCostPerUnit(fixedCosts, config, productLabourHours(p));
@@ -121,7 +123,7 @@ export default async function ProductsOverview({
                 meta={
                   <>
                     <span className="text-ink/55">{p.type}</span> ·{" "}
-                    {showingArchived ? "archived" : metaPrice(p)}
+                    {showingArchived ? "archived" : metaPrice(p, cur)}
                   </>
                 }
                 value={

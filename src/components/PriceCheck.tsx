@@ -19,6 +19,7 @@
 import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { AssistantSlot } from "@/components/AssistantSlot";
+import { useCurrency } from "@/components/CurrencyContext";
 import { reviewPriceAction } from "@/app/products/review-price-action";
 import {
   REVIEW_TOPICS,
@@ -38,6 +39,7 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
   const [review, setReview] = useState<Review | null>(null);
   const [source, setSource] = useState<"live" | "scripted" | null>(null);
   const [loading, setLoading] = useState(false);
+  const cur = useCurrency();
 
   // Read the latest ctx without making it an effect dependency — the review is
   // a snapshot taken when you open (or ask a follow-up), not a live recompute.
@@ -135,7 +137,7 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
                   key={s.price}
                   className="rounded-full border border-ink/14 px-3 py-1 font-sans text-[11.5px] tabular-nums text-ink/70"
                 >
-                  at £{s.price} → {Math.round(s.marginPct * 100)}%
+                  at {cur}{s.price} → {Math.round(s.marginPct * 100)}%
                 </span>
               ))}
             </div>

@@ -9,7 +9,10 @@
  * its chip's status tone, so the number and the chip beside it can never tell
  * two different stories. Every other figure stays ink.
  */
+"use client";
+
 import type { ReactNode } from "react";
+import { useCurrency } from "@/components/CurrencyContext";
 import type { StatusTone } from "@/lib/status";
 
 type PriceVariant =
@@ -24,8 +27,6 @@ type PriceVariant =
   | "sectionTotal" // 13px — the total beside a section label
   | "summary" //      13.5px — a line in the cost summary
   | "profit"; //      34px — the profit; the one figure that carries status colour
-
-const CURRENCY = "£";
 
 // Same meaning→colour mapping the Chip uses, but as text colour (not a tint):
 // the profit figure is allowed to be the one coloured number on the screen.
@@ -55,6 +56,7 @@ type PriceProps = {
 };
 
 export function Price({ value, variant = "inline", tone }: PriceProps): ReactNode {
+  const CURRENCY = useCurrency();
   // The final price splits so the eye lands on the pounds: whole number large,
   // decimals and currency smaller and lifted, over the clay underline.
   if (variant === "primary") {

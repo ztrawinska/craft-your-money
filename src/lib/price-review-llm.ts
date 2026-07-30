@@ -40,10 +40,10 @@ const SCHEMA: Record<string, unknown> = {
   required: ["verdict", "findings"],
 };
 
-const money = (v: number) => `£${v.toFixed(2)}`;
 const pct = (m: number) => `${Math.round(m * 100)}%`;
 
 function buildPrompt(ctx: ReviewContext, topic: ReviewTopic | null): string {
+  const money = (v: number) => `${ctx.symbol}${v.toFixed(2)}`;
   const facts = [
     `Your price (what the buyer pays): ${money(ctx.finalPrice)}`,
     ctx.vatRatePct

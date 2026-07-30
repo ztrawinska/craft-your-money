@@ -24,6 +24,7 @@ import {
 import { ActionSheet, type SheetAction } from "@/components/ActionSheet";
 import { BenchmarkSection } from "@/components/BenchmarkSection";
 import { Button } from "@/components/Button";
+import { useCurrency } from "@/components/CurrencyContext";
 import { Combobox } from "@/components/Combobox";
 import {
   EditShell,
@@ -107,6 +108,7 @@ function MaterialFields({
   footer: React.ReactNode;
   library: LibraryMaterial[];
 }) {
+  const cur = useCurrency();
   return (
     <EditShell>
       <label className="block">
@@ -119,7 +121,7 @@ function MaterialFields({
           options={library.map((m) => ({
             id: m.id,
             label: m.name,
-            hint: materialUnitLabel(m),
+            hint: materialUnitLabel(m, cur),
           }))}
           onType={(t) => onPatch({ name: t, fromLibrary: false })}
           onUseAsNew={() => onPatch({ fromLibrary: false })}
@@ -260,6 +262,7 @@ export function ProductEditor({
   const [labour, setLabour] = useState<LabourLine[]>(product.labour);
   const [otherCosts, setOtherCosts] = useState<OtherLine[]>(product.otherCosts);
   const [benchmark, setBenchmark] = useState<BenchmarkPrice[]>(product.benchmark ?? []);
+  const cur = useCurrency();
   const [editMat, setEditMat] = useState<EditState<MatDraft> | null>(null);
   const [editLab, setEditLab] = useState<EditState<LabDraft> | null>(null);
   const [editOther, setEditOther] = useState<EditState<OtherDraft> | null>(null);
@@ -597,7 +600,7 @@ export function ProductEditor({
                 <ListRow
                   label={m.name}
                   library={m.fromLibrary}
-                  meta={materialDetail(m)}
+                  meta={materialDetail(m, cur)}
                   value={<Price value={materialLineCost(m)} variant="inline" />}
                 />
               </button>
@@ -648,7 +651,7 @@ export function ProductEditor({
               >
                 <ListRow
                   label={l.step}
-                  meta={labourDetail(l)}
+                  meta={labourDetail(l, cur)}
                   value={<Price value={labourLineCost(l)} variant="inline" />}
                 />
               </button>

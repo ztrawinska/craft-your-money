@@ -14,6 +14,7 @@
 "use client";
 
 import { useState } from "react";
+import { useCurrency } from "@/components/CurrencyContext";
 import { grossForTargetProfit } from "@/lib/pricing";
 import type { StatusTone } from "@/lib/status";
 
@@ -37,6 +38,7 @@ export function EditableProfit({
   onPriceChange: (value: string) => void;
 }) {
   const [draft, setDraft] = useState<string | null>(null);
+  const cur = useCurrency();
   const color = tone ? toneText[tone] : "text-ink";
 
   // Not editing → the live profit (positive; a loss is shown by the label, per
@@ -47,7 +49,7 @@ export function EditableProfit({
     <span
       className={`inline-flex items-baseline border-b border-dashed border-ink/25 pb-[2px] font-serif text-[34px] font-medium leading-none tabular-nums ${color}`}
     >
-      <span className="mr-[1px]">£</span>
+      <span className="mr-[1px]">{cur}</span>
       <input
         inputMode="decimal"
         aria-label="Set the profit you want per piece"

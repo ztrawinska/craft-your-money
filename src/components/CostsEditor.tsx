@@ -13,6 +13,7 @@
 import { useState, useTransition } from "react";
 import { Plus } from "lucide-react";
 import { BottomNav } from "@/components/BottomNav";
+import { useCurrency } from "@/components/CurrencyContext";
 import { Button } from "@/components/Button";
 import { ListRow } from "@/components/ListRow";
 import { Price } from "@/components/Price";
@@ -135,6 +136,7 @@ export function CostsEditor({
   initialConfig: FixedCostConfig;
   sample: { name: string; labourHours: number } | null;
 }) {
+  const cur = useCurrency();
   const [costs, setCosts] = useState<FixedCost[]>(initialCosts);
   const [edit, setEdit] = useState<{
     index: number | "new";
@@ -263,8 +265,8 @@ export function CostsEditor({
                   label={c.label}
                   meta={
                     c.period === "seasonal"
-                      ? `£${c.amount.toFixed(2)} · ${c.monthsActive} months a year`
-                      : `£${c.amount.toFixed(2)} / month`
+                      ? `${cur}${c.amount.toFixed(2)} · ${c.monthsActive} months a year`
+                      : `${cur}${c.amount.toFixed(2)} / month`
                   }
                   value={<Price value={monthlyEquivalent(c)} variant="inline" />}
                 />
@@ -345,7 +347,7 @@ export function CostsEditor({
                     : "This piece carries"}
               </p>
               <p className="mt-1 font-serif text-[28px] font-medium tabular-nums text-ink">
-                £{share.toFixed(2)}
+                {cur}{share.toFixed(2)}
               </p>
               <p className="mt-1 font-sans text-[12px] font-light text-ink/55">
                 of business costs, added on top of its direct cost.

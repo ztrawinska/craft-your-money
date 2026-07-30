@@ -7,6 +7,7 @@ import { generateReview, marginAtPrice, reviewScenarios, type ReviewContext } fr
 // the flagship: £42 gross, 20% VAT, £16.80 full cost → 52% margin.
 // Make cost £14.06 = £2.81 materials + £11.25 labour; labour dominates.
 const flagship: ReviewContext = {
+  symbol: "£",
   finalPrice: 42,
   net: 35,
   profit: 18.2,

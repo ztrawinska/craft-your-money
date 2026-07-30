@@ -13,6 +13,7 @@
 "use client";
 
 import { Chip } from "@/components/Chip";
+import { useCurrency } from "@/components/CurrencyContext";
 import { EditableProfit } from "@/components/EditableProfit";
 import { FramedSurface } from "@/components/FramedSurface";
 import { Price } from "@/components/Price";
@@ -56,6 +57,7 @@ export function PricingPanel({
   onReset,
   onUseSuggested,
 }: PricingPanelProps) {
+  const cur = useCurrency();
   const options = { targetMarginPct, vatRatePct, businessCostShare };
 
   // The calculated suggestion depends only on cost + target, not the price.
@@ -68,12 +70,16 @@ export function PricingPanel({
   const pricing = computePricingFromDirect(directCost, { finalPrice, ...options });
   const chip = statusChip({ workflow, hasPrice: finalPrice != null, marginPct: pricing.marginPct });
   const tone = pricing.marginPct != null ? profitTone(profitabilityFromMargin(pricing.marginPct)) : null;
-  const warning = finalPrice != null ? priceWarning(pricing, { finalPrice, targetMarginPct, vatRatePct }) : null;
+  const warning =
+    finalPrice != null
+      ? priceWarning(pricing, { finalPrice, targetMarginPct, vatRatePct, cur })
+      : null;
 
   // Everything the Price Check needs — only when there's a price to review.
   const reviewCtx =
     finalPrice != null && pricing.net != null && pricing.profit != null && pricing.marginPct != null
       ? {
+          symbol: cur,
           finalPrice,
           net: pricing.net,
           profit: pricing.profit,
@@ -103,7 +109,7 @@ export function PricingPanel({
           <p className="text-[12.5px] text-clay-deep">Calculated price</p>
           {suggestion.calculatedBeforeVat != null && (
             <p className="mt-0.5 text-[11px] font-light text-ink/42">
-              £{suggestion.calculatedBeforeVat.toFixed(2)} before VAT · {targetMarginPct}%
+              {cur}{suggestion.calculatedBeforeVat.toFixed(2)} before VAT · {targetMarginPct}%
               target
             </p>
           )}
@@ -120,17 +126,17 @@ export function PricingPanel({
         <span>Your price</span>
         {diverged ? (
           <button type="button" onClick={onReset} className={resetLinkClass}>
-            Reset to £{calculatedPrice!.toFixed(2)}
+            Reset to {cur}{calculatedPrice!.toFixed(2)}
           </button>
         ) : finalPrice == null && calculatedPrice != null ? (
           <button type="button" onClick={onUseSuggested} className={resetLinkClass}>
-            Use £{calculatedPrice.toFixed(2)}
+            Use {cur}{calculatedPrice.toFixed(2)}
           </button>
         ) : null}
       </div>
 
       <div className="mb-3 inline-flex items-baseline border-b-2 border-clay pb-[5px]">
-        <span className="mr-[2px] font-serif text-[22px] text-ink/42">£</span>
+        <span className="mr-[2px] font-serif text-[22px] text-ink/42">{cur}</span>
         <input
           inputMode="decimal"
           aria-label="Your price"
@@ -147,7 +153,7 @@ export function PricingPanel({
         <p className="mb-4 text-[13px] font-light text-ink/55">
           You keep{" "}
           <strong className="font-medium text-ink tabular-nums">
-            £{pricing.net.toFixed(2)}
+            {cur}{pricing.net.toFixed(2)}
           </strong>{" "}
           after {vatRatePct}% VAT.
         </p>

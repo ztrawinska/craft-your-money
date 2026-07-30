@@ -59,18 +59,18 @@ export const materialLineCost = (m: MaterialLine): number => m.quantity * m.unit
 export const labourLineCost = (l: LabourLine): number => (l.minutes / 60) * l.rate;
 
 /** The quiet second line under a material name: "4g × £0.62/g", "2 × £6.50". */
-export function materialDetail(m: MaterialLine): string {
+export function materialDetail(m: MaterialLine, cur = "£"): string {
   const unit = m.unit.trim();
   if (m.quantity === 1) {
-    return unit ? `£${m.unitCost.toFixed(2)} / ${unit}` : `£${m.unitCost.toFixed(2)}`;
+    return unit ? `${cur}${m.unitCost.toFixed(2)} / ${unit}` : `${cur}${m.unitCost.toFixed(2)}`;
   }
   return unit
-    ? `${m.quantity}${unit} × £${m.unitCost.toFixed(2)}/${unit}`
-    : `${m.quantity} × £${m.unitCost.toFixed(2)}`;
+    ? `${m.quantity}${unit} × ${cur}${m.unitCost.toFixed(2)}/${unit}`
+    : `${m.quantity} × ${cur}${m.unitCost.toFixed(2)}`;
 }
 
-export function labourDetail(l: LabourLine): string {
-  return `${l.minutes} min · £${l.rate}/hr`;
+export function labourDetail(l: LabourLine, cur = "£"): string {
+  return `${l.minutes} min · ${cur}${l.rate}/hr`;
 }
 
 /** Total labour hours for a product — the input to bench-time cost allocation. */

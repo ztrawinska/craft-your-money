@@ -15,9 +15,12 @@ export type LibraryMaterial = {
 };
 
 /** "£0.62 / g" · "£6.50 each" — the unit-cost line. */
-export function materialUnitLabel(m: Pick<LibraryMaterial, "unit" | "unitCost">): string {
+export function materialUnitLabel(
+  m: Pick<LibraryMaterial, "unit" | "unitCost">,
+  cur = "£",
+): string {
   const u = m.unit.trim();
-  return u ? `£${m.unitCost.toFixed(2)} / ${u}` : `£${m.unitCost.toFixed(2)} each`;
+  return u ? `${cur}${m.unitCost.toFixed(2)} / ${u}` : `${cur}${m.unitCost.toFixed(2)} each`;
 }
 
 /** "120g in stock" · "no stock tracked". */

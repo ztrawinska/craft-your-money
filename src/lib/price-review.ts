@@ -13,6 +13,7 @@ import type { MarketRead } from "@/lib/benchmark";
 export type CostPart = { label: string; amount: number };
 
 export type ReviewContext = {
+  symbol: string; // the account currency symbol, so the review reads in it too
   finalPrice: number;
   net: number;
   profit: number;
@@ -43,7 +44,8 @@ export const REVIEW_TOPICS: { id: ReviewTopic; label: string }[] = [
   { id: "costs", label: "If my costs rise?" },
 ];
 
-const money = (v: number) => `£${v.toFixed(2)}`;
+// Money is formatted in the account currency — each function binds it to ctx.
+const fmt = (ctx: ReviewContext) => (v: number) => `${ctx.symbol}${v.toFixed(2)}`;
 const pct = (m: number) => `${Math.round(m * 100)}%`;
 const relevantCost = (ctx: ReviewContext) => ctx.fullCost ?? ctx.directCost;
 
@@ -77,6 +79,7 @@ export function reviewProvenance(ctx: ReviewContext): Provenance {
 }
 
 export function generateReview(ctx: ReviewContext, topic: ReviewTopic | null): Review {
+  const money = fmt(ctx);
   const relevant = relevantCost(ctx);
   const overTarget = ctx.marginPct >= ctx.targetMarginPct / 100;
 
@@ -180,6 +183,7 @@ function composition(ctx: ReviewContext): string {
 
 /** Where the price sits versus the one the costs and target imply. */
 function placement(ctx: ReviewContext): string {
+  const money = fmt(ctx);
   if (ctx.profit < 0) {
     return `You're ${money(-ctx.profit)} under what each piece costs — the price needs to come up before anything else matters.`;
   }
@@ -199,6 +203,7 @@ function placement(ctx: ReviewContext): string {
 
 /** The risk — what a rise in the single biggest cost would do to the margin. */
 function sensitivity(ctx: ReviewContext): string {
+  const money = fmt(ctx);
   const line = ctx.topLine;
   if (line == null || line.amount <= 0 || ctx.net <= 0) {
     return ctx.vatRatePct
