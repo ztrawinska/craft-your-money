@@ -65,9 +65,9 @@ export function EditableProfit({
         }}
         onBlur={() => setDraft(null)}
         className={`bg-transparent caret-clay-deep outline-none placeholder:text-ink/25 ${color}`}
-        style={{ width: `${Math.max(shown.length, 4) + 0.3}ch` }}
+        style={{ width: `${Math.max(shown.length, 4) + (cur.suffix ? 0.05 : 0.3)}ch` }}
       />
-      {cur.suffix && <span className="ml-[3px]">{cur.symbol}</span>}
+      {cur.suffix && <span className="ml-[1px]">{cur.symbol}</span>}
     </span>
   );
 }

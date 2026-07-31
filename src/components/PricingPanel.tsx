@@ -146,9 +146,10 @@ export function PricingPanel({
           value={priceText}
           onChange={(e) => onPriceChange(e.target.value)}
           className="bg-transparent font-serif text-[44px] font-medium leading-none tracking-[-0.02em] tabular-nums text-ink caret-clay-deep outline-none placeholder:text-ink/25"
-          style={{ width: `${Math.max(priceText.length, 4) + 0.5}ch` }}
+          // trim the trailing caret room when a suffix follows, so the symbol sits close
+          style={{ width: `${Math.max(priceText.length, 4) + (cur.suffix ? 0.1 : 0.5)}ch` }}
         />
-        {cur.suffix && <span className="ml-[4px] font-serif text-[22px] text-ink/42">{cur.symbol}</span>}
+        {cur.suffix && <span className="ml-[2px] font-serif text-[22px] text-ink/42">{cur.symbol}</span>}
       </div>
 
       {/* VAT — what you keep, reserved wording for VAT only */}
