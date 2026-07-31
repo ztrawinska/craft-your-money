@@ -40,7 +40,7 @@ User-facing status labels: Healthy / Caution / Risky / No price. Chip tone is th
 ## Pricing logic (subtle — do not simplify)
 
 * direct_cost = materials + labour + other per-unit costs.
-* calculated_price = direct_cost ÷ (1 − target_margin). ALWAYS from direct cost, never full cost. Runtime-only, NEVER persisted.
+* calculated_price = relevant_cost ÷ (1 − target_margin), where relevant_cost = full_cost when business costs are configured, else direct_cost. It targets the margin on the SAME cost margin is measured against, so accepting the suggestion lands exactly on target (never below it). Runtime-only, NEVER persisted. Trade-off (was direct-cost-only): the suggestion now shifts if the monthly volume estimate changes, since the business-cost share does.
 * final_price ("your price") is the user's decision and drives ALL logic (margin, profit, status, market position). Pre-filled with calculated_price; auto-syncs until first manual edit, then decoupled; "reset to calculated" is one-time and does not re-enable auto-sync. final_price is the only price stored.
 * VAT: final_price is GROSS. net_price = final ÷ (1 + vat_rate), runtime-derived. Margin runs on NET. VAT off by default (no VAT copy anywhere when off).
 * Fixed costs are OPTIONAL. If configured: full_cost = direct_cost + fixed_cost_per_unit, and margin/profit evaluate against full_cost. Otherwise everything runs on direct_cost.

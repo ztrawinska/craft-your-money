@@ -67,9 +67,11 @@ export function computePricingFromDirect(
   const profit = net == null ? null : net - relevantCost;
   const marginPct = net == null || net <= 0 ? null : (profit as number) / net;
 
-  // The suggestion is ALWAYS from direct cost, never full cost (§6).
+  // The suggestion targets the margin on the SAME cost the margin is measured
+  // against — full cost when business costs are configured, else direct cost —
+  // so accepting it actually hits the target (never lands below it).
   const calculatedBeforeVat =
-    directCost <= 0 ? null : directCost / (1 - o.targetMarginPct / 100);
+    relevantCost <= 0 ? null : relevantCost / (1 - o.targetMarginPct / 100);
   const calculatedPrice =
     calculatedBeforeVat == null
       ? null
@@ -158,7 +160,9 @@ export function priceWarning(
     };
   }
 
-  if (p.marginPct != null && p.marginPct < o.targetMarginPct / 100) {
+  // The 0.001 tolerance keeps the recommended price (rounded to 2dp) from
+  // flashing this warning when it lands essentially on target.
+  if (p.marginPct != null && p.marginPct < o.targetMarginPct / 100 - 0.001) {
     return {
       text: `Your price covers costs but is below your ${o.targetMarginPct}% margin target.`,
       severity: "below-target",

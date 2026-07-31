@@ -107,12 +107,12 @@ Only calculated when fixed costs are configured. Otherwise everything runs on `d
 
 ### Calculated price (the suggestion)
 ```
-calculated_price = direct_cost ÷ (1 − target_margin)
+calculated_price = relevant_cost ÷ (1 − target_margin)
 ```
-- **Always from direct cost, never full cost.** Deliberate: avoids double-counting business costs and keeps the suggestion stable when volume estimates change.
+where `relevant_cost` = `full_cost` when business costs are configured, else `direct_cost`.
+- **Targets the margin on the same cost margin is measured against**, so accepting the suggestion lands exactly on the target margin — it never recommends a price that's then flagged below target. (This was the revisit anticipated below; it replaced direct-cost-only.)
 - **Runtime-only. Never persisted.**
-- If fixed costs are configured, a clearly-labelled secondary reference may be shown: `full_cost ÷ (1 − target_margin)`. It does not affect the final-price pre-fill.
-- *Known revisitable decision:* basing the suggestion on full cost is a cheap change (one formula, nothing persisted). If revisited, prefer a Settings toggle over a per-product option.
+- *Trade-off, accepted:* the suggestion now shifts when the monthly volume estimate changes, since the business-cost share does. A recommendation that hits the target is worth more than one that stays stable but misses it. If stability is ever wanted back, a Settings toggle (direct vs full basis) is the shape to add — not a per-product option.
 
 ### Final price (the decision)
 `final_price` is the user's actual selling price and drives **all** downstream logic: margin, profit, status, market position.

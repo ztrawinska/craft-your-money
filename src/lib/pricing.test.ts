@@ -27,8 +27,21 @@ test("the flagship product's numbers are internally consistent (§6)", () => {
   expect(p.net).toBeCloseTo(35, 2); // 42 / 1.2
   expect(p.profit).toBeCloseTo(18.2, 2); // 35 − 16.80
   expect(p.marginPct).toBeCloseTo(0.52, 2); // 18.20 / 35
-  expect(p.calculatedBeforeVat).toBeCloseTo(23.43, 2);
-  expect(p.calculatedPrice).toBeCloseTo(28.12, 2); // 23.43 × 1.2
+  // The suggestion targets 40% on the FULL cost (£16.80), so it hits the target
+  // once business costs are shared in — not the direct cost.
+  expect(p.calculatedBeforeVat).toBeCloseTo(28.0, 2); // 16.80 / 0.6
+  expect(p.calculatedPrice).toBeCloseTo(33.6, 2); // 28.00 × 1.2
+});
+
+test("accepting the calculated price lands exactly on target, no warning (§6)", () => {
+  // direct £25.55 + business share £2.74 = £28.29 full cost, 40% target, 20% VAT
+  const opts = { targetMarginPct: 40, vatRatePct: 20, businessCostShare: 2.74 };
+  const suggestion = computePricingFromDirect(25.55, { finalPrice: null, ...opts });
+  expect(suggestion.calculatedPrice).toBeCloseTo(56.58, 2); // 28.29 / 0.6 × 1.2
+
+  const at = computePricingFromDirect(25.55, { finalPrice: suggestion.calculatedPrice!, ...opts });
+  expect(at.marginPct).toBeCloseTo(0.4, 3); // exactly the target
+  expect(priceWarning(at, { finalPrice: suggestion.calculatedPrice!, ...opts })).toBe(null);
 });
 
 test("back-solving a price from a target profit round-trips (§6)", () => {
