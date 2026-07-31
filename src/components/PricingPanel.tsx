@@ -139,16 +139,21 @@ export function PricingPanel({
 
       <div className="mb-3 inline-flex items-baseline border-b-2 border-clay pb-[5px]">
         {!cur.suffix && <span className="mr-[2px] font-serif text-[22px] text-ink/42">{cur.symbol}</span>}
-        <input
-          inputMode="decimal"
-          aria-label="Your price"
-          placeholder="0.00"
-          value={priceText}
-          onChange={(e) => onPriceChange(e.target.value)}
-          className="bg-transparent font-serif text-[44px] font-medium leading-none tracking-[-0.02em] tabular-nums text-ink caret-clay-deep outline-none placeholder:text-ink/25"
-          // trim the trailing caret room when a suffix follows, so the symbol sits close
-          style={{ width: `${Math.max(priceText.length, 4) + (cur.suffix ? 0.1 : 0.5)}ch` }}
-        />
+        {/* the input hugs its text: an invisible sizer sets the exact width
+            (so a suffix symbol sits right after the number, not after slack) */}
+        <span className="relative inline-block font-serif text-[44px] font-medium leading-none tracking-[-0.02em] tabular-nums">
+          <span aria-hidden className="invisible block whitespace-pre pr-[2px]">
+            {priceText || "0.00"}
+          </span>
+          <input
+            inputMode="decimal"
+            aria-label="Your price"
+            placeholder="0.00"
+            value={priceText}
+            onChange={(e) => onPriceChange(e.target.value)}
+            className="absolute inset-0 w-full bg-transparent text-ink caret-clay-deep outline-none placeholder:text-ink/25"
+          />
+        </span>
         {cur.suffix && <span className="ml-[2px] font-serif text-[22px] text-ink/42">{cur.symbol}</span>}
       </div>
 

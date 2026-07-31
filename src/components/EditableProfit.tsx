@@ -50,24 +50,29 @@ export function EditableProfit({
       className={`inline-flex items-baseline border-b border-dashed border-ink/25 pb-[2px] font-serif text-[34px] font-medium leading-none tabular-nums ${color}`}
     >
       {!cur.suffix && <span className="mr-[1px]">{cur.symbol}</span>}
-      <input
-        inputMode="decimal"
-        aria-label="Set the profit you want per piece"
-        value={shown}
-        placeholder="0.00"
-        onFocus={() => setDraft(profit != null && profit > 0.005 ? profit.toFixed(2) : "")}
-        onChange={(e) => {
-          const raw = e.target.value;
-          setDraft(raw);
-          const target = Number(raw.replace(",", "."));
-          if (raw.trim() === "" || !Number.isFinite(target)) return;
-          onPriceChange(grossForTargetProfit(target, relevantCost, vatRatePct).toFixed(2));
-        }}
-        onBlur={() => setDraft(null)}
-        className={`bg-transparent caret-clay-deep outline-none placeholder:text-ink/25 ${color}`}
-        style={{ width: `${Math.max(shown.length, 4) + (cur.suffix ? 0.05 : 0.3)}ch` }}
-      />
-      {cur.suffix && <span className="ml-[1px]">{cur.symbol}</span>}
+      {/* input hugs its text via an invisible sizer, so a suffix symbol sits close */}
+      <span className="relative inline-block">
+        <span aria-hidden className="invisible block whitespace-pre pr-[2px]">
+          {shown || "0.00"}
+        </span>
+        <input
+          inputMode="decimal"
+          aria-label="Set the profit you want per piece"
+          value={shown}
+          placeholder="0.00"
+          onFocus={() => setDraft(profit != null && profit > 0.005 ? profit.toFixed(2) : "")}
+          onChange={(e) => {
+            const raw = e.target.value;
+            setDraft(raw);
+            const target = Number(raw.replace(",", "."));
+            if (raw.trim() === "" || !Number.isFinite(target)) return;
+            onPriceChange(grossForTargetProfit(target, relevantCost, vatRatePct).toFixed(2));
+          }}
+          onBlur={() => setDraft(null)}
+          className={`absolute inset-0 w-full bg-transparent caret-clay-deep outline-none placeholder:text-ink/25 ${color}`}
+        />
+      </span>
+      {cur.suffix && <span className="ml-[2px]">{cur.symbol}</span>}
     </span>
   );
 }
