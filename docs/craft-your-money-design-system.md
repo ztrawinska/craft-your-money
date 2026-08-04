@@ -231,7 +231,7 @@ A trailing chevron is a promise that something opens. Putting one on an action t
 
 **Anti-pattern:** a "soft filled" fourth level (clay wash + outline). It was built, tested and rejected — it added weight without adding clarity.
 
-### 2.4 Dropdown — *to build*
+### 2.4 Dropdown — *built (ghost trigger + shadcn Drawer sheet)*
 
 A filter, sort or select control. **Not a new control level — it is the ghost button plus a chevron.**
 
@@ -335,7 +335,7 @@ The rule to remember: **iris marks who is speaking, never what the answer is.**
 
 **Rule:** chrome carries no category signal. A candlemaker reads these icons identically. Jewelry lives only in content.
 
-### 2.11 Action sheet — *to build*
+### 2.11 Action sheet — *built (shadcn Drawer)*
 
 Holds destructive and secondary actions for an object (the ⋯ menu). **A bottom sheet, not a floating popover** — no card hovering over a flat page, full-width 44px+ targets, identical behaviour by tap at any size.
 
@@ -350,6 +350,8 @@ Holds destructive and secondary actions for an object (the ⋯ menu). **A bottom
 - A destructive confirm must **name the object**, say plainly that it is permanent, and where one exists, **point at the gentler alternative**.
 
 **Anti-pattern:** floating popover menus; a confirm dialog opening on top of a sheet; destructive actions with no stated consequence.
+
+**Implementation:** the action sheet and the status/type filters (§2.4) share ONE primitive — a shadcn **Drawer** (vaul) restyled to these tokens (`ink-28` scrim, 34×3px grab handle, 14px top corners, `max-w-430`, the sheet shadow). vaul supplies focus-trap, Escape and scroll-lock; the anatomy and rules above are enforced by the styling, not the library. This is why the filters open a bottom sheet, never a floating menu — the primitive has no floating variant in this app.
 
 ### 2.12 Inline form — *to build*
 

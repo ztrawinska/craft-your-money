@@ -2,6 +2,11 @@
  * ActionSheet — the ⋯ menu (design system §2.11). A bottom sheet, never a
  * floating popover: page background, a grab handle, full-width 44px+ rows.
  *
+ * Built on the shared shadcn Drawer (vaul) primitive, so it gets focus-trap,
+ * Escape, drag-to-dismiss and scroll-lock for free — the look and behaviour are
+ * unchanged from the hand-built version. The external API (open / onClose /
+ * actions) is identical, so callers don't change.
+ *
  * Dividers mark a change in kind, not every row — constructive actions sit
  * together, one hairline sets off the destructive one, which is last and red.
  * A destructive confirm swaps the sheet's content in place (never a modal on a
@@ -10,6 +15,7 @@
 "use client";
 
 import { useState, type ReactNode } from "react";
+import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 
 export type SheetAction = {
   id: string;
@@ -32,7 +38,6 @@ export function ActionSheet({
   actions: SheetAction[];
 }) {
   const [confirming, setConfirming] = useState<SheetAction | null>(null);
-  if (!open) return null;
 
   const close = () => {
     setConfirming(null);
@@ -40,15 +45,10 @@ export function ActionSheet({
   };
 
   return (
-    <div className="fixed inset-0 z-50">
-      <button
-        type="button"
-        aria-label="Close"
-        onClick={close}
-        className="absolute inset-0 bg-ink/28"
-      />
-      <div className="absolute inset-x-0 bottom-0 mx-auto max-w-[430px] rounded-t-[14px] border-t border-ink/14 bg-page pb-4 pt-2 shadow-[0_-10px_30px_-12px_rgba(30,25,22,0.25)]">
-        <div className="mx-auto mb-1.5 h-[3px] w-[34px] rounded-full bg-ink/14" />
+    <Drawer open={open} onOpenChange={(next) => !next && close()}>
+      <DrawerContent className="pb-4">
+        {/* Accessible name for the dialog; the visible headers vary by state. */}
+        <DrawerTitle className="sr-only">Actions</DrawerTitle>
 
         {confirming ? (
           <div className="px-5 pb-1 pt-2">
@@ -121,7 +121,7 @@ export function ActionSheet({
             </div>
           </>
         )}
-      </div>
-    </div>
+      </DrawerContent>
+    </Drawer>
   );
 }
