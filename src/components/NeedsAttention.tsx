@@ -2,10 +2,11 @@
  * NeedsAttention — the dashboard's attention list, kept short (PRD §11).
  *
  * The home should peek the problem that matters, not grow a full ledger. So it
- * shows the most-urgent item(s) inline and tucks the rest behind a "N more"
- * row that opens the shared bottom-sheet Drawer. With one item there is no
- * overflow, so no sheet ever appears — the single-item case stays inline for
- * free.
+ * shows the most-urgent item(s) inline and, when there are more, a "See all N"
+ * row opens the shared bottom-sheet Drawer with the FULL list — the peek is a
+ * highlight, the sheet is the authoritative list (the top item shows in both,
+ * which is fine). With one item there is no overflow, so no sheet ever appears
+ * — the single-item case stays inline for free.
  *
  * Items arrive already computed and sorted by the server (risky worst-first,
  * then no-price), as plain data — this component only renders and toggles.
@@ -88,7 +89,7 @@ export function NeedsAttention({ items }: { items: AttentionItem[] }) {
               type="button"
               className="flex w-full items-center justify-between border-t border-ink/7 px-6 py-[13px] text-left font-sans text-[12.5px] font-medium text-clay-deep"
             >
-              {overflow.length} more {overflow.length === 1 ? "needs" : "need"} attention
+              See all {items.length}
               <ChevronRight size={15} strokeWidth={2} />
             </button>
           </DrawerTrigger>
@@ -97,7 +98,7 @@ export function NeedsAttention({ items }: { items: AttentionItem[] }) {
               Needs attention
             </DrawerTitle>
             <div className="divide-y divide-ink/7">
-              {overflow.map((item) => (
+              {items.map((item) => (
                 <AttentionRow key={item.id} item={item} />
               ))}
             </div>

@@ -14,8 +14,8 @@ import { ArrowRight, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { AssistantSlot } from "@/components/AssistantSlot";
 import { BottomNav } from "@/components/BottomNav";
+import { HeroProfit } from "@/components/HeroProfit";
 import { NeedsAttention, type AttentionItem } from "@/components/NeedsAttention";
-import { Price } from "@/components/Price";
 import { currencyCur, formatMoney } from "@/lib/currency";
 import { fixedCostPerUnit } from "@/lib/fixed-costs";
 import { pricingFor, productLabourHours, statusInputFor, type Product } from "@/lib/products";
@@ -50,6 +50,12 @@ export default function Dashboard() {
     const m = pricingFor(p, settings, shareOf(p)).marginPct;
     return m !== null && m < HEALTHY_MIN;
   }).length;
+
+  // What the average is made of — each priced product's profit, worst first —
+  // so the hero can unfold "how this is figured" without any new data.
+  const contributions = activePriced
+    .map((p) => ({ name: p.name, profit: pricingFor(p, settings, shareOf(p)).profit ?? 0 }))
+    .sort((a, b) => a.profit - b.profit);
 
   const weakest = [...activePriced].sort(
     (a, b) => (pricingFor(a, settings, shareOf(a)).marginPct ?? 0) - (pricingFor(b, settings, shareOf(b)).marginPct ?? 0),
@@ -134,16 +140,8 @@ export default function Dashboard() {
           </p>
         </div>
 
-        {/* hero — average profit per piece, monochrome, always true */}
-        <div className="px-6 pb-1">
-          <p className="mb-[9px] font-sans text-[9.5px] font-semibold uppercase tracking-[0.14em] text-ink/42">
-            Avg profit / piece
-          </p>
-          <Price value={avgProfit} variant="hero" />
-          <p className="mt-[9px] font-sans text-[12px] font-light leading-[1.5] text-ink/55">
-            across your {pricedDone} priced products, after all costs
-          </p>
-        </div>
+        {/* hero — average profit per piece: count-up + "how this is figured" */}
+        <HeroProfit value={avgProfit} count={pricedDone} contributions={contributions} />
 
         {/* supporting metrics */}
         <div className="mx-6 mt-5 grid grid-cols-2 gap-1 border-t border-ink/7 pt-4">
