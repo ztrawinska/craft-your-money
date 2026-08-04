@@ -3,15 +3,19 @@
  * library autofill, §12). Pick a saved item to fill the row; "+ Use as new" is
  * always the last option, so the library never traps you.
  *
- * The suggestions render IN FLOW, directly under the input (content below
- * shifts down) — not a floating popover. That keeps the flat, no-floating-panels
- * language and matches how inline edit already expands in place.
+ * The suggestions float in a shadcn Popover anchored under the input, instead
+ * of pushing content down in flow — so the surrounding UI no longer jumps as
+ * the list opens and closes. The popover is anchored (not a trigger) and does
+ * NOT steal focus, so you keep typing in the field; picking still works because
+ * items block the input's blur (onMouseDown) until the click lands. vaul-style
+ * collision handling flips it above the field near the viewport edge.
  */
 "use client";
 
 import { useId, useState } from "react";
 import { Diamond, Plus } from "lucide-react";
 import { fieldInput } from "@/components/inline-form";
+import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
 
 export type ComboOption = { id: string; label: string; hint?: string };
 
@@ -24,6 +28,9 @@ type ComboboxProps = {
   placeholder?: string;
   autoFocus?: boolean;
 };
+
+const listSurface =
+  "w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-[7px] border border-ink/14 bg-page p-0 shadow-[0_8px_24px_-8px_rgba(30,25,22,0.18)]";
 
 export function Combobox({
   value,
@@ -44,23 +51,38 @@ export function Combobox({
   const showList = open && (matches.length > 0 || showUseAsNew);
 
   return (
-    <div>
-      <input
-        autoFocus={autoFocus}
-        value={value}
-        onChange={(e) => onType(e.target.value)}
-        onFocus={() => setOpen(true)}
-        onBlur={() => setOpen(false)}
-        onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
-        placeholder={placeholder}
-        className={`${fieldInput} font-sans`}
-        role="combobox"
-        aria-expanded={showList}
-        aria-controls={listId}
-      />
+    <Popover open={showList} onOpenChange={(next) => !next && setOpen(false)}>
+      <PopoverAnchor asChild>
+        <input
+          autoFocus={autoFocus}
+          value={value}
+          onChange={(e) => onType(e.target.value)}
+          onFocus={() => setOpen(true)}
+          onBlur={() => setOpen(false)}
+          onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
+          placeholder={placeholder}
+          className={`${fieldInput} font-sans`}
+          role="combobox"
+          aria-expanded={showList}
+          aria-controls={listId}
+        />
+      </PopoverAnchor>
 
-      {showList && (
-        <ul id={listId} className="mt-1 overflow-hidden rounded-[5px] border border-ink/14">
+      <PopoverContent
+        id={listId}
+        align="start"
+        sideOffset={5}
+        // Keep focus in the anchored input, and disable Radix's own dismiss:
+        // the input IS "outside" the content, so typing would otherwise close
+        // the popover. We drive open/close ourselves (focus / blur / Escape /
+        // item click) instead.
+        onOpenAutoFocus={(e) => e.preventDefault()}
+        onCloseAutoFocus={(e) => e.preventDefault()}
+        onFocusOutside={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
+        className={listSurface}
+      >
+        <ul>
           {matches.map((o) => (
             <li key={o.id}>
               <button
@@ -102,7 +124,7 @@ export function Combobox({
             </li>
           )}
         </ul>
-      )}
-    </div>
+      </PopoverContent>
+    </Popover>
   );
 }

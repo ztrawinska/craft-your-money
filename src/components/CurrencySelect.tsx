@@ -1,8 +1,12 @@
 /**
  * CurrencySelect — pick the account currency by searching (§14). Type to filter
- * by code, name or symbol; pick to store the ISO code. Suggestions render in
- * flow beneath the field, matching the flat, no-floating-panels language (the
- * same pattern as the materials Combobox).
+ * by code, name or symbol; pick to store the ISO code.
+ *
+ * The results float in a shadcn Popover anchored under the field, instead of
+ * pushing the settings rows down in flow — so the page no longer jumps as the
+ * list opens. The popover is anchored (not a trigger) and does NOT steal focus,
+ * so typing stays in the field; picking works because items block the input's
+ * blur until the click lands.
  */
 "use client";
 
@@ -10,6 +14,7 @@ import { useId, useState } from "react";
 import { Check } from "lucide-react";
 import { fieldInput } from "@/components/inline-form";
 import { CURRENCIES, currencyByCode } from "@/lib/currency";
+import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
 
 export function CurrencySelect({
   value,
@@ -32,51 +37,69 @@ export function CurrencySelect({
           c.symbol.toLowerCase().includes(q),
       )
     : CURRENCIES;
+  const showList = open && matches.length > 0;
 
   return (
     <div className="w-[190px]">
-      <input
-        value={open ? query : selected ? `${selected.symbol}  ${selected.name}` : value}
-        onChange={(e) => setQuery(e.target.value)}
-        onFocus={() => {
-          setOpen(true);
-          setQuery("");
-        }}
-        onBlur={() => setOpen(false)}
-        onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
-        placeholder="Search currency"
-        className={`${fieldInput} font-sans text-[13.5px]`}
-        role="combobox"
-        aria-expanded={open}
-        aria-controls={listId}
-      />
+      <Popover open={showList} onOpenChange={(next) => !next && setOpen(false)}>
+        <PopoverAnchor asChild>
+          <input
+            value={open ? query : selected ? `${selected.symbol}  ${selected.name}` : value}
+            onChange={(e) => setQuery(e.target.value)}
+            onFocus={() => {
+              setOpen(true);
+              setQuery("");
+            }}
+            onBlur={() => setOpen(false)}
+            onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
+            placeholder="Search currency"
+            className={`${fieldInput} font-sans text-[13.5px]`}
+            role="combobox"
+            aria-expanded={showList}
+            aria-controls={listId}
+          />
+        </PopoverAnchor>
 
-      {open && matches.length > 0 && (
-        <ul id={listId} className="mt-1 max-h-[220px] overflow-auto rounded-[5px] border border-ink/14">
-          {matches.map((c) => (
-            <li key={c.code}>
-              <button
-                type="button"
-                onMouseDown={(e) => e.preventDefault()}
-                onClick={() => {
-                  onChange(c.code);
-                  setOpen(false);
-                }}
-                className="flex w-full items-center gap-2.5 px-3 py-2 text-left hover:bg-ink/5"
-              >
-                <span className="w-6 shrink-0 font-serif text-[15px] text-ink">{c.symbol}</span>
-                <span className="min-w-0 flex-1 truncate font-sans text-[13px] text-ink">
-                  {c.name}
-                </span>
-                <span className="shrink-0 font-sans text-[11px] text-ink/42">{c.code}</span>
-                {c.code === value && (
-                  <Check size={13} strokeWidth={2.2} className="shrink-0 text-clay-deep" />
-                )}
-              </button>
-            </li>
-          ))}
-        </ul>
-      )}
+        <PopoverContent
+          id={listId}
+          align="start"
+          sideOffset={5}
+          // Keep focus in the anchored input, and disable Radix's own dismiss:
+          // the input IS "outside" the content, so typing would otherwise close
+          // the popover. We drive open/close ourselves (focus / blur / Escape /
+          // item click) instead.
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          onCloseAutoFocus={(e) => e.preventDefault()}
+          onFocusOutside={(e) => e.preventDefault()}
+          onInteractOutside={(e) => e.preventDefault()}
+          className="max-h-[220px] w-[var(--radix-popover-trigger-width)] overflow-auto rounded-[7px] border border-ink/14 bg-page p-0 shadow-[0_8px_24px_-8px_rgba(30,25,22,0.18)]"
+        >
+          <ul>
+            {matches.map((c) => (
+              <li key={c.code}>
+                <button
+                  type="button"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => {
+                    onChange(c.code);
+                    setOpen(false);
+                  }}
+                  className="flex w-full items-center gap-2.5 px-3 py-2 text-left hover:bg-ink/5"
+                >
+                  <span className="w-6 shrink-0 font-serif text-[15px] text-ink">{c.symbol}</span>
+                  <span className="min-w-0 flex-1 truncate font-sans text-[13px] text-ink">
+                    {c.name}
+                  </span>
+                  <span className="shrink-0 font-sans text-[11px] text-ink/42">{c.code}</span>
+                  {c.code === value && (
+                    <Check size={13} strokeWidth={2.2} className="shrink-0 text-clay-deep" />
+                  )}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </PopoverContent>
+      </Popover>
     </div>
   );
 }

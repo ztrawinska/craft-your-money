@@ -253,6 +253,8 @@ A filter, sort or select control. **Not a new control level — it is the ghost 
 
 **Anti-pattern:** chip-shaped dropdowns; white pills floating on the page; text carets.
 
+**Type-to-search fields are the one sanctioned exception to "no floating panels."** The currency picker (§14) and the materials-library autofill (§12) are text inputs you type into, with suggestions as you go — a different control from the filter dropdown above. Their list floats in a shadcn **Popover** anchored under the field, not in flow. Rendered in flow, the list pushed the surrounding rows down as it opened and pulled them back as it closed — the UI visibly *jumped*, which read as broken; a stable anchored panel is calmer. The panel wears **page colour**, a `1px ink-14` border and a soft shadow — not the elevated white card the anti-pattern warns against — and it **never steals focus**, so typing continues uninterrupted; picking works because items block the input's blur until the click lands. This is the only floating surface in the app; filters and menus still use the bottom sheet (§2.4, §2.11).
+
 ### 2.5 Section header — *to build*
 
 `SectionLabel` + optional right-aligned total.
