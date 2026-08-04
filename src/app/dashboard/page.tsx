@@ -14,11 +14,8 @@ import { ArrowRight, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { AssistantSlot } from "@/components/AssistantSlot";
 import { BottomNav } from "@/components/BottomNav";
-import { Button } from "@/components/Button";
-import { Chip } from "@/components/Chip";
-import { ListRow } from "@/components/ListRow";
+import { NeedsAttention, type AttentionItem } from "@/components/NeedsAttention";
 import { Price } from "@/components/Price";
-import { SectionLabel } from "@/components/SectionLabel";
 import { currencyCur, formatMoney } from "@/lib/currency";
 import { fixedCostPerUnit } from "@/lib/fixed-costs";
 import { pricingFor, productLabourHours, statusInputFor, type Product } from "@/lib/products";
@@ -58,32 +55,51 @@ export default function Dashboard() {
     (a, b) => (pricingFor(a, settings, shareOf(a)).marginPct ?? 0) - (pricingFor(b, settings, shareOf(b)).marginPct ?? 0),
   )[0];
 
-  // Attention: active risky first, then active no-price. Drafts never appear.
-  const risky = active.filter((p) => {
-    const m = pricingFor(p, settings, shareOf(p)).marginPct;
-    return m !== null && m < RISKY_MAX;
-  });
+  // Attention: active risky (worst margin first), then active no-price. Drafts
+  // never appear. Built as plain data with the chip precomputed, so the
+  // client-side NeedsAttention (which owns the sheet) needs no store access.
+  // No cap here — the home peeks the worst and the sheet holds the rest.
+  const risky = active
+    .filter((p) => {
+      const m = pricingFor(p, settings, shareOf(p)).marginPct;
+      return m !== null && m < RISKY_MAX;
+    })
+    .sort(
+      (a, b) =>
+        (pricingFor(a, settings, shareOf(a)).marginPct ?? 0) -
+        (pricingFor(b, settings, shareOf(b)).marginPct ?? 0),
+    );
   const noPrice = active.filter((p) => p.finalPrice === null);
-  const attention = [
+  const attentionItems: AttentionItem[] = [
     ...risky.map((p) => {
       const profit = pricingFor(p, settings, shareOf(p)).profit ?? 0;
+      const chip = statusChip(statusInputFor(p, settings, shareOf(p)));
       return {
-        p,
+        id: p.id,
+        name: p.name,
         stripe: "risky" as const,
         note:
           profit < 0
             ? `losing ${formatMoney(Math.abs(profit), cur)} / sale`
             : `only ${formatMoney(profit, cur)} / sale`,
         action: "Reprice",
+        chipTone: chip.tone,
+        chipLabel: chip.label,
       };
     }),
-    ...noPrice.map((p) => ({
-      p,
-      stripe: "neutral" as const,
-      note: "active without one",
-      action: "Set price",
-    })),
-  ].slice(0, 3);
+    ...noPrice.map((p) => {
+      const chip = statusChip(statusInputFor(p, settings, shareOf(p)));
+      return {
+        id: p.id,
+        name: p.name,
+        stripe: "neutral" as const,
+        note: "active, no price yet",
+        action: "Set price",
+        chipTone: chip.tone,
+        chipLabel: chip.label,
+      };
+    }),
+  ];
 
   const resume = products.find((p) => p.workflow === "draft" && p.finalPrice === null);
 
@@ -163,45 +179,8 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* needs attention — only rendered when there is something to do */}
-        {attention.length > 0 && (
-          <>
-            <div className="mt-8 px-6">
-              <SectionLabel>Needs attention</SectionLabel>
-            </div>
-            <div className="divide-y divide-ink/7 border-t border-ink/7">
-              {attention.map(({ p, stripe, note, action }) => {
-                const chip = statusChip(statusInputFor(p, settings, shareOf(p)));
-                return (
-                  <ListRow
-                    key={p.id}
-                    emphasis="product"
-                    stripe={stripe}
-                    label={p.name}
-                    meta={
-                      <span className="inline-flex items-center gap-1.5">
-                        <Chip size="sm" tone={chip.tone}>
-                          {chip.label}
-                        </Chip>
-                        <span>{note}</span>
-                      </span>
-                    }
-                    value={
-                      <Button
-                        variant="link"
-                        href={`/products/${p.id}`}
-                        className="text-[13.5px] font-semibold"
-                        iconTrailing={<ChevronRight size={15} strokeWidth={2} />}
-                      >
-                        {action}
-                      </Button>
-                    }
-                  />
-                );
-              })}
-            </div>
-          </>
-        )}
+        {/* needs attention — peek the worst; the rest live in a sheet */}
+        <NeedsAttention items={attentionItems} />
 
         {/* resume draft */}
         {resume && (
