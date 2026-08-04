@@ -143,9 +143,9 @@ export default function Dashboard() {
         {/* hero — average profit per piece: count-up + "how this is figured" */}
         <HeroProfit value={avgProfit} count={pricedDone} contributions={contributions} />
 
-        {/* supporting metrics */}
-        <div className="mx-6 mt-5 grid grid-cols-2 gap-1 border-t border-ink/7 pt-4">
-          <div>
+        {/* supporting metrics — centred to match the redesign */}
+        <div className="mx-6 mt-5 grid grid-cols-2 border-t border-ink/7 pt-4">
+          <div className="text-center">
             <p className="mb-1.5 font-sans text-[9px] font-semibold uppercase tracking-[0.12em] text-ink/42">
               Priced
             </p>
@@ -157,14 +157,14 @@ export default function Dashboard() {
               </span>
             </p>
           </div>
-          <div className="border-l border-ink/7 pl-4">
+          <div className="border-l border-ink/7 text-center">
             <p className="mb-1.5 font-sans text-[9px] font-semibold uppercase tracking-[0.12em] text-ink/42">
               Below target
             </p>
             {belowTarget > 0 ? (
               <Link
                 href="/products"
-                className="inline-flex items-center font-serif text-[20px] font-medium tabular-nums text-ink"
+                className="inline-flex items-center justify-center font-serif text-[20px] font-medium tabular-nums text-ink"
               >
                 {belowTarget}
                 <ChevronRight size={14} strokeWidth={2} className="ml-0.5 text-clay-deep" />

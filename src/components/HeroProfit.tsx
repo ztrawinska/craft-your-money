@@ -66,11 +66,11 @@ export function HeroProfit({
       <div className="relative mx-auto w-fit">
         <div
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-[40%] h-[155%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-[50%]"
+          className="pointer-events-none absolute left-1/2 top-[40%] h-[170%] w-[150%] -translate-x-1/2 -translate-y-1/2 rounded-[50%]"
           style={{
             background:
-              "radial-gradient(50% 50% at 50% 50%, rgba(160,113,106,0.34), rgba(160,113,106,0) 66%)",
-            filter: "blur(10px)",
+              "radial-gradient(50% 50% at 50% 50%, rgba(160,113,106,0.5), rgba(160,113,106,0) 68%)",
+            filter: "blur(9px)",
           }}
         />
         <div className="relative">
