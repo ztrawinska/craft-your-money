@@ -40,6 +40,72 @@
  * That keeps everything in one hue family with nothing extra to define.
  */
 
+/*
+ * shadcn/ui token bridge.
+ *
+ * shadcn components reference semantic tokens (--primary, --background,
+ * --border …). We map those onto the Craft Your Money palette above so any
+ * shadcn primitive lands on-brand by default. Where our system uses opacity
+ * (ink/14, ink/55) we bake the nearest solid hex here — hand-skinned
+ * components (like Switch) still use the real ink/opacity utilities directly,
+ * so this bridge is only the fallback for anything not individually tuned.
+ *
+ * Two deliberate omissions that protect the existing UI:
+ * - No dark mode. The design system is single-theme (paper) on purpose.
+ * - No shadcn base layer (its `* { border }` reset and `body` overrides),
+ *   so nothing already on screen shifts.
+ */
+:root {
+  --radius: 0.4375rem; /* 7px — matches the button / dropdown geometry */
+
+  --background: #f7f4f0; /* page */
+  --foreground: #1e1916; /* ink */
+  --card: #ffffff;
+  --card-foreground: #1e1916;
+  --popover: #ffffff;
+  --popover-foreground: #1e1916;
+  --primary: #8a5a52; /* clay-deep */
+  --primary-foreground: #fdfbf9;
+  --secondary: #efe9e2;
+  --secondary-foreground: #1e1916;
+  --muted: #efe9e2;
+  --muted-foreground: #7d756e; /* ≈ ink at 55% on page */
+  --accent: #efe9e2;
+  --accent-foreground: #1e1916;
+  --destructive: #b04a40; /* status-red */
+  --destructive-foreground: #fdfbf9;
+  --border: #e5ded6; /* ≈ ink at 14% on page */
+  --input: #e5ded6;
+  --ring: #a0716a; /* clay — the focus accent */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
 body {
   /* page colour, plus a near-invisible paper grain (~2%) so the flat surface
      reads as paper, not screen. The noise SVG is transparent with dark specks,

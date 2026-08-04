@@ -14,7 +14,7 @@ import Link from "next/link";
 import { Button } from "@/components/Button";
 import { CurrencySelect } from "@/components/CurrencySelect";
 import { SectionLabel } from "@/components/SectionLabel";
-import { Switch } from "@/components/Switch";
+import { Switch } from "@/components/ui/switch";
 import { fieldInput, num } from "@/components/inline-form";
 import { saveSettingsAction } from "@/app/settings/actions";
 import { currencyCur, DEFAULT_CURRENCY } from "@/lib/currency";
@@ -131,7 +131,7 @@ export function SettingsForm({ initial }: { initial: Settings }) {
               <CurrencySelect value={currency} onChange={setCurrency} />
             </Row>
             <Row label="I'm VAT registered" help="Your price is the gross tag price; margins run on the net.">
-              <Switch checked={vatEnabled} onChange={setVatEnabled} label="I'm VAT registered" />
+              <Switch checked={vatEnabled} onCheckedChange={setVatEnabled} aria-label="I'm VAT registered" />
             </Row>
             {vatEnabled && (
               <Row label="VAT rate" help="Changing VAT recalculates every margin and status. Prices never move.">
