@@ -9,8 +9,10 @@
  *   this unfolds each priced product's profit and the average they make. It is
  *   the "where does this number come from" move, in plain figures.
  *
- * No glow, no card: the focal weight comes from motion and the size the Price
- * hero already owns, so the flat surface holds.
+ * The figure is centred and sits over a soft clay glow — the one deliberate
+ * focal moment on the screen (Zuza's call). It's light on paper, not a card or
+ * a shadow, so the flat surface still holds; the glow is the only place any
+ * gradient appears.
  */
 "use client";
 
@@ -57,11 +59,24 @@ export function HeroProfit({
     `${n < 0 ? "−" : "+"}${formatMoney(Math.abs(n), cur)}`;
 
   return (
-    <div className="px-6 pb-1">
+    <div className="px-6 pb-1 text-center">
       <p className="mb-[9px] font-sans text-[9.5px] font-semibold uppercase tracking-[0.14em] text-ink/42">
         Avg profit / piece
       </p>
-      <Price value={shown} variant="hero" />
+      <div className="relative mx-auto w-fit">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-1/2 h-[165%] w-[150%] -translate-x-1/2 -translate-y-1/2 rounded-full"
+          style={{
+            background:
+              "radial-gradient(50% 50% at 50% 50%, rgba(160,113,106,0.20), rgba(160,113,106,0) 70%)",
+            filter: "blur(12px)",
+          }}
+        />
+        <div className="relative">
+          <Price value={shown} variant="hero" />
+        </div>
+      </div>
       <p className="mt-[9px] font-sans text-[12px] font-light leading-[1.5] text-ink/55">
         across your {count} priced products, after all costs
       </p>
@@ -83,7 +98,7 @@ export function HeroProfit({
           </button>
 
           {open && (
-            <div className="mt-2.5 border-t border-ink/7 pt-1">
+            <div className="mt-2.5 border-t border-ink/7 pt-1 text-left">
               {contributions.map((c) => (
                 <div key={c.name} className="flex items-baseline justify-between gap-3 py-[5px]">
                   <span className="min-w-0 truncate font-sans text-[12.5px] text-ink/70">
