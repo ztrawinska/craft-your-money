@@ -15,7 +15,8 @@ import { Button } from "@/components/Button";
 import { CurrencySelect } from "@/components/CurrencySelect";
 import { SectionLabel } from "@/components/SectionLabel";
 import { Switch } from "@/components/ui/switch";
-import { fieldInput, num } from "@/components/inline-form";
+import { Input } from "@/components/ui/input";
+import { num } from "@/components/inline-form";
 import { saveSettingsAction } from "@/app/settings/actions";
 import { currencyCur, DEFAULT_CURRENCY } from "@/lib/currency";
 import type { Settings } from "@/lib/settings";
@@ -57,11 +58,11 @@ function NumberField({
   return (
     <span className="inline-flex items-center gap-1.5">
       {prefix && <span className="font-serif text-[15px] text-ink/42">{prefix}</span>}
-      <input
+      <Input
         inputMode="decimal"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`${fieldInput} ${width} text-right font-serif tabular-nums`}
+        className={`${width} text-right font-serif tabular-nums`}
       />
       {suffix && <span className="font-sans text-[12px] text-ink/55">{suffix}</span>}
     </span>

@@ -9,6 +9,7 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/Button";
+import { Input } from "@/components/ui/input";
 import { PRODUCT_TYPES } from "@/lib/products";
 import { createProductAction } from "@/app/products/actions";
 
@@ -39,12 +40,12 @@ export default function NewProduct() {
           <span className="mb-1.5 block text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/42">
             Name
           </span>
-          <input
+          <Input
             name="name"
             required
             autoFocus
             placeholder="e.g. Hammered silver band"
-            className="w-full rounded-[5px] border border-ink/14 bg-page px-3 py-2.5 text-[16px] font-sans text-ink outline-none focus:border-clay focus:ring-[3px] focus:ring-clay/12"
+            className="font-sans"
           />
         </label>
 

@@ -26,13 +26,12 @@ import { BenchmarkSection } from "@/components/BenchmarkSection";
 import { Button } from "@/components/Button";
 import { useCurrency } from "@/components/CurrencyContext";
 import { Combobox } from "@/components/Combobox";
+import { Input } from "@/components/ui/input";
 import {
   EditShell,
   FieldLabel,
   FormFooter,
-  MoneyInput,
-  fieldInput,
-  num,
+  MoneyInput,  num,
   type EditState,
 } from "@/components/inline-form";
 import { ListRow } from "@/components/ListRow";
@@ -136,21 +135,21 @@ function MaterialFields({
       <div className="mt-3 flex gap-2">
         <label className="w-[64px]">
           <FieldLabel>Qty</FieldLabel>
-          <input
+          <Input
             inputMode="decimal"
             value={draft.quantity}
             onChange={(e) => onPatch({ quantity: e.target.value })}
             placeholder="0"
-            className={`${fieldInput} font-serif tabular-nums`}
+            className="font-serif tabular-nums"
           />
         </label>
         <label className="w-[64px]">
           <FieldLabel>Unit</FieldLabel>
-          <input
+          <Input
             value={draft.unit}
             onChange={(e) => onPatch({ unit: e.target.value })}
             placeholder="g"
-            className={`${fieldInput} font-sans`}
+            className="font-sans"
           />
         </label>
         <label className="flex-1">
@@ -178,23 +177,23 @@ function LabourFields({
     <EditShell>
       <label className="block">
         <FieldLabel>Step</FieldLabel>
-        <input
+        <Input
           autoFocus
           value={draft.step}
           onChange={(e) => onPatch({ step: e.target.value })}
           placeholder="e.g. Soldering"
-          className={`${fieldInput} font-sans`}
+          className="font-sans"
         />
       </label>
       <div className="mt-3 flex gap-2">
         <label className="w-[96px]">
           <FieldLabel>Minutes</FieldLabel>
-          <input
+          <Input
             inputMode="numeric"
             value={draft.minutes}
             onChange={(e) => onPatch({ minutes: e.target.value })}
             placeholder="0"
-            className={`${fieldInput} font-serif tabular-nums`}
+            className="font-serif tabular-nums"
           />
         </label>
         <label className="flex-1">
@@ -224,12 +223,12 @@ function OtherFields({
     <EditShell>
       <label className="block">
         <FieldLabel>Cost</FieldLabel>
-        <input
+        <Input
           autoFocus
           value={draft.label}
           onChange={(e) => onPatch({ label: e.target.value })}
           placeholder="e.g. Gift box, hallmarking"
-          className={`${fieldInput} font-sans`}
+          className="font-sans"
         />
       </label>
       <div className="mt-3">

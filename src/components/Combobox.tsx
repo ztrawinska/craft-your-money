@@ -14,7 +14,7 @@
 
 import { useId, useState } from "react";
 import { Diamond, Plus } from "lucide-react";
-import { fieldInput } from "@/components/inline-form";
+import { Input } from "@/components/ui/input";
 import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
 
 export type ComboOption = { id: string; label: string; hint?: string };
@@ -53,7 +53,7 @@ export function Combobox({
   return (
     <Popover open={showList} onOpenChange={(next) => !next && setOpen(false)}>
       <PopoverAnchor asChild>
-        <input
+        <Input
           autoFocus={autoFocus}
           value={value}
           onChange={(e) => onType(e.target.value)}
@@ -61,7 +61,7 @@ export function Combobox({
           onBlur={() => setOpen(false)}
           onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
           placeholder={placeholder}
-          className={`${fieldInput} font-sans`}
+          className="font-sans"
           role="combobox"
           aria-expanded={showList}
           aria-controls={listId}

@@ -17,13 +17,12 @@ import { Button } from "@/components/Button";
 import { useCurrency } from "@/components/CurrencyContext";
 import { ListRow } from "@/components/ListRow";
 import { SectionLabel } from "@/components/SectionLabel";
+import { Input } from "@/components/ui/input";
 import {
   EditShell,
   FieldLabel,
   FormFooter,
-  MoneyInput,
-  fieldInput,
-  num,
+  MoneyInput,  num,
   type EditState,
 } from "@/components/inline-form";
 import { saveMaterialAction, deleteMaterialAction } from "@/app/materials/actions";
@@ -57,22 +56,22 @@ function MaterialFields({
     <EditShell>
       <label className="block">
         <FieldLabel>Name</FieldLabel>
-        <input
+        <Input
           autoFocus
           value={draft.name}
           onChange={(e) => onPatch({ name: e.target.value })}
           placeholder="e.g. Sterling silver sheet"
-          className={`${fieldInput} font-sans`}
+          className="font-sans"
         />
       </label>
       <div className="mt-3 flex gap-2">
         <label className="w-[72px]">
           <FieldLabel>Unit</FieldLabel>
-          <input
+          <Input
             value={draft.unit}
             onChange={(e) => onPatch({ unit: e.target.value })}
             placeholder="g"
-            className={`${fieldInput} font-sans`}
+            className="font-sans"
           />
         </label>
         <label className="flex-1">
@@ -82,12 +81,12 @@ function MaterialFields({
       </div>
       <label className="mt-3 block w-[140px]">
         <FieldLabel>Stock (optional)</FieldLabel>
-        <input
+        <Input
           inputMode="decimal"
           value={draft.stock}
           onChange={(e) => onPatch({ stock: e.target.value })}
           placeholder="not tracked"
-          className={`${fieldInput} font-serif tabular-nums`}
+          className="font-serif tabular-nums"
         />
       </label>
       {footer}

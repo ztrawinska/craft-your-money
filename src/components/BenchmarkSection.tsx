@@ -16,7 +16,8 @@ import { ChevronDown, Plus, X } from "lucide-react";
 import { Button } from "@/components/Button";
 import { useCurrency } from "@/components/CurrencyContext";
 import { formatMoney } from "@/lib/currency";
-import { FieldLabel, MoneyInput, fieldInput, num } from "@/components/inline-form";
+import { FieldLabel, MoneyInput, num } from "@/components/inline-form";
+import { Input } from "@/components/ui/input";
 import type { BenchmarkPrice, MarketRead } from "@/lib/benchmark";
 
 const positionPhrase: Record<MarketRead["position"], string> = {
@@ -109,12 +110,12 @@ export function BenchmarkSection({
             </label>
             <label className="flex-1">
               <FieldLabel>Where (optional)</FieldLabel>
-              <input
+              <Input
                 value={label}
                 onChange={(e) => setLabel(e.target.value)}
                 placeholder="e.g. Etsy"
                 onKeyDown={(e) => e.key === "Enter" && add()}
-                className={`${fieldInput} font-sans`}
+                className="font-sans"
               />
             </label>
           </div>

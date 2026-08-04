@@ -12,7 +12,7 @@
 
 import { useId, useState } from "react";
 import { Check } from "lucide-react";
-import { fieldInput } from "@/components/inline-form";
+import { Input } from "@/components/ui/input";
 import { CURRENCIES, currencyByCode } from "@/lib/currency";
 import { Popover, PopoverAnchor, PopoverContent } from "@/components/ui/popover";
 
@@ -43,7 +43,7 @@ export function CurrencySelect({
     <div className="w-[190px]">
       <Popover open={showList} onOpenChange={(next) => !next && setOpen(false)}>
         <PopoverAnchor asChild>
-          <input
+          <Input
             value={open ? query : selected ? `${selected.symbol}  ${selected.name}` : value}
             onChange={(e) => setQuery(e.target.value)}
             onFocus={() => {
@@ -53,7 +53,7 @@ export function CurrencySelect({
             onBlur={() => setOpen(false)}
             onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
             placeholder="Search currency"
-            className={`${fieldInput} font-sans text-[13.5px]`}
+            className="font-sans text-[13.5px]"
             role="combobox"
             aria-expanded={showList}
             aria-controls={listId}

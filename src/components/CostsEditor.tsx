@@ -21,13 +21,12 @@ import { Price } from "@/components/Price";
 import { RadioCards } from "@/components/RadioCards";
 import { SectionLabel } from "@/components/SectionLabel";
 import { TintedBand } from "@/components/TintedBand";
+import { Input } from "@/components/ui/input";
 import {
   EditShell,
   FieldLabel,
   FormFooter,
-  MoneyInput,
-  fieldInput,
-  num,
+  MoneyInput,  num,
 } from "@/components/inline-form";
 import {
   deleteFixedCostAction,
@@ -81,12 +80,12 @@ function CostFields({
     <EditShell>
       <label className="block">
         <FieldLabel>Cost</FieldLabel>
-        <input
+        <Input
           autoFocus
           value={draft.label}
           onChange={(e) => onPatch({ label: e.target.value })}
           placeholder="e.g. Studio rent"
-          className={`${fieldInput} font-sans`}
+          className="font-sans"
         />
       </label>
       <div className="mt-3 flex items-end gap-2">
@@ -114,12 +113,12 @@ function CostFields({
       {draft.period === "seasonal" && (
         <label className="mt-3 block w-[140px]">
           <FieldLabel>Months a year</FieldLabel>
-          <input
+          <Input
             inputMode="numeric"
             value={draft.monthsActive}
             onChange={(e) => onPatch({ monthsActive: e.target.value })}
             placeholder="4"
-            className={`${fieldInput} font-serif tabular-nums`}
+            className="font-serif tabular-nums"
           />
         </label>
       )}
@@ -310,13 +309,13 @@ export function CostsEditor({
               {method === "per-unit" ? "Pieces you make" : "Your bench hours"}
             </span>
             <span className="inline-flex items-center gap-1.5">
-              <input
+              <Input
                 inputMode="decimal"
                 value={volume}
                 onChange={(e) => setVolume(e.target.value)}
                 onBlur={() => saveConfig(method, volume)}
                 placeholder="0"
-                className={`${fieldInput} w-[72px] text-right font-serif tabular-nums`}
+                className="w-[72px] text-right font-serif tabular-nums"
               />
               <span className="font-sans text-[12px] text-ink/55">{volumeLabel}</span>
             </span>

@@ -10,12 +10,9 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { Input } from "@/components/ui/input";
 import { useCurrency } from "@/components/CurrencyContext";
 import { formatMoney } from "@/lib/currency";
-
-/** Shared text-input styling. 16px prevents iOS auto-zoom (§2.12). */
-export const fieldInput =
-  "w-full rounded-[5px] border border-ink/14 bg-page px-3 py-2.5 text-[16px] text-ink outline-none focus:border-clay focus:ring-[3px] focus:ring-clay/12";
 
 /** Parse a user-typed number, accepting a comma decimal. */
 export const num = (s: string) => Number(s.replace(",", "."));
@@ -51,12 +48,12 @@ export function MoneyInput({
       >
         {cur.symbol}
       </span>
-      <input
+      <Input
         inputMode="decimal"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`${fieldInput} font-serif tabular-nums ${cur.suffix ? "pr-9" : "pl-6"}`}
+        className={`font-serif tabular-nums ${cur.suffix ? "pr-9" : "pl-6"}`}
       />
     </div>
   );
