@@ -5,7 +5,7 @@
       "name": "craft-your-money",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
-      "port": 3000
+      "autoPort": true
     }
   ]
 }

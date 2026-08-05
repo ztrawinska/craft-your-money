@@ -6,7 +6,7 @@
  * which creates the draft and redirects to /products/[id] to add costs. No JS
  * required to work — the name field is `required`, the type pills are radios.
  */
-import { ArrowLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/Button";
 import { Input } from "@/components/ui/input";
@@ -18,8 +18,12 @@ export default function NewProduct() {
     <main className="mx-auto w-full max-w-[430px] pb-24">
       {/* header */}
       <div className="flex items-center justify-between px-6 pt-5">
-        <Link href="/products" aria-label="Back" className="-ml-1.5 text-ink/55">
-          <ArrowLeft size={18} strokeWidth={2} />
+        <Link
+          href="/products"
+          aria-label="Back"
+          className="-ml-3.5 flex size-11 items-center justify-center text-ink/55"
+        >
+          <ChevronLeft size={22} strokeWidth={2} />
         </Link>
         <span />
         <span className="w-[18px]" />

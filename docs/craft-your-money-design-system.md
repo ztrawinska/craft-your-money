@@ -53,7 +53,7 @@ Ink is used at fixed opacities rather than as separate greys. This keeps everyth
 | `ink-42` | 42% | Section labels (caps), inactive nav, unit suffixes |
 | `ink-30` | 30% | Placeholders, muted marks, the neutral stripe |
 | `ink-14` | 14% | Stronger dividers, input borders, dashed frames |
-| `ink-07` | 7% | Hairline dividers between rows and sections |
+| `ink-07` | 7% | Hairline dividers between *sections* (no longer between rows in a list — see §2.6) |
 
 **Tinted bands** (briefing, insight strip) use `rgba(ink, 0.035)` — deliberately lighter than `cream-mid`, which read as shouting. Backgrounds should sit very close to the page.
 
@@ -131,7 +131,7 @@ Nothing is rounder than 11px except chips. Generous radii read as "app card" —
 | Divider | `1px ink-14` | Before a summary, above a metric band |
 | Dashed | `1px dashed ink-14` | Secondary/derived lines (business-cost share), resume container |
 | Accent rule | `3px clay` | Top of the framed pricing surface |
-| Urgency stripe | `3px` status colour | Left edge of a list row |
+| Urgency stripe | `3px` status colour, inset + `rounded-full` | In the gutter of a list row (not the screen edge) |
 | Active tick | `2px clay-deep` | Above the active nav tab |
 
 The 3px clay top rule and the 2px clay nav tick are deliberately the same device at different scales: *"this is where you are"* and *"this is where you decide"* speak one visual language.
@@ -229,6 +229,8 @@ Three levels. **Three, not four** — resist adding a fourth.
 
 A trailing chevron is a promise that something opens. Putting one on an action that completes in place — like Restore — would be a lie about what the tap does. Restore uses `rotate-ccw`; `archive-restore` is more literal but too busy at this size (the same lesson the Costs icon taught us).
 
+**Back is the mirror of navigate:** a **leading** `chevron-left` (22px, `ink-55`), not an arrow — same chevron family as the forward-nav promise. It sits in a **44×44 target** (`size-11`, pulled left with a negative margin so the glyph still hugs the edge) to meet WCAG 2.5.5.
+
 **Anti-pattern:** a "soft filled" fourth level (clay wash + outline). It was built, tested and rejected — it added weight without adding clarity.
 
 ### 2.4 Dropdown — *built (ghost trigger + shadcn Drawer sheet)*
@@ -263,28 +265,29 @@ A filter, sort or select control. **Not a new control level — it is the ghost 
 - Total: 13px Lora, `ink-55`, right-aligned on the same baseline.
 - Followed by rows separated with `ink-07` hairlines.
 
-### 2.6 List row — *to build*
+### 2.6 List row — *built*
 
 The workhorse. Two lines, optional left stripe, optional right slot.
 
 **Anatomy**
 ```
-[stripe]  Primary label (Lora 15–16px)              [right slot]
-          Meta line (Plex 11.5px ink-55)
+ │  Primary label (Lora 15–16px)                     [right slot]
+ │  Meta line (Plex 12px ink-55)
 ```
 
-- **Left stripe:** 3px, status-coloured, urgency-scaled (red full, amber 55%, green 38%, none for No price / Draft). A secondary scan aid — the chip is primary. *Exception:* on the dashboard's curated attention list — where every row already needs action — a No-price row takes a neutral `ink-30` stripe rather than none, since "no stripe" would there read as "nothing here".
+- **Left stripe:** a `3px` **inset, rounded** bar sitting in the page gutter (≈`left-3`, vertically inset ≈14px, `rounded-full`) — *not* a full-bleed border glued to the screen edge. Status-coloured, urgency-scaled (red full, amber 55%, green 38%, none for No price / Draft). A secondary scan aid — the chip is primary. *Exception:* on the dashboard's curated attention list — where every row already needs action — a No-price row takes a neutral `ink-30` stripe rather than none, since "no stripe" would there read as "nothing here".
+- **No rules between rows.** A product list separates by row rhythm (56–64px height) and the inset stripe alone — no `ink-07` hairline per row. Lines return only between larger *sections*, not between siblings in one list. (This supersedes the older "rows separated with `ink-07` hairlines" convention.)
 - **Right slot:** a chip (overview) or a verb-link (dashboard attention).
-- **Meta line** carries the arithmetic in the quiet voice: `4g × £0.62/g`, `20 min · £15/hr`, `Ring · £42.00`.
+- **Meta line** carries the arithmetic in the quiet voice at `12px ink-55` (Plex, normal weight — not `font-light`, which read too thin): `4g × £0.62/g`, `20 min · £15/hr`, `Ring · £42.00`.
 - Height 56–64px. Whole row is tappable; no hover-only affordances.
 - **When a row is muted (draft, archived), dim the content — never the action.** Dimming the whole row makes a live action read as disabled. The name and meta line recede; the verb-link stays full-strength clay.
 
-### 2.7 Framed surface — *to build*
+### 2.7 Framed surface — *built*
 
 The one enclosed area per screen. Currently: the pricing block.
 
-- `1px` clay border at 34% opacity, 8px radius, white background.
-- `3px` solid clay rule across the top.
+- 8px radius, `card` (near-white) background, **no border**.
+- **Torn top edge** — the block reads as a sheet torn from a pad: even flat runs interrupted by concave semicircle notches (`5px` deep, `16px` apart; radius = depth so the notch stays a true semicircle), cut *out* of the card so the real page shows through the gaps. **Both corners begin on a flat run** — solid mask caps at the top-left/right guarantee the edge never opens on a half-notch, whatever the card's width. The card fill + the tear define the surface (this replaced the old `1px` clay border + `3px` clay top rule). Implemented by masking the card itself, so the notches are the true page colour, not an overlaid fill. Kept flat — no shadow, no 3-D lip.
 - Internal sections divided by `ink-07` hairlines.
 
 **Rule:** if a second framed surface appears on a screen, one of them is wrong. Reach for hairlines instead.
@@ -355,17 +358,38 @@ Holds destructive and secondary actions for an object (the ⋯ menu). **A bottom
 
 **Implementation:** the action sheet and the status/type filters (§2.4) share ONE primitive — a shadcn **Drawer** (vaul) restyled to these tokens (`ink-28` scrim, 34×3px grab handle, 14px top corners, `max-w-430`, the sheet shadow). vaul supplies focus-trap, Escape and scroll-lock; the anatomy and rules above are enforced by the styling, not the library. This is why the filters open a bottom sheet, never a floating menu — the primitive has no floating variant in this app.
 
-### 2.12 Inline form — *to build*
+### 2.12 Inline form — *built*
 
 Add and edit never open a modal.
 
-- The row expands in place; a **3px clay left stripe** plus a **faint `ink` 3.5% tint** (rounded on the right, like the assistant inset in §2.9) mark edit mode; content below shifts down. Inputs stay `page`-coloured so they lift off the tint.
+- The row expands in place into a **rounded (`8px`) card with a faint `ink` 5% tint** — **containment alone** marks edit mode (the benchmark norm: Airwallex, Bevel, Walmart all signal editing by a contained card, no accent stripe). The active input's own focus ring completes the signal. **No left stripe here** — it was decoration, not signal. (Contrast the clay/iris stripes elsewhere, which *carry* meaning — the one framed surface §2.7, "AI is here" §2.9 — and so stay.) Inputs stay `page`-coloured so they lift off the tint.
 - Inputs: `page` background, `1px ink-14` border, 5px radius, 15px Lora for values (tabular).
 - Focus: clay border + `0 0 0 3px rgba(clay, 0.12)` ring.
 - Live line cost above the actions, on a dashed rule.
 - Delete opens an **inline confirm**, never a modal, with reassuring copy.
 - Save is disabled until the row is valid. No error states while typing.
 - 16px minimum input size (prevents iOS zoom); 44px minimum touch targets.
+
+### 2.13 Money entry — *built*
+
+**Every money field is a right-to-left cents accumulator** (`lib/money-input.ts`), the YNAB model. The field reads *digits only*: each digit shifts the amount one place left and the last two digits are always the pennies, so the decimal point and the two decimals are painted on — never typed, never strandable.
+
+```
+"" → 5 → 0.05 → 6 → 0.56 → 8 → 5.68 → 0 → 56.80 → ⌫ → 5.68
+```
+
+**Rules**
+- Keypad is `inputMode="numeric"`, not `decimal` — there is **no separator key**, because you never type a separator (this is what removed the "keyboard only has a comma, and the dot is deletable" problem).
+- All-zero reads as **empty** (the placeholder `0.00` shows through) — a blank money field already means "no price".
+- The **caret is always pinned to the right**, even after a tap in the middle (`pinCaretRight` on `onFocus` + `onSelect`), so entry always builds from the right and the cursor sits between the number and the currency.
+- The **whole figure is one tap target, currency included** — the price and profit wrap their number+symbol in a `<label>` so tapping the `zł`/`£` (or the empty width beside it) focuses the field.
+- Applies to price, profit, and every `MoneyInput` (material cost, labour rate, other cost, benchmark price). **Not** quantity or minutes — those take real decimals (`2.5 g`) and stay plain fields.
+
+This is **enforced in code**, not a convention: the shared helpers are the only way money is typed.
+
+### 2.14 Reveal toggle — *built*
+
+The "tap to see the numbers behind this figure" control — the dashboard's *how this is figured* (§ hero) and the product's *market benchmark* (§11) are the same thing and share one look: an **inline** `chevron-down` link, dotted `clay/50` underline, `clay-deep` 11.5px Plex 500, chevron rotating 180° on open. Clay because it is a link/action (§2.3). It is **not** a full-width grey section header — that treatment reads as structure, this reads as optional depth.
 
 ---
 

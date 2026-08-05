@@ -20,6 +20,7 @@ import { Price } from "@/components/Price";
 import { PriceCheck } from "@/components/PriceCheck";
 import type { MarketRead } from "@/lib/benchmark";
 import { formatMoney } from "@/lib/currency";
+import { handleCentsInput, pinCaretRight } from "@/lib/money-input";
 import { computePricingFromDirect, priceWarning } from "@/lib/pricing";
 import type { CostPart } from "@/lib/price-review";
 import { profitTone, profitabilityFromMargin, statusChip } from "@/lib/status";
@@ -137,25 +138,32 @@ export function PricingPanel({
         ) : null}
       </div>
 
-      <div className="mb-3 inline-flex items-baseline border-b-2 border-clay pb-[5px]">
-        {!cur.suffix && <span className="mr-[2px] font-serif text-[22px] text-ink/42">{cur.symbol}</span>}
-        {/* the input hugs its text: an invisible sizer sets the exact width
-            (so a suffix symbol sits right after the number, not after slack) */}
-        <span className="relative inline-block font-serif text-[44px] font-medium leading-none tracking-[-0.02em] tabular-nums">
-          <span aria-hidden className="invisible block whitespace-pre pr-[2px]">
-            {priceText || "0.00"}
+      {/* the whole row is the tap target (label focuses the input from anywhere,
+          including the currency and the empty space); the number+symbol stay
+          hugged left under the clay rule */}
+      <label className="mb-3 flex w-full cursor-text items-baseline">
+        <span className="inline-flex items-baseline border-b-2 border-clay pb-[5px]">
+          {!cur.suffix && <span className="mr-[2px] font-serif text-[22px] text-ink/42">{cur.symbol}</span>}
+          {/* the input hugs its text: an invisible sizer sets the exact width
+              (so a suffix symbol sits right after the number, not after slack) */}
+          <span className="relative inline-block font-serif text-[44px] font-medium leading-none tracking-[-0.02em] tabular-nums">
+            <span aria-hidden className="invisible block whitespace-pre pr-[2px]">
+              {priceText || "0.00"}
+            </span>
+            <input
+              inputMode="numeric"
+              aria-label="Your price"
+              placeholder="0.00"
+              value={priceText}
+              onChange={(e) => handleCentsInput(e, onPriceChange)}
+              onFocus={pinCaretRight}
+              onSelect={pinCaretRight}
+              className="absolute inset-0 w-full bg-transparent text-ink caret-clay-deep outline-none placeholder:text-ink/25"
+            />
           </span>
-          <input
-            inputMode="decimal"
-            aria-label="Your price"
-            placeholder="0.00"
-            value={priceText}
-            onChange={(e) => onPriceChange(e.target.value)}
-            className="absolute inset-0 w-full bg-transparent text-ink caret-clay-deep outline-none placeholder:text-ink/25"
-          />
+          {cur.suffix && <span className="ml-[2px] font-serif text-[22px] text-ink/42">{cur.symbol}</span>}
         </span>
-        {cur.suffix && <span className="ml-[2px] font-serif text-[22px] text-ink/42">{cur.symbol}</span>}
-      </div>
+      </label>
 
       {/* VAT — what you keep, reserved wording for VAT only */}
       {pricing.net != null && vatRatePct != null && (

@@ -93,7 +93,7 @@ export function NeedsAttention({ items }: { items: AttentionItem[] }) {
         <DrawerTitle className="px-6 pb-1 pt-1 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/42">
           Needs attention
         </DrawerTitle>
-        <div className="divide-y divide-ink/7">
+        <div>
           {items.map((item) => (
             <AttentionRow key={item.id} item={item} />
           ))}
