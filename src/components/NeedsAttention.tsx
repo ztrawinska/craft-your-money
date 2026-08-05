@@ -70,7 +70,7 @@ export function NeedsAttention({ items }: { items: AttentionItem[] }) {
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <div className="mt-8 px-6">
+      <div className="mt-6 px-6">
         <DrawerTrigger asChild>
           <button
             type="button"

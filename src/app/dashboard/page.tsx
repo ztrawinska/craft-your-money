@@ -10,7 +10,7 @@
  * is something to do, and "Below target" falls back to a quiet italic "all on
  * target" instead of a proud 0.
  */
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { AssistantSlot } from "@/components/AssistantSlot";
 import { BottomNav } from "@/components/BottomNav";
@@ -198,23 +198,23 @@ export default function Dashboard() {
         {resume && (
           <Link
             href={`/products/${resume.id}`}
-            className="mx-6 mt-8 flex items-center justify-between rounded-[8px] border border-dashed border-ink/14 px-[18px] py-4"
+            className="mx-6 mt-3 flex items-center justify-between rounded-[8px] border border-dashed border-ink/14 px-[18px] py-4"
           >
             <div>
               <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/42">
                 Continue where you left off
               </p>
               <p className="mt-1 font-serif text-[14px] font-medium">{resume.name}</p>
-              <p className="mt-0.5 font-sans text-[10.5px] font-light italic text-ink/42">
+              <p className="mt-0.5 font-sans text-[11px] italic text-ink/52">
                 Draft · edited 2 days ago
               </p>
             </div>
-            <ArrowRight size={16} className="text-clay-deep" />
+            <ChevronRight size={16} className="text-clay-deep" />
           </Link>
         )}
 
         {/* assistant entry point — nothing generates until it genuinely does */}
-        <AssistantSlot className="mx-6 mb-6 mt-8">Ask about your prices</AssistantSlot>
+        <AssistantSlot className="mx-6 mb-6 mt-3">Ask about your prices</AssistantSlot>
       </main>
 
       <BottomNav active="home" />

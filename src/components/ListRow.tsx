@@ -87,9 +87,9 @@ export function ListRow({
         </span>
         {meta && (
           <p
-            className={`mt-[3px] font-sans font-light ${
-              isProduct ? "text-[11.5px]" : "text-[12px]"
-            } ${muted ? "text-ink/30" : "text-ink/42"}`}
+            className={`mt-[3px] font-sans text-[12px] ${
+              muted ? "text-ink/40" : "text-ink/55"
+            }`}
           >
             {meta}
           </p>
