@@ -205,8 +205,8 @@ export default function Dashboard() {
               <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/42">
                 Continue where you left off
               </p>
-              <p className="mt-1 font-serif text-[14px] font-medium">{resume.name}</p>
-              <p className="mt-0.5 font-sans text-[11px] italic text-ink/52">
+              <p className="mt-1 font-serif text-[16px] font-medium leading-[1.2]">{resume.name}</p>
+              <p className="mt-[3px] font-sans text-[12px] text-ink/55">
                 Draft · edited 2 days ago
               </p>
             </div>

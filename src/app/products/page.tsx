@@ -13,17 +13,11 @@ import { ListRow } from "@/components/ListRow";
 import { RestoreButton } from "@/components/RestoreButton";
 import { StatusFilter } from "@/components/StatusFilter";
 import { TypeFilter } from "@/components/TypeFilter";
-import { TintedBand } from "@/components/TintedBand";
-import { currencyCur, formatMoney, type Cur } from "@/lib/currency";
+import { currencyCur, formatMoney } from "@/lib/currency";
 import { fixedCostPerUnit } from "@/lib/fixed-costs";
 import { PRODUCT_TYPES, productLabourHours, statusInputFor, type Product } from "@/lib/products";
 import { getFixedCostConfig, getFixedCosts, getSettings, listProducts } from "@/lib/store";
 import { compareByStatus, sortKey, statusChip, stripeTone } from "@/lib/status";
-
-function metaPrice(p: Product, cur: Cur): string {
-  if (p.finalPrice !== null) return formatMoney(p.finalPrice, cur);
-  return p.workflow === "draft" ? "in progress" : "no price set";
-}
 
 export default async function ProductsOverview({
   searchParams,
@@ -81,19 +75,6 @@ export default async function ProductsOverview({
           </span>
         </div>
 
-        {/* deterministic insight — only on the unfiltered default view */}
-        {!filtered && (
-          <TintedBand className="mx-6 mb-5">
-            <p className="font-serif text-[13px] italic leading-[1.5] text-ink/70">
-              <strong className="font-medium not-italic text-ink">
-                Stacking set × 3
-              </strong>{" "}
-              has your weakest margin — you&rsquo;re losing money on it. Two
-              products sit below your 30% target.
-            </p>
-          </TintedBand>
-        )}
-
         {/* controls: filters (dropdowns) left, sort (bare icon) right */}
         <div className="flex items-center gap-2 px-6 pb-3.5 pt-1">
           <StatusFilter current={status} type={type} />
@@ -121,17 +102,26 @@ export default async function ProductsOverview({
                 stripe={showingArchived ? null : stripeTone(input)}
                 muted={showingArchived || p.workflow === "draft"}
                 label={p.name}
-                meta={
-                  <>
-                    <span className="text-ink/55">{p.type}</span> ·{" "}
-                    {showingArchived ? "archived" : metaPrice(p, cur)}
-                  </>
-                }
+                meta={showingArchived ? "archived" : p.type}
                 value={
                   showingArchived ? (
                     <RestoreButton id={p.id} />
                   ) : (
-                    <Chip tone={chip.tone}>{chip.label}</Chip>
+                    // Price leads (quick lookup — shop, fairs, "how much is
+                    // this?"); the status chip sits under it as the caption.
+                    // Margin already lives inside the chip label, so it's not
+                    // repeated. No-price rows drop the figure and show the chip
+                    // alone at full size.
+                    <div className="flex flex-col items-end gap-1.5">
+                      {p.finalPrice !== null && (
+                        <span className="font-serif text-[16px] font-medium leading-none tabular-nums text-ink">
+                          {formatMoney(p.finalPrice, cur)}
+                        </span>
+                      )}
+                      <Chip tone={chip.tone} size={p.finalPrice !== null ? "sm" : "default"}>
+                        {chip.label}
+                      </Chip>
+                    </div>
                   )
                 }
               />

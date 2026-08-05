@@ -271,14 +271,15 @@ The workhorse. Two lines, optional left stripe, optional right slot.
 
 **Anatomy**
 ```
- │  Primary label (Lora 15–16px)                     [right slot]
- │  Meta line (Plex 12px ink-55)
+ │  Primary label (Lora 15–16px)              Final price (Lora 16px)
+ │  Meta line / category (Plex 12px ink-55)         Status chip (sm)
 ```
 
 - **Left stripe:** a `3px` **inset, rounded** bar sitting in the page gutter (≈`left-3`, vertically inset ≈14px, `rounded-full`) — *not* a full-bleed border glued to the screen edge. Status-coloured, urgency-scaled (red full, amber 55%, green 38%, none for No price / Draft). A secondary scan aid — the chip is primary. *Exception:* on the dashboard's curated attention list — where every row already needs action — a No-price row takes a neutral `ink-30` stripe rather than none, since "no stripe" would there read as "nothing here".
 - **No rules between rows.** A product list separates by row rhythm (56–64px height) and the inset stripe alone — no `ink-07` hairline per row. Lines return only between larger *sections*, not between siblings in one list. (This supersedes the older "rows separated with `ink-07` hairlines" convention.)
-- **Right slot:** a chip (overview) or a verb-link (dashboard attention).
-- **Meta line** carries the arithmetic in the quiet voice at `12px ink-55` (Plex, normal weight — not `font-light`, which read too thin): `4g × £0.62/g`, `20 min · £15/hr`, `Ring · £42.00`.
+- **Right slot:** varies by use. On the **product overview** it's a stacked cell — the **final price leads** (Lora 16px, medium, tabular, ink) with the **status chip beneath it** (`sm` size). Price leads because the overview's everyday job is a quick price lookup (shop, a fair, "how much is this one?"); the chip is the caption. A No-price row drops the figure and shows the chip alone at full (`default`) size. Elsewhere the slot is a single element — a `sm`/`default` chip, or a verb-link (dashboard attention). *Trade-off (was chip-only):* profit isn't shown here — it's a detail deferred to the product's own screen, worth revisiting with real users later.
+- **Margin isn't repeated in the row** — the chip label already carries it (`Healthy · 76%`, `Would be Healthy · 52%`), so the meta line and the price cell stay clear of it.
+- **Meta line** carries the arithmetic in the quiet voice at `12px ink-55` (Plex, normal weight — not `font-light`, which read too thin): `4g × £0.62/g`, `20 min · £15/hr`. On the overview product row it's now just the **category** (`Ring`) — the price moved up into the right slot, so it's no longer restated here.
 - Height 56–64px. Whole row is tappable; no hover-only affordances.
 - **When a row is muted (draft, archived), dim the content — never the action.** Dimming the whole row makes a live action read as disabled. The name and meta line recede; the verb-link stays full-strength clay.
 
