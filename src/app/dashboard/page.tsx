@@ -131,12 +131,13 @@ export default function Dashboard() {
           </Link>
         </div>
 
-        {/* briefing — assembled from real numbers, in plain language. Serif +
-            higher contrast so it reads like a message (PRD §11), matching the
-            benchmark mock; this is the one body block that isn't sans. */}
-        <div className="px-6 pb-[26px] pt-4">
-          <p className="font-serif text-[16.5px] leading-[1.6] text-ink/85">
-            Your pricing is mostly healthy — most of your range earns well. But{" "}
+        {/* briefing — assembled from real numbers, in plain language. Serif so
+            it reads like a message (PRD §11), but kept short and quiet: one line
+            of calm context, the single product that actually needs a decision
+            (named + linked), and a nudge. No reassurance filler. */}
+        <div className="px-6 pb-5 pt-3">
+          <p className="font-serif text-[15px] leading-[1.55] text-ink/72">
+            Most of your range earns well — but{" "}
             {weakest ? (
               // The one product that matters is the tap target here — the
               // attention CTA below is just a count, so this is where the worst
