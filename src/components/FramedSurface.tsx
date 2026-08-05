@@ -31,14 +31,14 @@ export function FramedSurface({ children, className = "" }: FramedSurfaceProps) 
   // Masking the card itself (not an overlay) is what makes the gaps the true
   // page colour. Flat, no shadow. The notch sits at each tile's centre with flat
   // runs either side, so the edge starts and ends on a flat run.
-  const NOTCH = 6; // depth (px)
+  const NOTCH = 5; // depth (px)
   const tornEdge = {
     WebkitMaskImage:
-      "radial-gradient(circle at 50% 0%, transparent 0 6px, #000 6.4px), linear-gradient(#000, #000)",
+      "radial-gradient(circle at 50% 0%, transparent 0 5px, #000 5.4px), linear-gradient(#000, #000)",
     maskImage:
-      "radial-gradient(circle at 50% 0%, transparent 0 6px, #000 6.4px), linear-gradient(#000, #000)",
-    WebkitMaskSize: `18px ${NOTCH}px, 100% calc(100% - ${NOTCH}px)`,
-    maskSize: `18px ${NOTCH}px, 100% calc(100% - ${NOTCH}px)`,
+      "radial-gradient(circle at 50% 0%, transparent 0 5px, #000 5.4px), linear-gradient(#000, #000)",
+    WebkitMaskSize: `15px ${NOTCH}px, 100% calc(100% - ${NOTCH}px)`,
+    maskSize: `15px ${NOTCH}px, 100% calc(100% - ${NOTCH}px)`,
     WebkitMaskRepeat: "repeat-x, no-repeat",
     maskRepeat: "repeat-x, no-repeat",
     WebkitMaskPosition: "top center, bottom",

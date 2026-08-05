@@ -285,7 +285,7 @@ The workhorse. Two lines, optional left stripe, optional right slot.
 The one enclosed area per screen. Currently: the pricing block.
 
 - 8px radius, `card` (near-white) background, **no border**.
-- **Torn top edge** — the block reads as a sheet torn from a pad: even flat runs interrupted by concave semicircle notches (`6px` deep, `18px` apart), cut *out* of the card so the real page shows through the gaps. The card fill + the tear define the surface (this replaced the old `1px` clay border + `3px` clay top rule). Implemented by masking the card itself, so the notches are the true page colour, not an overlaid fill. Kept flat — no shadow, no 3-D lip.
+- **Torn top edge** — the block reads as a sheet torn from a pad: even flat runs interrupted by concave semicircle notches (`5px` deep, `15px` apart; radius = depth so the notch stays a true semicircle), cut *out* of the card so the real page shows through the gaps. The card fill + the tear define the surface (this replaced the old `1px` clay border + `3px` clay top rule). Implemented by masking the card itself, so the notches are the true page colour, not an overlaid fill. Kept flat — no shadow, no 3-D lip.
 - Internal sections divided by `ink-07` hairlines.
 
 **Rule:** if a second framed surface appears on a screen, one of them is wrong. Reach for hairlines instead.
