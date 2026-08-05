@@ -356,11 +356,11 @@ Holds destructive and secondary actions for an object (the ⋯ menu). **A bottom
 
 **Implementation:** the action sheet and the status/type filters (§2.4) share ONE primitive — a shadcn **Drawer** (vaul) restyled to these tokens (`ink-28` scrim, 34×3px grab handle, 14px top corners, `max-w-430`, the sheet shadow). vaul supplies focus-trap, Escape and scroll-lock; the anatomy and rules above are enforced by the styling, not the library. This is why the filters open a bottom sheet, never a floating menu — the primitive has no floating variant in this app.
 
-### 2.12 Inline form — *to build*
+### 2.12 Inline form — *built*
 
 Add and edit never open a modal.
 
-- The row expands in place; a **3px clay left stripe** plus a **faint `ink` 3.5% tint** (rounded on the right, like the assistant inset in §2.9) mark edit mode; content below shifts down. Inputs stay `page`-coloured so they lift off the tint.
+- The row expands in place into a **rounded (`8px`) card with a faint `ink` 5% tint** — **containment alone** marks edit mode (the benchmark norm: Airwallex, Bevel, Walmart all signal editing by a contained card, no accent stripe). The active input's own focus ring completes the signal. **No left stripe here** — it was decoration, not signal. (Contrast the clay/iris stripes elsewhere, which *carry* meaning — the one framed surface §2.7, "AI is here" §2.9 — and so stay.) Inputs stay `page`-coloured so they lift off the tint.
 - Inputs: `page` background, `1px ink-14` border, 5px radius, 15px Lora for values (tabular).
 - Focus: clay border + `0 0 0 3px rgba(clay, 0.12)` ring.
 - Live line cost above the actions, on a dashed rule.

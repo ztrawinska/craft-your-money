@@ -141,9 +141,13 @@ export function FormFooter({
 /** Edit mode is marked by a 3px clay left stripe and a faint ink tint (rounded
  *  on the right, like the assistant inset in §2.9); content below shifts down. */
 export function EditShell({ children }: { children: ReactNode }) {
+  // Edit mode is signalled by containment alone: a rounded, faintly-tinted card
+  // that lifts the row off the page, plus the input's own focus ring. No accent
+  // stripe — it was purely decorative here (the benchmark norm — Airwallex,
+  // Bevel, Walmart — is a contained card, no stripe). The clay/iris stripes
+  // elsewhere stay because they carry meaning (the one framed surface; "AI is
+  // here"); this one didn't.
   return (
-    <div className="my-2 rounded-r-[6px] border-l-[3px] border-clay bg-ink/[0.035] px-4 py-3">
-      {children}
-    </div>
+    <div className="my-2 rounded-[8px] bg-ink/[0.05] px-4 py-3">{children}</div>
   );
 }
