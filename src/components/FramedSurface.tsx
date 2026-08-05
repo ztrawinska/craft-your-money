@@ -29,20 +29,24 @@ export function FramedSurface({ children, className = "" }: FramedSurfaceProps) 
   // concave (semicircle) notches, cut straight out of the card so the *real*
   // page shows through the gaps — a sheet torn from a pad, ending exactly there.
   // Masking the card itself (not an overlay) is what makes the gaps the true
-  // page colour. Flat, no shadow. The notch sits at each tile's centre with flat
-  // runs either side, so the edge starts and ends on a flat run.
+  // page colour. Flat, no shadow.
+  //
+  // Four mask layers (union): the repeating notch strip; a solid body below it;
+  // and two solid caps at the top-left and top-right, so BOTH corners always
+  // begin on a flat run (never a half-notch cut, whatever the card's width).
   const NOTCH = 5; // depth (px)
+  const notch =
+    "radial-gradient(circle at 50% 0%, transparent 0 5px, #000 5.4px)";
+  const solid = "linear-gradient(#000, #000)";
   const tornEdge = {
-    WebkitMaskImage:
-      "radial-gradient(circle at 50% 0%, transparent 0 5px, #000 5.4px), linear-gradient(#000, #000)",
-    maskImage:
-      "radial-gradient(circle at 50% 0%, transparent 0 5px, #000 5.4px), linear-gradient(#000, #000)",
-    WebkitMaskSize: `15px ${NOTCH}px, 100% calc(100% - ${NOTCH}px)`,
-    maskSize: `15px ${NOTCH}px, 100% calc(100% - ${NOTCH}px)`,
-    WebkitMaskRepeat: "repeat-x, no-repeat",
-    maskRepeat: "repeat-x, no-repeat",
-    WebkitMaskPosition: "top center, bottom",
-    maskPosition: "top center, bottom",
+    WebkitMaskImage: `${notch}, ${solid}, ${solid}, ${solid}`,
+    maskImage: `${notch}, ${solid}, ${solid}, ${solid}`,
+    WebkitMaskSize: `16px ${NOTCH}px, 100% calc(100% - ${NOTCH}px), 10px ${NOTCH}px, 10px ${NOTCH}px`,
+    maskSize: `16px ${NOTCH}px, 100% calc(100% - ${NOTCH}px), 10px ${NOTCH}px, 10px ${NOTCH}px`,
+    WebkitMaskRepeat: "repeat-x, no-repeat, no-repeat, no-repeat",
+    maskRepeat: "repeat-x, no-repeat, no-repeat, no-repeat",
+    WebkitMaskPosition: "top center, bottom, top left, top right",
+    maskPosition: "top center, bottom, top left, top right",
   } as const;
 
   return (
