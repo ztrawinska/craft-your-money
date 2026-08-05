@@ -229,6 +229,8 @@ Three levels. **Three, not four** — resist adding a fourth.
 
 A trailing chevron is a promise that something opens. Putting one on an action that completes in place — like Restore — would be a lie about what the tap does. Restore uses `rotate-ccw`; `archive-restore` is more literal but too busy at this size (the same lesson the Costs icon taught us).
 
+**Back is the mirror of navigate:** a **leading** `chevron-left` (22px, `ink-55`), not an arrow — same chevron family as the forward-nav promise. It sits in a **44×44 target** (`size-11`, pulled left with a negative margin so the glyph still hugs the edge) to meet WCAG 2.5.5.
+
 **Anti-pattern:** a "soft filled" fourth level (clay wash + outline). It was built, tested and rejected — it added weight without adding clarity.
 
 ### 2.4 Dropdown — *built (ghost trigger + shadcn Drawer sheet)*
@@ -367,6 +369,27 @@ Add and edit never open a modal.
 - Delete opens an **inline confirm**, never a modal, with reassuring copy.
 - Save is disabled until the row is valid. No error states while typing.
 - 16px minimum input size (prevents iOS zoom); 44px minimum touch targets.
+
+### 2.13 Money entry — *built*
+
+**Every money field is a right-to-left cents accumulator** (`lib/money-input.ts`), the YNAB model. The field reads *digits only*: each digit shifts the amount one place left and the last two digits are always the pennies, so the decimal point and the two decimals are painted on — never typed, never strandable.
+
+```
+"" → 5 → 0.05 → 6 → 0.56 → 8 → 5.68 → 0 → 56.80 → ⌫ → 5.68
+```
+
+**Rules**
+- Keypad is `inputMode="numeric"`, not `decimal` — there is **no separator key**, because you never type a separator (this is what removed the "keyboard only has a comma, and the dot is deletable" problem).
+- All-zero reads as **empty** (the placeholder `0.00` shows through) — a blank money field already means "no price".
+- The **caret is always pinned to the right**, even after a tap in the middle (`pinCaretRight` on `onFocus` + `onSelect`), so entry always builds from the right and the cursor sits between the number and the currency.
+- The **whole figure is one tap target, currency included** — the price and profit wrap their number+symbol in a `<label>` so tapping the `zł`/`£` (or the empty width beside it) focuses the field.
+- Applies to price, profit, and every `MoneyInput` (material cost, labour rate, other cost, benchmark price). **Not** quantity or minutes — those take real decimals (`2.5 g`) and stay plain fields.
+
+This is **enforced in code**, not a convention: the shared helpers are the only way money is typed.
+
+### 2.14 Reveal toggle — *built*
+
+The "tap to see the numbers behind this figure" control — the dashboard's *how this is figured* (§ hero) and the product's *market benchmark* (§11) are the same thing and share one look: an **inline** `chevron-down` link, dotted `clay/50` underline, `clay-deep` 11.5px Plex 500, chevron rotating 180° on open. Clay because it is a link/action (§2.3). It is **not** a full-width grey section header — that treatment reads as structure, this reads as optional depth.
 
 ---
 

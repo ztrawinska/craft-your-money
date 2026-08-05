@@ -15,6 +15,7 @@
 
 import { useState } from "react";
 import { useCurrency } from "@/components/CurrencyContext";
+import { handleCentsInput, pinCaretRight } from "@/lib/money-input";
 import { grossForTargetProfit } from "@/lib/pricing";
 import type { StatusTone } from "@/lib/status";
 
@@ -46,8 +47,8 @@ export function EditableProfit({
   const shown = draft ?? (profit == null ? "" : Math.abs(profit).toFixed(2));
 
   return (
-    <span
-      className={`inline-flex items-baseline border-b border-dashed border-ink/25 pb-[2px] font-serif text-[34px] font-medium leading-none tabular-nums ${color}`}
+    <label
+      className={`inline-flex cursor-text items-baseline border-b border-dashed border-ink/25 pb-[2px] font-serif text-[34px] font-medium leading-none tabular-nums ${color}`}
     >
       {!cur.suffix && <span className="mr-[1px]">{cur.symbol}</span>}
       {/* input hugs its text via an invisible sizer, so a suffix symbol sits close */}
@@ -56,23 +57,35 @@ export function EditableProfit({
           {shown || "0.00"}
         </span>
         <input
-          inputMode="decimal"
+          inputMode="numeric"
           aria-label="Set the profit you want per piece"
           value={shown}
           placeholder="0.00"
-          onFocus={() => setDraft(profit != null && profit > 0.005 ? profit.toFixed(2) : "")}
-          onChange={(e) => {
-            const raw = e.target.value;
-            setDraft(raw);
-            const target = Number(raw.replace(",", "."));
-            if (raw.trim() === "" || !Number.isFinite(target)) return;
-            onPriceChange(grossForTargetProfit(target, relevantCost, vatRatePct).toFixed(2));
+          onFocus={(e) => {
+            setDraft(profit != null && profit > 0.005 ? profit.toFixed(2) : "");
+            // focusing via the label (e.g. tapping "zł") doesn't place a caret,
+            // and the draft swap re-renders — so pin to the right next frame
+            const el = e.currentTarget;
+            requestAnimationFrame(() => {
+              const end = el.value.length;
+              el.setSelectionRange(end, end);
+            });
           }}
+          onChange={(e) =>
+            handleCentsInput(e, (next) => {
+              setDraft(next);
+              if (next === "") return;
+              const target = Number(next);
+              if (Number.isFinite(target))
+                onPriceChange(grossForTargetProfit(target, relevantCost, vatRatePct).toFixed(2));
+            })
+          }
+          onSelect={pinCaretRight}
           onBlur={() => setDraft(null)}
           className={`absolute inset-0 w-full bg-transparent caret-clay-deep outline-none placeholder:text-ink/25 ${color}`}
         />
       </span>
       {cur.suffix && <span className="ml-[2px]">{cur.symbol}</span>}
-    </span>
+    </label>
   );
 }

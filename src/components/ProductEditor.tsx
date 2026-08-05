@@ -12,7 +12,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
-import { Archive, ArrowLeft, Copy, Ellipsis, Plus, RotateCcw, Trash2 } from "lucide-react";
+import { Archive, ChevronLeft, Copy, Ellipsis, Plus, RotateCcw, Trash2 } from "lucide-react";
 import Link from "next/link";
 import {
   archiveProductAction,
@@ -532,11 +532,15 @@ export function ProductEditor({
   ];
 
   return (
-    <main className="mx-auto w-full max-w-[430px] pb-24">
+    <main className="mx-auto w-full max-w-[430px]">
       {/* ── header: back · workflow stamp · more ── */}
       <div className="flex items-center justify-between px-6 pt-5">
-        <Link href="/products" aria-label="Back" className="-ml-1.5 text-ink/55">
-          <ArrowLeft size={18} strokeWidth={2} />
+        <Link
+          href="/products"
+          aria-label="Back"
+          className="-ml-3.5 flex size-11 items-center justify-center text-ink/55"
+        >
+          <ChevronLeft size={22} strokeWidth={2} />
         </Link>
         {product.archived ? (
           <span className="rounded-[2px] border border-ink/30 px-[11px] pb-[3px] pt-1 text-[9.5px] font-semibold uppercase tracking-[0.22em] text-ink/55">

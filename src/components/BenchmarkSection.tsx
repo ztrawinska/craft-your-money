@@ -1,6 +1,9 @@
 /**
- * BenchmarkSection — the collapsed "Market benchmark" tab on the product detail
- * (PRD §11, kept in the r2 bordered-tab treatment per the design system).
+ * BenchmarkSection — the collapsed "market benchmark" disclosure on the product
+ * detail (PRD §11). Its toggle is the same optional-reveal control as the
+ * dashboard's "how this is figured": an inline dotted-clay chevron, not a grey
+ * section header — both are "tap to see the numbers behind this", so they share
+ * one visual (and clay is the accent for links/actions, §2).
  *
  * Deliberately light: a few prices you've seen for similar pieces, entered by
  * hand. It shows the range, the median and where you sit — but the real payoff
@@ -53,20 +56,23 @@ export function BenchmarkSection({
 
   return (
     <div className="px-6 pt-5">
+      {/* the same optional-reveal toggle as the dashboard's "how this is figured"
+          (§2 — links/actions are clay): an inline dotted-clay chevron, not a
+          grey section header */}
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="flex w-full items-center justify-between border-b border-t border-ink/7 py-[15px] text-left"
+        aria-expanded={open}
+        className="inline-flex items-center gap-1 border-b border-dotted border-clay/50 pb-px font-sans text-[11.5px] font-medium text-clay-deep"
       >
-        <span className="font-sans text-[13.5px] font-medium text-ink/55">
-          Market benchmark
-          {benchmark.length > 0 && (
-            <span className="font-light text-ink/30"> · {benchmark.length}</span>
-          )}
-        </span>
+        market benchmark
+        {benchmark.length > 0 && (
+          <span className="font-light text-clay-deep/55"> · {benchmark.length}</span>
+        )}
         <ChevronDown
-          size={14}
-          className={`text-ink/30 transition-transform ${open ? "rotate-180" : ""}`}
+          size={13}
+          strokeWidth={2}
+          className={`transition-transform ${open ? "rotate-180" : ""}`}
         />
       </button>
 

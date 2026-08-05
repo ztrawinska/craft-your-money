@@ -13,6 +13,7 @@ import type { ReactNode } from "react";
 import { Input } from "@/components/ui/input";
 import { useCurrency } from "@/components/CurrencyContext";
 import { formatMoney } from "@/lib/currency";
+import { handleCentsInput, pinCaretRight } from "@/lib/money-input";
 
 /** Parse a user-typed number, accepting a comma decimal. */
 export const num = (s: string) => Number(s.replace(",", "."));
@@ -49,9 +50,11 @@ export function MoneyInput({
         {cur.symbol}
       </span>
       <Input
-        inputMode="decimal"
+        inputMode="numeric"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => handleCentsInput(e, onChange)}
+        onFocus={pinCaretRight}
+        onSelect={pinCaretRight}
         placeholder={placeholder}
         className={`font-serif tabular-nums ${cur.suffix ? "pr-9" : "pl-6"}`}
       />
