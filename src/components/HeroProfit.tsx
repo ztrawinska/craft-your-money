@@ -60,34 +60,37 @@ export function HeroProfit({
 
   return (
     <div className="px-6 pb-1 text-center">
-      <p className="mb-[9px] font-sans text-[9.5px] font-semibold uppercase tracking-[0.14em] text-ink/42">
-        Avg profit / piece
-      </p>
-      <div className="relative mx-auto w-fit">
+      {/* label + figure + sub share one positioned block, so the glow is an
+          ellipse biased up over the number (matches the benchmark mock's
+          `inset: -22% 20% 32%` — narrower than the number, pulled upward). */}
+      <div className="relative">
         <div
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-[40%] h-[170%] w-[150%] -translate-x-1/2 -translate-y-1/2 rounded-[50%]"
+          className="pointer-events-none absolute inset-x-[16%] top-[4%] bottom-[16%] rounded-[50%]"
           style={{
             background:
-              "radial-gradient(50% 50% at 50% 50%, rgba(160,113,106,0.5), rgba(160,113,106,0) 68%)",
-            filter: "blur(9px)",
+              "radial-gradient(ellipse at center, rgba(160,113,106,0.42), rgba(160,113,106,0) 68%)",
+            filter: "blur(11px)",
           }}
         />
+        <p className="relative mb-[9px] font-sans text-[9.5px] font-semibold uppercase tracking-[0.14em] text-ink/42">
+          Avg profit / piece
+        </p>
         <div className="relative">
           <Price value={shown} variant="hero" />
         </div>
+        <p className="relative mt-[9px] font-sans text-[12px] leading-[1.5] text-ink/55">
+          across your {count} priced products, after all costs
+        </p>
       </div>
-      <p className="mt-[9px] font-sans text-[12px] font-light leading-[1.5] text-ink/55">
-        across your {count} priced products, after all costs
-      </p>
 
       {contributions.length > 0 && (
-        <div className="mt-2.5">
+        <div className="mt-3">
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
             aria-expanded={open}
-            className="inline-flex items-center gap-1 font-sans text-[11.5px] font-medium text-clay-deep"
+            className="inline-flex items-center gap-1 border-b border-dotted border-clay/50 pb-px font-sans text-[11.5px] font-medium text-clay-deep"
           >
             how this is figured
             <ChevronDown

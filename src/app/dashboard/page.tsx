@@ -131,9 +131,11 @@ export default function Dashboard() {
           </Link>
         </div>
 
-        {/* briefing — assembled from real numbers, in plain language */}
+        {/* briefing — assembled from real numbers, in plain language. Serif +
+            higher contrast so it reads like a message (PRD §11), matching the
+            benchmark mock; this is the one body block that isn't sans. */}
         <div className="px-6 pb-[26px] pt-4">
-          <p className="font-sans text-[15px] font-light leading-[1.7] text-ink/70">
+          <p className="font-serif text-[16.5px] leading-[1.6] text-ink/85">
             Your pricing is mostly healthy — most of your range earns well. But{" "}
             <strong className="font-medium text-ink">{weakest?.name}</strong> is
             quietly losing money on every sale. Worth two minutes today.
