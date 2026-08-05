@@ -85,7 +85,7 @@ export function HeroProfit({
       </div>
 
       {contributions.length > 0 && (
-        <div className="mt-3">
+        <div className="mt-1.5">
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}

@@ -40,11 +40,14 @@ type ListRowProps = {
   href?: string;
 };
 
-const stripeColor: Record<Exclude<Stripe, null>, string> = {
-  risky: "border-l-status-red", // full — the loudest
-  caution: "border-l-status-amber/55",
-  healthy: "border-l-status-green/38", // quietest — it's fine, just noting
-  neutral: "border-l-ink/30", // a missing input, not a health judgement
+// The stripe is an inset, rounded bar (not a full-bleed left border) — it sits
+// in the page gutter and reads as a marker on the row, not a rule stuck to the
+// screen edge. Tones match the overview's urgency scale.
+const stripeBg: Record<Exclude<Stripe, null>, string> = {
+  risky: "bg-status-red", // full — the loudest
+  caution: "bg-status-amber/55",
+  healthy: "bg-status-green/38", // quietest — it's fine, just noting
+  neutral: "bg-ink/30", // a missing input, not a health judgement
 };
 
 export function ListRow({
@@ -68,13 +71,21 @@ export function ListRow({
   const rowClass = [
     "flex justify-between gap-3",
     isProduct
-      ? "min-h-[64px] items-center border-l-[3px] py-[13px] pl-[21px] pr-6"
+      ? "relative min-h-[64px] items-center py-[13px] pl-6 pr-6"
       : "items-baseline py-3",
-    stripe ? stripeColor[stripe] : isProduct ? "border-l-transparent" : "",
   ].join(" ");
+
+  const stripeBar =
+    isProduct && stripe ? (
+      <span
+        aria-hidden
+        className={`absolute bottom-[14px] left-3 top-[14px] w-[3px] rounded-full ${stripeBg[stripe]}`}
+      />
+    ) : null;
 
   const content = (
     <>
+      {stripeBar}
       <div className="min-w-0">
         <span className={labelClass}>
           {label}

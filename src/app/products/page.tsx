@@ -107,8 +107,9 @@ export default async function ProductsOverview({
           </button>
         </div>
 
-        {/* the list — hairline-separated rows, problems first */}
-        <div className="divide-y divide-ink/7">
+        {/* the list — no rules between rows; the inset stripe + row rhythm do
+            the separating (problems first) */}
+        <div>
           {sorted.map((p) => {
             const input = statusInputFor(p, settings, shareOf(p));
             const chip = statusChip(input);

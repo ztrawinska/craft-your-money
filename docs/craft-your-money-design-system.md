@@ -53,7 +53,7 @@ Ink is used at fixed opacities rather than as separate greys. This keeps everyth
 | `ink-42` | 42% | Section labels (caps), inactive nav, unit suffixes |
 | `ink-30` | 30% | Placeholders, muted marks, the neutral stripe |
 | `ink-14` | 14% | Stronger dividers, input borders, dashed frames |
-| `ink-07` | 7% | Hairline dividers between rows and sections |
+| `ink-07` | 7% | Hairline dividers between *sections* (no longer between rows in a list — see §2.6) |
 
 **Tinted bands** (briefing, insight strip) use `rgba(ink, 0.035)` — deliberately lighter than `cream-mid`, which read as shouting. Backgrounds should sit very close to the page.
 
@@ -131,7 +131,7 @@ Nothing is rounder than 11px except chips. Generous radii read as "app card" —
 | Divider | `1px ink-14` | Before a summary, above a metric band |
 | Dashed | `1px dashed ink-14` | Secondary/derived lines (business-cost share), resume container |
 | Accent rule | `3px clay` | Top of the framed pricing surface |
-| Urgency stripe | `3px` status colour | Left edge of a list row |
+| Urgency stripe | `3px` status colour, inset + `rounded-full` | In the gutter of a list row (not the screen edge) |
 | Active tick | `2px clay-deep` | Above the active nav tab |
 
 The 3px clay top rule and the 2px clay nav tick are deliberately the same device at different scales: *"this is where you are"* and *"this is where you decide"* speak one visual language.
@@ -263,19 +263,20 @@ A filter, sort or select control. **Not a new control level — it is the ghost 
 - Total: 13px Lora, `ink-55`, right-aligned on the same baseline.
 - Followed by rows separated with `ink-07` hairlines.
 
-### 2.6 List row — *to build*
+### 2.6 List row — *built*
 
 The workhorse. Two lines, optional left stripe, optional right slot.
 
 **Anatomy**
 ```
-[stripe]  Primary label (Lora 15–16px)              [right slot]
-          Meta line (Plex 11.5px ink-55)
+ │  Primary label (Lora 15–16px)                     [right slot]
+ │  Meta line (Plex 12px ink-55)
 ```
 
-- **Left stripe:** 3px, status-coloured, urgency-scaled (red full, amber 55%, green 38%, none for No price / Draft). A secondary scan aid — the chip is primary. *Exception:* on the dashboard's curated attention list — where every row already needs action — a No-price row takes a neutral `ink-30` stripe rather than none, since "no stripe" would there read as "nothing here".
+- **Left stripe:** a `3px` **inset, rounded** bar sitting in the page gutter (≈`left-3`, vertically inset ≈14px, `rounded-full`) — *not* a full-bleed border glued to the screen edge. Status-coloured, urgency-scaled (red full, amber 55%, green 38%, none for No price / Draft). A secondary scan aid — the chip is primary. *Exception:* on the dashboard's curated attention list — where every row already needs action — a No-price row takes a neutral `ink-30` stripe rather than none, since "no stripe" would there read as "nothing here".
+- **No rules between rows.** A product list separates by row rhythm (56–64px height) and the inset stripe alone — no `ink-07` hairline per row. Lines return only between larger *sections*, not between siblings in one list. (This supersedes the older "rows separated with `ink-07` hairlines" convention.)
 - **Right slot:** a chip (overview) or a verb-link (dashboard attention).
-- **Meta line** carries the arithmetic in the quiet voice: `4g × £0.62/g`, `20 min · £15/hr`, `Ring · £42.00`.
+- **Meta line** carries the arithmetic in the quiet voice at `12px ink-55` (Plex, normal weight — not `font-light`, which read too thin): `4g × £0.62/g`, `20 min · £15/hr`, `Ring · £42.00`.
 - Height 56–64px. Whole row is tappable; no hover-only affordances.
 - **When a row is muted (draft, archived), dim the content — never the action.** Dimming the whole row makes a live action read as disabled. The name and meta line recede; the verb-link stays full-strength clay.
 
