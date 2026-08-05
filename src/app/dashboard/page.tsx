@@ -12,7 +12,7 @@
  */
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { AssistantSlot } from "@/components/AssistantSlot";
+import { AskIrisTeaser } from "@/components/AskIrisTeaser";
 import { BottomNav } from "@/components/BottomNav";
 import { HeroProfit } from "@/components/HeroProfit";
 import { NeedsAttention, type AttentionItem } from "@/components/NeedsAttention";
@@ -214,8 +214,9 @@ export default function Dashboard() {
           </Link>
         )}
 
-        {/* assistant entry point — nothing generates until it genuinely does */}
-        <AssistantSlot className="mx-6 mb-6 mt-3">Ask about your prices</AssistantSlot>
+        {/* assistant entry point — opens the iris sheet (a teaser until the
+            open-ended Q&A genuinely generates) */}
+        <AskIrisTeaser className="px-6 mb-6 mt-3" />
       </main>
 
       <BottomNav active="home" />

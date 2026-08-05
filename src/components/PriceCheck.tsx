@@ -1,25 +1,26 @@
 /**
- * PriceCheck — the assistant's review, inside the pricing block (PRD §10, §2.9).
+ * PriceCheck — the assistant's review of your price (PRD §10, §2.9).
  *
- * Closed, it's just the glint "Check this price" button. Open, it becomes an
- * INSET within the same framed surface — never a floating card — marked by a
- * 2px iris left-rule and a faint iris wash.
+ * The entry point is the glint "Check this price" slot in the pricing block.
+ * Tapping it opens the shared iris **sheet** (IrisSheet) — no longer an inset
+ * inside the framed surface, so there is no iris left-rule or wash here; the
+ * sheet's header carries the glint and label instead.
  *
- * Iris marks WHO is speaking, never the answer. So it touches only the glint,
- * the "Price check" label, the finding numerals and the follow-up chips. The
- * verdict, the scenarios and everything about the price stay ink.
+ * Iris still marks WHO is speaking, never the answer. In the body it touches
+ * only the finding numerals and the follow-up chips. The verdict, the scenarios
+ * and everything about the price stay ink.
  *
- * The verdict + findings come from the live Claude API (reviewPriceAction),
- * with a scripted fallback when there's no key or the call fails. Scenarios and
+ * The verdict + findings come from the live Claude API (reviewPriceAction), with
+ * a scripted fallback when there's no key or the call fails. Scenarios and
  * provenance stay deterministic and client-side. Bounded: verdict → three
  * findings → two preview-only scenarios → three follow-ups, then it stops.
  */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { X } from "lucide-react";
 import { AssistantSlot } from "@/components/AssistantSlot";
 import { useCurrency } from "@/components/CurrencyContext";
+import { IrisSheet } from "@/components/IrisSheet";
 import { formatMoney } from "@/lib/currency";
 import { reviewPriceAction } from "@/app/products/review-price-action";
 import {
@@ -30,8 +31,6 @@ import {
   type ReviewContext,
   type ReviewTopic,
 } from "@/lib/price-review";
-
-const GLINT_PATH = "M12 3 Q13.6 9.4 21 12 Q13.6 14.6 12 21 Q10.4 14.6 3 12 Q10.4 9.4 12 3 Z";
 
 export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
   const [open, setOpen] = useState(false);
@@ -68,17 +67,10 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
     };
   }, [open, topic]);
 
-  // No price yet → nothing to review.
+  // No price yet → nothing to review; the slot is present but inert.
   if (ctx == null) {
     return (
-      <AssistantSlot centered className="mt-5">
-        Check this price
-      </AssistantSlot>
-    );
-  }
-  if (!open) {
-    return (
-      <AssistantSlot centered className="mt-5" onClick={() => setOpen(true)}>
+      <AssistantSlot centered disabled className="mt-5">
         Check this price
       </AssistantSlot>
     );
@@ -89,7 +81,7 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
   const followups = REVIEW_TOPICS.filter((t) => !visited.includes(t.id));
   const busy = loading || review == null;
 
-  const close = () => {
+  const reset = () => {
     setOpen(false);
     setTopic(null);
     setVisited([]);
@@ -98,21 +90,17 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
   };
 
   return (
-    <div className="mt-5 rounded-r-[6px] border-l-2 border-iris bg-iris/[0.055] py-4 pl-4 pr-4">
-      {/* header — glint + label (iris: who's speaking) + dismiss */}
-      <div className="mb-3 flex items-center gap-2">
-        <svg
-          viewBox="0 0 24 24"
-          className={`h-[15px] w-[15px] shrink-0 fill-iris ${busy ? "animate-pulse" : ""}`}
-        >
-          <path d={GLINT_PATH} />
-        </svg>
-        <span className="flex-1 font-sans text-[13.5px] font-medium text-iris-deep">Price check</span>
-        <button type="button" onClick={close} aria-label="Dismiss" className="text-ink/42">
-          <X size={16} />
-        </button>
-      </div>
-
+    <IrisSheet
+      label="Price check"
+      busy={busy}
+      open={open}
+      onOpenChange={(o) => (o ? setOpen(true) : reset())}
+      trigger={
+        <AssistantSlot centered className="mt-5">
+          Check this price
+        </AssistantSlot>
+      }
+    >
       {busy ? (
         <p className="py-2 font-sans text-[13px] font-light text-ink/55">Reading your numbers…</p>
       ) : (
@@ -183,6 +171,6 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
           </div>
         </>
       )}
-    </div>
+    </IrisSheet>
   );
 }

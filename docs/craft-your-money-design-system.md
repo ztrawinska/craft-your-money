@@ -301,12 +301,14 @@ For briefings, insight strips and quiet emphasis.
 
 **Rule:** backgrounds sit very close to the page. If a band draws the eye before the content does, it's too strong.
 
-### 2.9 Assistant slot (the glint) — *to build*
+### 2.9 The glint & the iris sheet — *built*
 
-The only place iris appears.
+Iris is the AI layer. It shows up in exactly two forms: the **entry-point slot** (the glint button you tap) and the **iris sheet** it opens. Every AI interaction uses this same pair — one pattern, everywhere.
+
+**The entry-point slot** (`AssistantSlot`) — always a button that opens the sheet:
 
 - `1px` iris border at 30%, `rgba(iris, 0.06)` background, 8px radius.
-- Glint SVG at 15px, then 13.5px iris-deep label, then a trailing arrow.
+- Glint SVG at 15px (`Glint`), then 13.5px iris-deep label, then a trailing `chevron-right` (or centered with no chevron, for the pricing-block "Check this price").
 - Glint path: `M12 3 Q13.6 9.4 21 12 Q13.6 14.6 12 21 Q10.4 14.6 3 12 Q10.4 9.4 12 3 Z`
 
 **Rules**
@@ -314,18 +316,20 @@ The only place iris appears.
 - Iris never touches status colours.
 - Deterministic features (library autofill) use a neutral ◆ diamond, **not** the glint. The glint means *a model is thinking*, and that promise must stay honest.
 
-#### The expanded surface (Price Check)
+#### The iris sheet (`IrisSheet`)
 
-When the assistant answers, the review is **an inset inside the existing framed surface** — never a second floating card. On Product Detail it opens within the pricing block, below a hairline.
+When iris responds, it opens a **bottom sheet** — the app's standard modal surface (§2.11), not an inline inset. (An earlier version nested the Price Check inside the pricing block's framed surface with a `2px` iris left-rule and a wash; that's gone. The sheet unifies every AI interaction and keeps the framed surface for the *one* decision it's reserved for.)
 
-- **Marker:** a `2px` iris left-rule and a `rgba(iris, .055)` wash, 6px radius on the right side only.
-- **Structure:** header (glint + "Price check" label + dismiss) → verdict in Lora → numbered findings separated by iris-tinted hairlines → preview-only scenarios → follow-up chips → provenance footer.
-- **Iris appears on exactly four things:** the glint, the section label, the finding numerals, and the follow-up chips.
+- **No left-rule, no iris wash.** The sheet is a neutral drawer like the action sheet and the benchmark drawer. Iris is carried by its contents, not its background.
+- **Header:** glint (pulses while the model works) + label ("Price check", "Pricing coach") + dismiss.
+- **Iris appears on exactly four things:** the glint, the label, the finding numerals, and the follow-up chips. Nothing else in the sheet is iris.
 - **Iris never touches the price, the profit or the status chip.** Those keep clay and status colours.
 
 The rule to remember: **iris marks who is speaking, never what the answer is.**
 
-- **Scenarios are preview-only.** They show what another price would mean; tapping one never applies it. There is no "apply" control in the card — the price stays the user's decision.
+**Price Check** (Product Detail) fills the sheet body: verdict in Lora → numbered findings (iris numerals) → preview-only scenarios → follow-up chips → provenance footer. **Talk to your pricing coach** (dashboard) opens the same sheet with a *teaser* body — the open-ended coach isn't built, so it says so honestly and points to this spot for when it lands (north star: chat through prices, manage products).
+
+- **Scenarios are preview-only.** They show what another price would mean; tapping one never applies it. There is no "apply" control — the price stays the user's decision.
 - **Follow-ups are chips, never free text**, generated from the findings themselves, roughly three exchanges deep. The assistant cannot introduce new UI.
 - **Provenance closes every review:** *Used / Assumed / Can't know*. Admitting the limit is what makes the rest trustworthy.
 

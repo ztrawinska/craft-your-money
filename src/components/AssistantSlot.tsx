@@ -1,70 +1,42 @@
 /**
- * AssistantSlot — the only place iris appears (design system §2.9).
+ * AssistantSlot — the iris entry point (design system §2.9).
  *
  * The glint means "a model is involved". It never mixes with clay on one
- * element and never touches status colours. Used for AI entry points:
- * "Check this price" on the pricing block (centered), "Ask about your prices"
- * on the dashboard (with a trailing arrow).
+ * element and never touches status colours. Used to OPEN the iris sheet:
+ * "Check this price" on the pricing block (centered), "Talk to your pricing
+ * coach" on the dashboard (with a trailing chevron).
  *
- * An entry point only, until it genuinely generates: pass `href` to make it
- * navigate; leave it off for a placeholder that doesn't act yet.
+ * It is always a button now: every iris interaction opens a bottom sheet
+ * (§2.9), so the slot is a sheet trigger. It forwards its ref and props, so it
+ * drops straight into `<DrawerTrigger asChild>`.
  */
-import type { ReactNode } from "react";
-import Link from "next/link";
+import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { ChevronRight } from "lucide-react";
-
-const GLINT_PATH =
-  "M12 3 Q13.6 9.4 21 12 Q13.6 14.6 12 21 Q10.4 14.6 3 12 Q10.4 9.4 12 3 Z";
+import { Glint } from "@/components/Glint";
 
 type AssistantSlotProps = {
   children: ReactNode;
-  href?: string;
-  onClick?: () => void;
-  /** Centered with no trailing arrow (the pricing-block "Check this price"). */
+  /** Centered with no trailing chevron (the pricing-block "Check this price"). */
   centered?: boolean;
-  className?: string;
-};
+} & ButtonHTMLAttributes<HTMLButtonElement>;
 
-export function AssistantSlot({
-  children,
-  href,
-  onClick,
-  centered = false,
-  className = "",
-}: AssistantSlotProps) {
-  const cls = `flex items-center gap-[9px] rounded-[8px] border border-iris/30 bg-iris/[0.06] px-4 py-[13px] font-sans ${
-    centered ? "justify-center" : ""
-  } ${className}`;
-
-  const inner = (
-    <>
-      <svg viewBox="0 0 24 24" className="h-[15px] w-[15px] shrink-0 fill-iris">
-        <path d={GLINT_PATH} />
-      </svg>
-      <span
-        className={`text-[13.5px] font-medium text-iris-deep ${
-          centered ? "" : "flex-1"
-        }`}
+export const AssistantSlot = forwardRef<HTMLButtonElement, AssistantSlotProps>(
+  function AssistantSlot({ children, centered = false, className = "", ...rest }, ref) {
+    return (
+      <button
+        ref={ref}
+        type="button"
+        className={`flex w-full items-center gap-[9px] rounded-[8px] border border-iris/30 bg-iris/[0.06] px-4 py-[13px] font-sans disabled:opacity-55 ${
+          centered ? "justify-center" : ""
+        } ${className}`}
+        {...rest}
       >
-        {children}
-      </span>
-      {!centered && <ChevronRight size={15} className="text-iris-deep" />}
-    </>
-  );
-
-  if (href) {
-    return (
-      <Link href={href} className={cls}>
-        {inner}
-      </Link>
-    );
-  }
-  if (onClick) {
-    return (
-      <button type="button" onClick={onClick} className={`w-full ${cls}`}>
-        {inner}
+        <Glint className="h-[15px] w-[15px] shrink-0" />
+        <span className={`text-[13.5px] font-medium text-iris-deep ${centered ? "" : "flex-1 text-left"}`}>
+          {children}
+        </span>
+        {!centered && <ChevronRight size={15} className="text-iris-deep" />}
       </button>
     );
-  }
-  return <div className={cls}>{inner}</div>;
-}
+  },
+);
