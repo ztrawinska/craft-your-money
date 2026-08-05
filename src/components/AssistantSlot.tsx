@@ -11,7 +11,7 @@
  */
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 
 const GLINT_PATH =
   "M12 3 Q13.6 9.4 21 12 Q13.6 14.6 12 21 Q10.4 14.6 3 12 Q10.4 9.4 12 3 Z";
@@ -48,7 +48,7 @@ export function AssistantSlot({
       >
         {children}
       </span>
-      {!centered && <ArrowRight size={15} className="text-iris-deep" />}
+      {!centered && <ChevronRight size={15} className="text-iris-deep" />}
     </>
   );
 
