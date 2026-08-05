@@ -1,12 +1,11 @@
 /**
- * NeedsAttention — the dashboard's attention list, kept short (PRD §11).
+ * NeedsAttention — the dashboard's attention entry point (PRD §11).
  *
- * The home should peek the problem that matters, not grow a full ledger. So it
- * shows the most-urgent item(s) inline and, when there are more, a "See all N"
- * row opens the shared bottom-sheet Drawer with the FULL list — the peek is a
- * highlight, the sheet is the authoritative list (the top item shows in both,
- * which is fine). With one item there is no overflow, so no sheet ever appears
- * — the single-item case stays inline for free.
+ * YNAB-style split: the home shows only a compact count + "Review" CTA, and the
+ * authoritative FULL list lives in the sheet it opens. The single most-urgent
+ * product isn't peeked here — it's named and linked in the briefing above — so
+ * nothing is shown twice. The count stays honest (1 product / 2 products) and
+ * the sheet always holds every item, however many.
  *
  * Items arrive already computed and sorted by the server (risky worst-first,
  * then no-price), as plain data — this component only renders and toggles.
@@ -31,10 +30,6 @@ export type AttentionItem = {
   chipTone: ChipTone;
   chipLabel: string;
 };
-
-/** How many items to peek inline before the rest go into the sheet. Bump to 2
- *  to show two before collapsing; 1 keeps the home to a single hero problem. */
-const INLINE_MAX = 1;
 
 function AttentionRow({ item }: { item: AttentionItem }) {
   return (
@@ -68,43 +63,40 @@ export function NeedsAttention({ items }: { items: AttentionItem[] }) {
   const [open, setOpen] = useState(false);
   if (items.length === 0) return null;
 
-  const inline = items.slice(0, INLINE_MAX);
-  const overflow = items.slice(INLINE_MAX);
+  const n = items.length;
 
   return (
     <>
       <div className="mt-8 px-6">
         <SectionLabel>Needs attention</SectionLabel>
       </div>
-      <div className="divide-y divide-ink/7 border-t border-ink/7">
-        {inline.map((item) => (
-          <AttentionRow key={item.id} item={item} />
-        ))}
-      </div>
-
-      {overflow.length > 0 && (
-        <Drawer open={open} onOpenChange={setOpen}>
-          <DrawerTrigger asChild>
-            <button
-              type="button"
-              className="flex w-full items-center justify-between border-t border-ink/7 px-6 py-[13px] text-left font-sans text-[12.5px] font-medium text-clay-deep"
-            >
-              See all {items.length}
+      <Drawer open={open} onOpenChange={setOpen}>
+        <DrawerTrigger asChild>
+          <button
+            type="button"
+            className="flex w-full items-center justify-between border-t border-ink/7 px-6 py-[15px] text-left"
+          >
+            <span className="font-sans text-[14px] text-ink/70">
+              <strong className="font-semibold text-ink">{n}</strong>{" "}
+              {n === 1 ? "product" : "products"}
+            </span>
+            <span className="inline-flex items-center gap-1 font-sans text-[13px] font-semibold text-clay-deep">
+              Review
               <ChevronRight size={15} strokeWidth={2} />
-            </button>
-          </DrawerTrigger>
-          <DrawerContent className="pb-4">
-            <DrawerTitle className="px-6 pb-1 pt-1 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/42">
-              Needs attention
-            </DrawerTitle>
-            <div className="divide-y divide-ink/7">
-              {items.map((item) => (
-                <AttentionRow key={item.id} item={item} />
-              ))}
-            </div>
-          </DrawerContent>
-        </Drawer>
-      )}
+            </span>
+          </button>
+        </DrawerTrigger>
+        <DrawerContent className="pb-4">
+          <DrawerTitle className="px-6 pb-1 pt-1 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/42">
+            Needs attention
+          </DrawerTitle>
+          <div className="divide-y divide-ink/7">
+            {items.map((item) => (
+              <AttentionRow key={item.id} item={item} />
+            ))}
+          </div>
+        </DrawerContent>
+      </Drawer>
     </>
   );
 }

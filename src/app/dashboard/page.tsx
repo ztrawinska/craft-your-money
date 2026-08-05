@@ -137,8 +137,20 @@ export default function Dashboard() {
         <div className="px-6 pb-[26px] pt-4">
           <p className="font-serif text-[16.5px] leading-[1.6] text-ink/85">
             Your pricing is mostly healthy — most of your range earns well. But{" "}
-            <strong className="font-medium text-ink">{weakest?.name}</strong> is
-            quietly losing money on every sale. Worth two minutes today.
+            {weakest ? (
+              // The one product that matters is the tap target here — the
+              // attention CTA below is just a count, so this is where the worst
+              // item is named and reached (YNAB pattern).
+              <Link
+                href={`/products/${weakest.id}`}
+                className="font-medium text-ink underline decoration-clay/40 decoration-1 underline-offset-[3px]"
+              >
+                {weakest.name}
+              </Link>
+            ) : (
+              <strong className="font-medium text-ink">this piece</strong>
+            )}{" "}
+            is quietly losing money on every sale. Worth two minutes today.
           </p>
         </div>
 
