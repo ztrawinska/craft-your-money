@@ -280,12 +280,12 @@ The workhorse. Two lines, optional left stripe, optional right slot.
 - Height 56–64px. Whole row is tappable; no hover-only affordances.
 - **When a row is muted (draft, archived), dim the content — never the action.** Dimming the whole row makes a live action read as disabled. The name and meta line recede; the verb-link stays full-strength clay.
 
-### 2.7 Framed surface — *to build*
+### 2.7 Framed surface — *built*
 
 The one enclosed area per screen. Currently: the pricing block.
 
-- `1px` clay border at 34% opacity, 8px radius, white background.
-- `3px` solid clay rule across the top.
+- 8px radius, `card` (near-white) background, **no border**.
+- **Torn top edge** — the block reads as a sheet torn from a pad: even flat runs interrupted by concave semicircle notches (`6px` deep, `18px` apart), cut *out* of the card so the real page shows through the gaps. The card fill + the tear define the surface (this replaced the old `1px` clay border + `3px` clay top rule). Implemented by masking the card itself, so the notches are the true page colour, not an overlaid fill. Kept flat — no shadow, no 3-D lip.
 - Internal sections divided by `ink-07` hairlines.
 
 **Rule:** if a second framed surface appears on a screen, one of them is wrong. Reach for hairlines instead.
