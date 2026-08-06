@@ -19,16 +19,16 @@ export default async function ProductDetail({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const product = getProduct(id);
+  const product = await getProduct(id);
   if (!product) notFound();
 
   return (
     <ProductEditor
       product={product}
-      settings={getSettings()}
-      library={listMaterials()}
-      fixedCosts={getFixedCosts()}
-      fixedCostConfig={getFixedCostConfig()}
+      settings={await getSettings()}
+      library={await listMaterials()}
+      fixedCosts={await getFixedCosts()}
+      fixedCostConfig={await getFixedCostConfig()}
     />
   );
 }

@@ -6,6 +6,6 @@
 import { SettingsForm } from "@/components/SettingsForm";
 import { getSettings } from "@/lib/store";
 
-export default function SettingsPage() {
-  return <SettingsForm initial={getSettings()} />;
+export default async function SettingsPage() {
+  return <SettingsForm initial={await getSettings()} />;
 }

@@ -23,7 +23,7 @@ function revalidateProduct(id: string) {
 /** Persist the editor's current state, then return to the overview. */
 export async function saveProductAction(product: Product): Promise<void> {
   const { saveProduct } = await import("@/lib/store");
-  saveProduct(product);
+  await saveProduct(product);
   revalidateProduct(product.id);
   redirect("/products");
 }
@@ -35,7 +35,7 @@ export async function createProductAction(formData: FormData): Promise<void> {
   if (!name) return; // the form marks name required; this guards direct posts
 
   const { createDraft } = await import("@/lib/store");
-  const product = createDraft(name, type);
+  const product = await createDraft(name, type);
   revalidatePath("/products");
   revalidatePath("/dashboard");
   redirect(`/products/${product.id}`);
@@ -46,7 +46,7 @@ export async function createProductAction(formData: FormData): Promise<void> {
 /** A full copy as a new draft; opens it to edit. */
 export async function duplicateProductAction(id: string): Promise<void> {
   const { duplicateProduct } = await import("@/lib/store");
-  const copy = duplicateProduct(id);
+  const copy = await duplicateProduct(id);
   revalidatePath("/products");
   if (copy) redirect(`/products/${copy.id}`);
 }
@@ -54,21 +54,21 @@ export async function duplicateProductAction(id: string): Promise<void> {
 /** Stop making it — keeps the record, leaves the overview and metrics. */
 export async function archiveProductAction(id: string): Promise<void> {
   const { setArchived } = await import("@/lib/store");
-  setArchived(id, true);
+  await setArchived(id, true);
   revalidateProduct(id);
   redirect("/products");
 }
 
 export async function restoreProductAction(id: string): Promise<void> {
   const { setArchived } = await import("@/lib/store");
-  setArchived(id, false);
+  await setArchived(id, false);
   revalidateProduct(id);
 }
 
 /** Remove permanently. */
 export async function deleteProductAction(id: string): Promise<void> {
   const { deleteProduct } = await import("@/lib/store");
-  deleteProduct(id);
+  await deleteProduct(id);
   revalidateProduct(id);
   redirect("/products");
 }

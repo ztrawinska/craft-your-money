@@ -27,14 +27,14 @@ const RISKY_MAX = 0.15;
 
 const greeting = { date: "Tuesday, 21 July", text: "Good afternoon, Zuza", initial: "Z" };
 
-export default function Dashboard() {
+export default async function Dashboard() {
   // Everything below is derived from the stored product list, at request time.
   // Archived products are kept but never counted (product-actions spec).
-  const products = listProducts().filter((p) => !p.archived);
-  const settings = getSettings();
+  const products = (await listProducts()).filter((p) => !p.archived);
+  const settings = await getSettings();
   const cur = currencyCur(settings.currency);
-  const fixedCosts = getFixedCosts();
-  const config = getFixedCostConfig();
+  const fixedCosts = await getFixedCosts();
+  const config = await getFixedCostConfig();
   const shareOf = (p: Product) => fixedCostPerUnit(fixedCosts, config, productLabourHours(p));
 
   const active = products.filter((p) => p.workflow === "active");

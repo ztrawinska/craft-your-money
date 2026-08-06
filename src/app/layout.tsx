@@ -25,13 +25,13 @@ export const metadata: Metadata = {
   description: "Craft Your Money",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   // Resolve the account currency once, provide it to the whole tree.
-  const cur = currencyCur(getSettings().currency);
+  const cur = currencyCur((await getSettings()).currency);
   return (
     <html
       lang="en"

@@ -27,13 +27,13 @@ export default async function ProductsOverview({
   const params = await searchParams;
   const status = params.status ?? "all";
   const type = params.type ?? "all";
-  const settings = getSettings();
+  const settings = await getSettings();
   const cur = currencyCur(settings.currency);
-  const fixedCosts = getFixedCosts();
-  const config = getFixedCostConfig();
+  const fixedCosts = await getFixedCosts();
+  const config = await getFixedCostConfig();
   const shareOf = (p: Product) => fixedCostPerUnit(fixedCosts, config, productLabourHours(p));
 
-  const all = listProducts();
+  const all = await listProducts();
   const active = all.filter((p) => !p.archived);
   // Categories to offer — only the ones actually in use, in canonical order.
   const typesInUse = PRODUCT_TYPES.filter((t) => all.some((p) => p.type === t));

@@ -5,6 +5,6 @@
 import { MaterialsEditor } from "@/components/MaterialsEditor";
 import { listMaterials } from "@/lib/store";
 
-export default function MaterialsPage() {
-  return <MaterialsEditor initial={listMaterials()} />;
+export default async function MaterialsPage() {
+  return <MaterialsEditor initial={await listMaterials()} />;
 }

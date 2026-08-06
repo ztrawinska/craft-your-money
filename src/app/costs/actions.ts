@@ -18,18 +18,18 @@ function revalidateEverywhere() {
 
 export async function saveFixedCostAction(cost: FixedCost): Promise<void> {
   const { saveFixedCost } = await import("@/lib/store");
-  saveFixedCost(cost);
+  await saveFixedCost(cost);
   revalidateEverywhere();
 }
 
 export async function deleteFixedCostAction(id: string): Promise<void> {
   const { deleteFixedCost } = await import("@/lib/store");
-  deleteFixedCost(id);
+  await deleteFixedCost(id);
   revalidateEverywhere();
 }
 
 export async function saveFixedCostConfigAction(config: FixedCostConfig): Promise<void> {
   const { saveFixedCostConfig } = await import("@/lib/store");
-  saveFixedCostConfig(config);
+  await saveFixedCostConfig(config);
   revalidateEverywhere();
 }

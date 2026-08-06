@@ -11,7 +11,7 @@ import type { Settings } from "@/lib/settings";
 
 export async function saveSettingsAction(settings: Settings): Promise<void> {
   const { saveSettings } = await import("@/lib/store");
-  saveSettings(settings);
+  await saveSettings(settings);
   revalidatePath("/products");
   revalidatePath("/dashboard");
   revalidatePath("/settings");

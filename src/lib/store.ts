@@ -1,76 +1,123 @@
 /**
- * The product store — where the data actually lives. Server-only: it reads and
- * writes a JSON file under .data/, seeded from seed.ts on first run. Importing
- * "node:fs" keeps this out of any client bundle by construction.
+ * The product store — where the data actually lives. Server-only.
  *
- * This is deliberately the simplest thing that persists: one file, read fresh
- * each call, written whole on save. A real database is the production path
- * (post-MVP) — the screens only ever call these four functions, so swapping the
- * backend later touches nothing else.
+ * It talks to ONE async key/value interface (`load`/`save`) with two backends,
+ * chosen at import time by the environment:
+ *
+ * - **Redis (Upstash / Vercel KV)** in production — a writable, shared store.
+ *   Serverless filesystems are read-only, so the old file store threw on every
+ *   save once deployed. Redis is picked whenever its REST credentials are set.
+ * - **A JSON file under .data/** for local development — zero setup, and it
+ *   keeps local edits off the production data. Picked when there are no Redis
+ *   credentials.
+ *
+ * Everything above the two helpers is backend-agnostic: each collection is one
+ * JSON blob under a stable key (products / settings / materials / costs), read
+ * whole and written whole — the same simple shape as before, now async because
+ * a network store can't be synchronous. Swapping to a real relational schema
+ * later still only touches this file.
  *
  * The "node:fs" import keeps this server-only by construction: a client bundle
  * that tried to include it would fail to build.
  */
 import fs from "node:fs";
 import path from "node:path";
+import { Redis } from "@upstash/redis";
 import { seedFixedCostConfig, seedFixedCosts, seedMaterials, seedProducts } from "@/lib/seed";
 import type { FixedCost, FixedCostConfig } from "@/lib/fixed-costs";
 import type { LibraryMaterial } from "@/lib/materials";
 import type { Product, ProductType } from "@/lib/products";
 import { DEFAULT_SETTINGS, type Settings } from "@/lib/settings";
 
-const DATA_DIR = path.join(process.cwd(), ".data");
-const FILE = path.join(DATA_DIR, "products.json");
-const SETTINGS_FILE = path.join(DATA_DIR, "settings.json");
-const MATERIALS_FILE = path.join(DATA_DIR, "materials.json");
-const COSTS_FILE = path.join(DATA_DIR, "costs.json");
+// ── backend selection ───────────────────────────────────────────────────────
+// The Vercel↔Upstash integration injects KV_REST_API_*; a bare Upstash project
+// uses UPSTASH_REDIS_REST_*. Accept either so it works however the store was
+// provisioned. No credentials → the file backend (local dev).
+const REDIS_URL = process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL;
+const REDIS_TOKEN = process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN;
+const redis = REDIS_URL && REDIS_TOKEN ? new Redis({ url: REDIS_URL, token: REDIS_TOKEN }) : null;
 
-function readAll(): Product[] {
+type StoreKey = "products" | "settings" | "materials" | "costs";
+
+const DATA_DIR = path.join(process.cwd(), ".data");
+const FILE_FOR: Record<StoreKey, string> = {
+  products: "products.json",
+  settings: "settings.json",
+  materials: "materials.json",
+  costs: "costs.json",
+};
+
+/**
+ * Read a collection. On first read the key is empty, so we seed it (and persist
+ * the seed) so later reads and writes share one baseline. Any backend error
+ * degrades to the in-memory seed rather than crashing a page render.
+ */
+async function load<T>(key: StoreKey, seed: T): Promise<T> {
   try {
-    if (!fs.existsSync(FILE)) {
-      writeAll(seedProducts);
-      return seedProducts;
+    if (redis) {
+      const value = await redis.get<T>(key);
+      if (value == null) {
+        await redis.set(key, seed);
+        return seed;
+      }
+      return value;
     }
-    return JSON.parse(fs.readFileSync(FILE, "utf8")) as Product[];
+    const file = path.join(DATA_DIR, FILE_FOR[key]);
+    if (!fs.existsSync(file)) {
+      await save(key, seed);
+      return seed;
+    }
+    return JSON.parse(fs.readFileSync(file, "utf8")) as T;
   } catch {
-    return seedProducts;
+    return seed;
   }
 }
 
-function writeAll(products: Product[]): void {
+/** Write a collection whole. */
+async function save<T>(key: StoreKey, value: T): Promise<void> {
+  if (redis) {
+    await redis.set(key, value);
+    return;
+  }
   fs.mkdirSync(DATA_DIR, { recursive: true });
-  fs.writeFileSync(FILE, JSON.stringify(products, null, 2));
+  fs.writeFileSync(path.join(DATA_DIR, FILE_FOR[key]), JSON.stringify(value, null, 2));
 }
 
-export function listProducts(): Product[] {
-  return readAll();
+// ── products ────────────────────────────────────────────────────────────────
+
+export async function listProducts(): Promise<Product[]> {
+  return load("products", seedProducts);
 }
 
-export function getProduct(id: string): Product | undefined {
-  return readAll().find((p) => p.id === id);
+export async function getProduct(id: string): Promise<Product | undefined> {
+  return (await listProducts()).find((p) => p.id === id);
 }
 
 /** Insert or replace a product by id. */
-export function saveProduct(product: Product): void {
-  const all = readAll();
+export async function saveProduct(product: Product): Promise<void> {
+  const all = await listProducts();
   const i = all.findIndex((p) => p.id === product.id);
   if (i >= 0) all[i] = product;
   else all.push(product);
-  writeAll(all);
+  await save("products", all);
 }
 
-export function deleteProduct(id: string): void {
-  writeAll(readAll().filter((p) => p.id !== id));
+export async function deleteProduct(id: string): Promise<void> {
+  const all = await listProducts();
+  await save(
+    "products",
+    all.filter((p) => p.id !== id),
+  );
 }
 
-export function setArchived(id: string, archived: boolean): void {
-  const p = getProduct(id);
-  if (p) saveProduct({ ...p, archived });
+export async function setArchived(id: string, archived: boolean): Promise<void> {
+  const p = await getProduct(id);
+  if (p) await saveProduct({ ...p, archived });
 }
 
 /** A full copy, saved as a new draft named "… (copy)" (product-actions spec). */
-export function duplicateProduct(id: string): Product | undefined {
-  const p = getProduct(id);
+export async function duplicateProduct(id: string): Promise<Product | undefined> {
+  const p = await getProduct(id);
   if (!p) return undefined;
   const copy: Product = {
     ...p,
@@ -83,7 +130,7 @@ export function duplicateProduct(id: string): Product | undefined {
     otherCosts: p.otherCosts.map((o) => ({ ...o })),
     benchmark: (p.benchmark ?? []).map((b) => ({ ...b })),
   };
-  saveProduct(copy);
+  await saveProduct(copy);
   return copy;
 }
 
@@ -102,7 +149,7 @@ function slugify(name: string): string {
  * Target margin / VAT default to the sample account's settings (there's no
  * Settings model yet — see §14).
  */
-export function createDraft(name: string, type: ProductType): Product {
+export async function createDraft(name: string, type: ProductType): Promise<Product> {
   const product: Product = {
     id: `${slugify(name)}-${Date.now().toString(36)}`,
     name: name.trim(),
@@ -114,112 +161,73 @@ export function createDraft(name: string, type: ProductType): Product {
     otherCosts: [],
     benchmark: [],
   };
-  saveProduct(product);
+  await saveProduct(product);
   return product;
 }
 
 // ── account settings ──────────────────────────────────────────────────────
 
-export function getSettings(): Settings {
-  try {
-    if (!fs.existsSync(SETTINGS_FILE)) {
-      writeSettings(DEFAULT_SETTINGS);
-      return DEFAULT_SETTINGS;
-    }
-    // spread over defaults so a new field added later still has a value
-    return { ...DEFAULT_SETTINGS, ...JSON.parse(fs.readFileSync(SETTINGS_FILE, "utf8")) };
-  } catch {
-    return DEFAULT_SETTINGS;
-  }
+export async function getSettings(): Promise<Settings> {
+  // spread over defaults so a new field added later still has a value
+  return { ...DEFAULT_SETTINGS, ...(await load("settings", DEFAULT_SETTINGS)) };
 }
 
-function writeSettings(s: Settings): void {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
-  fs.writeFileSync(SETTINGS_FILE, JSON.stringify(s, null, 2));
-}
-
-export function saveSettings(s: Settings): void {
-  writeSettings(s);
+export async function saveSettings(s: Settings): Promise<void> {
+  await save("settings", s);
 }
 
 // ── materials library ───────────────────────────────────────────────────────
 
-function readMaterials(): LibraryMaterial[] {
-  try {
-    if (!fs.existsSync(MATERIALS_FILE)) {
-      writeMaterials(seedMaterials);
-      return seedMaterials;
-    }
-    return JSON.parse(fs.readFileSync(MATERIALS_FILE, "utf8")) as LibraryMaterial[];
-  } catch {
-    return seedMaterials;
-  }
+export async function listMaterials(): Promise<LibraryMaterial[]> {
+  return load("materials", seedMaterials);
 }
 
-function writeMaterials(materials: LibraryMaterial[]): void {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
-  fs.writeFileSync(MATERIALS_FILE, JSON.stringify(materials, null, 2));
-}
-
-export function listMaterials(): LibraryMaterial[] {
-  return readMaterials();
-}
-
-export function saveMaterial(material: LibraryMaterial): void {
-  const all = readMaterials();
+export async function saveMaterial(material: LibraryMaterial): Promise<void> {
+  const all = await listMaterials();
   const i = all.findIndex((m) => m.id === material.id);
   if (i >= 0) all[i] = material;
   else all.push(material);
-  writeMaterials(all);
+  await save("materials", all);
 }
 
-export function deleteMaterial(id: string): void {
-  writeMaterials(readMaterials().filter((m) => m.id !== id));
+export async function deleteMaterial(id: string): Promise<void> {
+  const all = await listMaterials();
+  await save(
+    "materials",
+    all.filter((m) => m.id !== id),
+  );
 }
 
 // ── fixed / business costs ──────────────────────────────────────────────────
 
 type CostsFile = { costs: FixedCost[]; config: FixedCostConfig };
+const seedCosts: CostsFile = { costs: seedFixedCosts, config: seedFixedCostConfig };
 
-function readCosts(): CostsFile {
-  try {
-    if (!fs.existsSync(COSTS_FILE)) {
-      const seed = { costs: seedFixedCosts, config: seedFixedCostConfig };
-      writeCosts(seed);
-      return seed;
-    }
-    return JSON.parse(fs.readFileSync(COSTS_FILE, "utf8")) as CostsFile;
-  } catch {
-    return { costs: seedFixedCosts, config: seedFixedCostConfig };
-  }
+async function readCosts(): Promise<CostsFile> {
+  return load("costs", seedCosts);
 }
 
-function writeCosts(data: CostsFile): void {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
-  fs.writeFileSync(COSTS_FILE, JSON.stringify(data, null, 2));
+export async function getFixedCosts(): Promise<FixedCost[]> {
+  return (await readCosts()).costs;
 }
 
-export function getFixedCosts(): FixedCost[] {
-  return readCosts().costs;
+export async function getFixedCostConfig(): Promise<FixedCostConfig> {
+  return (await readCosts()).config;
 }
 
-export function getFixedCostConfig(): FixedCostConfig {
-  return readCosts().config;
-}
-
-export function saveFixedCost(cost: FixedCost): void {
-  const data = readCosts();
+export async function saveFixedCost(cost: FixedCost): Promise<void> {
+  const data = await readCosts();
   const i = data.costs.findIndex((c) => c.id === cost.id);
   if (i >= 0) data.costs[i] = cost;
   else data.costs.push(cost);
-  writeCosts(data);
+  await save("costs", data);
 }
 
-export function deleteFixedCost(id: string): void {
-  const data = readCosts();
-  writeCosts({ ...data, costs: data.costs.filter((c) => c.id !== id) });
+export async function deleteFixedCost(id: string): Promise<void> {
+  const data = await readCosts();
+  await save("costs", { ...data, costs: data.costs.filter((c) => c.id !== id) });
 }
 
-export function saveFixedCostConfig(config: FixedCostConfig): void {
-  writeCosts({ ...readCosts(), config });
+export async function saveFixedCostConfig(config: FixedCostConfig): Promise<void> {
+  await save("costs", { ...(await readCosts()), config });
 }

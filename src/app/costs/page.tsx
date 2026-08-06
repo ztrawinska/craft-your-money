@@ -7,16 +7,16 @@ import { CostsEditor } from "@/components/CostsEditor";
 import { productLabourHours } from "@/lib/products";
 import { getFixedCostConfig, getFixedCosts, listProducts } from "@/lib/store";
 
-export default function CostsPage() {
-  const example = listProducts().find((p) => p.labour.length > 0) ?? null;
+export default async function CostsPage() {
+  const example = (await listProducts()).find((p) => p.labour.length > 0) ?? null;
   const sample = example
     ? { name: example.name, labourHours: productLabourHours(example) }
     : null;
 
   return (
     <CostsEditor
-      initialCosts={getFixedCosts()}
-      initialConfig={getFixedCostConfig()}
+      initialCosts={await getFixedCosts()}
+      initialConfig={await getFixedCostConfig()}
       sample={sample}
     />
   );

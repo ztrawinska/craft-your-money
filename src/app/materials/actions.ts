@@ -10,14 +10,14 @@ import type { LibraryMaterial } from "@/lib/materials";
 
 export async function saveMaterialAction(material: LibraryMaterial): Promise<void> {
   const { saveMaterial } = await import("@/lib/store");
-  saveMaterial(material);
+  await saveMaterial(material);
   revalidatePath("/materials");
   revalidatePath("/products/[id]", "page");
 }
 
 export async function deleteMaterialAction(id: string): Promise<void> {
   const { deleteMaterial } = await import("@/lib/store");
-  deleteMaterial(id);
+  await deleteMaterial(id);
   revalidatePath("/materials");
   revalidatePath("/products/[id]", "page");
 }
