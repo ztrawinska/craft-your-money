@@ -3,14 +3,16 @@
  * store's file (or Redis key) exists, this is no longer read; it's just the
  * initial contents.
  *
- * This is a deliberately authored collection, not random filler: one coastal
- * metalwork line ("Low Tide" — silver, copper, freshwater pearls) where every
- * piece has a real name and costed materials/labour. The prices are chosen so
- * each product lands on a specific profitability status, so the range shows one
- * intentional example of every state the app can display:
- *   Reef (Healthy) · Selkie (Risky, actually losing money) · Tideline (Caution)
- *   · Ember (active, no price) · Foundry (rich draft w/ benchmark) · Harbour
- *   (draft to resume) · Dune (archived).
+ * This is a deliberately authored collection, not random filler: one Greek-myth
+ * metalwork line (silver, copper, freshwater pearls) where every piece is named
+ * for a figure whose story fits the object — the three Fates for a trio of
+ * bands, the forge-god for a forged cuff, the mythic Ring of Gyges for a signet.
+ * The prices are chosen so each product lands on a specific profitability
+ * status, so the range shows one intentional example of every state the app can
+ * display:
+ *   Moirai (Healthy) · Thetis (Risky, actually losing money) · Thalassa
+ *   (Caution) · Hephaestus (active, no price) · Talos (rich draft w/ benchmark)
+ *   · Gyges (draft to resume) · Helios (archived).
  */
 import type { FixedCost, FixedCostConfig } from "@/lib/fixed-costs";
 import type { LibraryMaterial } from "@/lib/materials";
@@ -41,9 +43,10 @@ export const seedMaterials: LibraryMaterial[] = [
 
 export const seedProducts: Product[] = [
   {
-    // Healthy — the range's reliable earner. Three thin bands worn together.
-    id: "reef-stacking-trio",
-    name: "Reef stacking trio",
+    // Healthy — the range's reliable earner. Three thin bands worn together,
+    // named for the three Fates.
+    id: "moirai-stacking-trio",
+    name: "Moirai stacking trio",
     type: "Ring",
     workflow: "active",
     // Prices are GROSS (sample account has VAT on at 20%); margin runs on net,
@@ -64,8 +67,8 @@ export const seedProducts: Product[] = [
     // Risky AND losing money — the piece the dashboard briefing names. Pearls
     // are dear and the wrapping is slow, so at £24 it sells at a loss. This is
     // the on-camera repricing hero: bump it and watch the chip go Healthy.
-    id: "selkie-pearl-drops",
-    name: "Selkie pearl drops",
+    id: "thetis-pearl-drops",
+    name: "Thetis pearl drops",
     type: "Earrings",
     workflow: "active",
     // £30 gross → net £25 against a ~£38.5 full cost: a real ~£13.5 loss per
@@ -84,8 +87,8 @@ export const seedProducts: Product[] = [
   {
     // Caution — earns, but sits under the healthy line. A cast-wave pendant on
     // a fine curb chain.
-    id: "tideline-pendant",
-    name: "Tideline wave pendant",
+    id: "thalassa-wave-pendant",
+    name: "Thalassa wave pendant",
     type: "Necklace",
     workflow: "active",
     // £44 gross → net £36.67 against ~£28.3 full cost → ~23% margin (Caution).
@@ -103,8 +106,8 @@ export const seedProducts: Product[] = [
   {
     // Active, no price yet — costed but never priced, so it shows the "No price"
     // state on the overview and the "set a price" nudge on the dashboard.
-    id: "ember-forged-cuff",
-    name: "Ember forged cuff",
+    id: "hephaestus-forged-cuff",
+    name: "Hephaestus forged cuff",
     type: "Bracelet",
     workflow: "active",
     finalPrice: null,
@@ -119,8 +122,8 @@ export const seedProducts: Product[] = [
     // The flagship draft: priced, with the fixed-cost layer AND market
     // benchmarks, so the detail shows the dashed business-cost / full-cost lines
     // and the "how you compare" drawer. This is the rich screen to linger on.
-    id: "foundry-hammered-band",
-    name: "Foundry hammered band",
+    id: "talos-hammered-band",
+    name: "Talos hammered band",
     type: "Ring",
     workflow: "draft",
     finalPrice: 42,
@@ -144,8 +147,8 @@ export const seedProducts: Product[] = [
     // Draft with no price — the one the dashboard surfaces as "continue where
     // you left off". A genuine work-in-progress: named, one material in, not yet
     // costed out or priced.
-    id: "harbour-signet",
-    name: "Harbour signet",
+    id: "gyges-signet",
+    name: "Gyges signet",
     type: "Ring",
     workflow: "draft",
     finalPrice: null,
@@ -157,8 +160,8 @@ export const seedProducts: Product[] = [
   },
   {
     // Archived — kept as a record, out of the default overview and metrics.
-    id: "dune-copper-hoops",
-    name: "Dune copper hoops",
+    id: "helios-copper-hoops",
+    name: "Helios copper hoops",
     type: "Earrings",
     workflow: "active",
     finalPrice: 32,
