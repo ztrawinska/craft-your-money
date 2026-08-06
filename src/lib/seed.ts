@@ -4,15 +4,14 @@
  * initial contents.
  *
  * This is a deliberately authored collection, not random filler: one Greek-myth
- * metalwork line (silver, copper, freshwater pearls) where every piece is named
- * for a figure whose story fits the object — the three Fates for a trio of
- * bands, the forge-god for a forged cuff, the mythic Ring of Gyges for a signet.
- * The prices are chosen so each product lands on a specific profitability
- * status, so the range shows one intentional example of every state the app can
- * display:
- *   Moirai (Healthy) · Thetis (Risky, actually losing money) · Thalassa
- *   (Caution) · Hephaestus (active, no price) · Talos (rich draft w/ benchmark)
- *   · Gyges (draft to resume) · Helios (archived).
+ * metalwork line (silver, copper, freshwater pearls) named for goddesses whose
+ * story fits the object — the three Graces for a trio of bands, the hearth-fire
+ * goddess for a forged cuff, the goddess of oaths for a signet that seals. The
+ * prices are chosen so each product lands on a specific profitability status, so
+ * the range shows one intentional example of every state the app can display:
+ *   Charites (Healthy) · Thetis (Risky, actually losing money) · Thalassa
+ *   (Caution) · Hestia (active, no price) · Metis (rich draft w/ benchmark)
+ *   · Themis (draft to resume) · Eos (archived).
  */
 import type { FixedCost, FixedCostConfig } from "@/lib/fixed-costs";
 import type { LibraryMaterial } from "@/lib/materials";
@@ -44,9 +43,9 @@ export const seedMaterials: LibraryMaterial[] = [
 export const seedProducts: Product[] = [
   {
     // Healthy — the range's reliable earner. Three thin bands worn together,
-    // named for the three Fates.
-    id: "moirai-stacking-trio",
-    name: "Moirai stacking trio",
+    // named for the three Graces (beauty, adornment).
+    id: "charites-stacking-trio",
+    name: "Charites stacking trio",
     type: "Ring",
     workflow: "active",
     // Prices are GROSS (sample account has VAT on at 20%); margin runs on net,
@@ -106,8 +105,8 @@ export const seedProducts: Product[] = [
   {
     // Active, no price yet — costed but never priced, so it shows the "No price"
     // state on the overview and the "set a price" nudge on the dashboard.
-    id: "hephaestus-forged-cuff",
-    name: "Hephaestus forged cuff",
+    id: "hestia-forged-cuff",
+    name: "Hestia forged cuff",
     type: "Bracelet",
     workflow: "active",
     finalPrice: null,
@@ -122,8 +121,8 @@ export const seedProducts: Product[] = [
     // The flagship draft: priced, with the fixed-cost layer AND market
     // benchmarks, so the detail shows the dashed business-cost / full-cost lines
     // and the "how you compare" drawer. This is the rich screen to linger on.
-    id: "talos-hammered-band",
-    name: "Talos hammered band",
+    id: "metis-hammered-band",
+    name: "Metis hammered band",
     type: "Ring",
     workflow: "draft",
     finalPrice: 42,
@@ -147,8 +146,8 @@ export const seedProducts: Product[] = [
     // Draft with no price — the one the dashboard surfaces as "continue where
     // you left off". A genuine work-in-progress: named, one material in, not yet
     // costed out or priced.
-    id: "gyges-signet",
-    name: "Gyges signet",
+    id: "themis-signet",
+    name: "Themis signet",
     type: "Ring",
     workflow: "draft",
     finalPrice: null,
@@ -160,8 +159,8 @@ export const seedProducts: Product[] = [
   },
   {
     // Archived — kept as a record, out of the default overview and metrics.
-    id: "helios-copper-hoops",
-    name: "Helios copper hoops",
+    id: "eos-copper-hoops",
+    name: "Eos copper hoops",
     type: "Earrings",
     workflow: "active",
     finalPrice: 32,
