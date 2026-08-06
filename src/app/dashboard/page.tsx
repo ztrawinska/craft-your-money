@@ -19,6 +19,7 @@ import { NeedsAttention, type AttentionItem } from "@/components/NeedsAttention"
 import { currencyCur, formatMoney } from "@/lib/currency";
 import { fixedCostPerUnit } from "@/lib/fixed-costs";
 import { pricingFor, productLabourHours, statusInputFor, type Product } from "@/lib/products";
+import { productsHref } from "@/lib/products-query";
 import { getFixedCostConfig, getFixedCosts, getSettings, listProducts } from "@/lib/store";
 import { statusChip } from "@/lib/status";
 
@@ -182,7 +183,7 @@ export default async function Dashboard() {
             </p>
             {belowTarget > 0 ? (
               <Link
-                href="/products"
+                href={productsHref({ status: "below-target" })}
                 className="inline-flex items-center justify-center font-serif text-[20px] font-medium tabular-nums text-ink"
               >
                 {belowTarget}

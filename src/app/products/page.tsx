@@ -42,9 +42,20 @@ export default async function ProductsOverview({
   // the live range by the same key the chip and sort use. The type filter then
   // narrows whichever set that produced (the two compose).
   const showingArchived = status === "archived";
+  // "Below target" is the dashboard's actionable group — every priced product
+  // under the healthy margin, i.e. Risky OR Caution together (there's no single
+  // status for it, so it's matched as the pair).
+  const isBelowTarget = (p: Product) => {
+    const key = sortKey(statusInputFor(p, settings, shareOf(p)));
+    return key === "risky" || key === "caution";
+  };
   const byStatus = showingArchived
     ? all.filter((p) => p.archived)
-    : active.filter((p) => status === "all" || sortKey(statusInputFor(p, settings, shareOf(p))) === status);
+    : active.filter((p) => {
+        if (status === "all") return true;
+        if (status === "below-target") return isBelowTarget(p);
+        return sortKey(statusInputFor(p, settings, shareOf(p))) === status;
+      });
   const visible = type === "all" ? byStatus : byStatus.filter((p) => p.type === type);
 
   const sorted = showingArchived

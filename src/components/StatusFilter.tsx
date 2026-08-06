@@ -23,6 +23,8 @@ const OPTIONS = [
   { value: "no-price", label: "No price" },
   { value: "draft", label: "Draft" },
   { value: "archived", label: "Archived" },
+  // The actionable group the dashboard links to — Risky + Caution together.
+  { value: "below-target", label: "Below target" },
 ];
 
 export function StatusFilter({ current, type }: { current: string; type: string }) {
