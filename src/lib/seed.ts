@@ -1,6 +1,16 @@
 /**
  * Seed data — the sample products the store starts from on first run. Once the
- * store's file exists, this is no longer read; it's just the initial contents.
+ * store's file (or Redis key) exists, this is no longer read; it's just the
+ * initial contents.
+ *
+ * This is a deliberately authored collection, not random filler: one coastal
+ * metalwork line ("Low Tide" — silver, copper, freshwater pearls) where every
+ * piece has a real name and costed materials/labour. The prices are chosen so
+ * each product lands on a specific profitability status, so the range shows one
+ * intentional example of every state the app can display:
+ *   Reef (Healthy) · Selkie (Risky, actually losing money) · Tideline (Caution)
+ *   · Ember (active, no price) · Foundry (rich draft w/ benchmark) · Harbour
+ *   (draft to resume) · Dune (archived).
  */
 import type { FixedCost, FixedCostConfig } from "@/lib/fixed-costs";
 import type { LibraryMaterial } from "@/lib/materials";
@@ -14,24 +24,31 @@ export const seedFixedCosts: FixedCost[] = [
 ];
 export const seedFixedCostConfig: FixedCostConfig = { method: "per-unit", volume: 100 };
 
-/** The materials library the store starts from. Covers the library items the
- *  sample products reference, plus stock on some (and none on others). */
+/** The materials library the store starts from. Named, believable stock for a
+ *  small silver/copper studio — covers every material the pieces reference,
+ *  plus a few more so the picker looks like a real, lived-in library. */
 export const seedMaterials: LibraryMaterial[] = [
   { id: "m-silver-sheet", name: "Sterling silver sheet", unit: "g", unitCost: 0.62, stock: 120 },
   { id: "m-solder-wire", name: "Solder wire", unit: "g", unitCost: 1.1, stock: 40 },
   { id: "m-silver-wire", name: "Silver wire", unit: "g", unitCost: 0.72, stock: null },
-  { id: "m-pearls", name: "Freshwater pearls", unit: "", unitCost: 6.5, stock: 8 },
+  { id: "m-bezel-wire", name: "Fine silver bezel wire", unit: "g", unitCost: 0.85, stock: 25 },
+  { id: "m-silver-chain", name: "Silver curb chain", unit: "cm", unitCost: 0.18, stock: null },
   { id: "m-ear-wires", name: "Silver ear wires", unit: "pair", unitCost: 2.75, stock: null },
+  { id: "m-pearls", name: "Freshwater pearls", unit: "", unitCost: 6.5, stock: 8 },
+  { id: "m-keshi-pearls", name: "Keshi pearls", unit: "", unitCost: 4.2, stock: 12 },
   { id: "m-copper-sheet", name: "Copper sheet", unit: "g", unitCost: 0.09, stock: 200 },
 ];
 
 export const seedProducts: Product[] = [
   {
-    id: "stacking-set",
-    name: "Stacking set × 3",
+    // Healthy — the range's reliable earner. Three thin bands worn together.
+    id: "reef-stacking-trio",
+    name: "Reef stacking trio",
     type: "Ring",
     workflow: "active",
-    finalPrice: 38,
+    // Prices are GROSS (sample account has VAT on at 20%); margin runs on net,
+    // so £68 → net £56.67 → ~35% margin (Healthy).
+    finalPrice: 68,
     materials: [
       { name: "Sterling silver sheet", quantity: 14, unit: "g", unitCost: 0.62, fromLibrary: true },
       { name: "Solder wire", quantity: 0.5, unit: "g", unitCost: 1.1, fromLibrary: true },
@@ -44,11 +61,16 @@ export const seedProducts: Product[] = [
     otherCosts: [],
   },
   {
-    id: "pearl-drop",
-    name: "Pearl drop earrings",
+    // Risky AND losing money — the piece the dashboard briefing names. Pearls
+    // are dear and the wrapping is slow, so at £24 it sells at a loss. This is
+    // the on-camera repricing hero: bump it and watch the chip go Healthy.
+    id: "selkie-pearl-drops",
+    name: "Selkie pearl drops",
     type: "Earrings",
     workflow: "active",
-    finalPrice: 55,
+    // £30 gross → net £25 against a ~£38.5 full cost: a real ~£13.5 loss per
+    // sale (Risky). On camera, repricing to ~£68 lands it on Healthy.
+    finalPrice: 30,
     materials: [
       { name: "Freshwater pearls", quantity: 2, unit: "", unitCost: 6.5, fromLibrary: true },
       { name: "Silver ear wires", quantity: 1, unit: "pair", unitCost: 2.75, fromLibrary: true },
@@ -60,14 +82,17 @@ export const seedProducts: Product[] = [
     otherCosts: [],
   },
   {
-    id: "twisted-pendant",
-    name: "Twisted wire pendant",
+    // Caution — earns, but sits under the healthy line. A cast-wave pendant on
+    // a fine curb chain.
+    id: "tideline-pendant",
+    name: "Tideline wave pendant",
     type: "Necklace",
     workflow: "active",
-    finalPrice: 68,
+    // £44 gross → net £36.67 against ~£28.3 full cost → ~23% margin (Caution).
+    finalPrice: 44,
     materials: [
       { name: "Silver wire", quantity: 10, unit: "g", unitCost: 0.72, fromLibrary: true },
-      { name: "Chain", quantity: 45, unit: "cm", unitCost: 0.18 },
+      { name: "Silver curb chain", quantity: 45, unit: "cm", unitCost: 0.18, fromLibrary: true },
     ],
     labour: [
       { step: "Twisting & forming", minutes: 30, rate: 15 },
@@ -76,12 +101,14 @@ export const seedProducts: Product[] = [
     otherCosts: [],
   },
   {
-    id: "copper-cuff",
-    name: "Forged copper cuff",
+    // Active, no price yet — costed but never priced, so it shows the "No price"
+    // state on the overview and the "set a price" nudge on the dashboard.
+    id: "ember-forged-cuff",
+    name: "Ember forged cuff",
     type: "Bracelet",
     workflow: "active",
     finalPrice: null,
-    materials: [{ name: "Copper sheet", quantity: 20, unit: "g", unitCost: 0.09 }],
+    materials: [{ name: "Copper sheet", quantity: 20, unit: "g", unitCost: 0.09, fromLibrary: true }],
     labour: [
       { step: "Forging", minutes: 35, rate: 15 },
       { step: "Finishing", minutes: 15, rate: 15 },
@@ -89,10 +116,11 @@ export const seedProducts: Product[] = [
     otherCosts: [],
   },
   {
-    // The flagship: a draft with the fixed-cost layer configured, so the detail
-    // shows the dashed business-cost / full-cost lines.
-    id: "hammered-band",
-    name: "Hammered silver stacking band",
+    // The flagship draft: priced, with the fixed-cost layer AND market
+    // benchmarks, so the detail shows the dashed business-cost / full-cost lines
+    // and the "how you compare" drawer. This is the rich screen to linger on.
+    id: "foundry-hammered-band",
+    name: "Foundry hammered band",
     type: "Ring",
     workflow: "draft",
     finalPrice: 42,
@@ -113,24 +141,29 @@ export const seedProducts: Product[] = [
     ],
   },
   {
-    id: "new-ring",
-    name: "New ring concept",
+    // Draft with no price — the one the dashboard surfaces as "continue where
+    // you left off". A genuine work-in-progress: named, one material in, not yet
+    // costed out or priced.
+    id: "harbour-signet",
+    name: "Harbour signet",
     type: "Ring",
     workflow: "draft",
     finalPrice: null,
-    materials: [{ name: "Silver wire", quantity: 6, unit: "g", unitCost: 0.72, fromLibrary: true }],
-    labour: [],
+    materials: [
+      { name: "Sterling silver sheet", quantity: 6, unit: "g", unitCost: 0.62, fromLibrary: true },
+    ],
+    labour: [{ step: "Sawing & shaping", minutes: 25, rate: 15 }],
     otherCosts: [],
   },
   {
-    // Archived: kept as a record, out of the default overview and metrics.
-    id: "copper-hoop",
-    name: "Copper hoop earrings",
+    // Archived — kept as a record, out of the default overview and metrics.
+    id: "dune-copper-hoops",
+    name: "Dune copper hoops",
     type: "Earrings",
     workflow: "active",
     finalPrice: 32,
     archived: true,
-    materials: [{ name: "Copper wire", quantity: 8, unit: "g", unitCost: 0.11 }],
+    materials: [{ name: "Copper sheet", quantity: 8, unit: "g", unitCost: 0.09, fromLibrary: true }],
     labour: [{ step: "Forming & finishing", minutes: 30, rate: 15 }],
     otherCosts: [],
   },
