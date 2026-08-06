@@ -23,6 +23,14 @@ const ibmPlexSans = IBM_Plex_Sans({
 export const metadata: Metadata = {
   title: "Craft Your Money",
   description: "Craft Your Money",
+  // Tells iOS to launch the home-screen icon as a standalone app (chrome-less)
+  // and to keep the status bar readable over the light page. Pairs with
+  // app/manifest.ts — iOS needs these meta tags, not just the manifest.
+  appleWebApp: {
+    capable: true,
+    title: "Craft Your Money",
+    statusBarStyle: "default",
+  },
 };
 
 export default async function RootLayout({
