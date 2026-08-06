@@ -18,6 +18,7 @@
 
 import { useEffect, useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { Collapse } from "@/components/Collapse";
 import { useCurrency } from "@/components/CurrencyContext";
 import { Price } from "@/components/Price";
 import { formatMoney } from "@/lib/currency";
@@ -100,7 +101,7 @@ export function HeroProfit({
             />
           </button>
 
-          {open && (
+          <Collapse open={open}>
             <div className="mt-2.5 border-t border-ink/7 pt-1 text-left">
               {contributions.map((c) => (
                 <div key={c.name} className="flex items-baseline justify-between gap-3 py-[5px]">
@@ -121,7 +122,7 @@ export function HeroProfit({
                 </span>
               </div>
             </div>
-          )}
+          </Collapse>
         </div>
       )}
     </div>

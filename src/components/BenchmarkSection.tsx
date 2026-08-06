@@ -17,6 +17,7 @@
 import { useState } from "react";
 import { ChevronDown, Plus, X } from "lucide-react";
 import { Button } from "@/components/Button";
+import { Collapse } from "@/components/Collapse";
 import { useCurrency } from "@/components/CurrencyContext";
 import { formatMoney } from "@/lib/currency";
 import { FieldLabel, MoneyInput, num } from "@/components/inline-form";
@@ -76,7 +77,7 @@ export function BenchmarkSection({
         />
       </button>
 
-      {open && (
+      <Collapse open={open}>
         <div className="pb-1 pt-4">
           <p className="font-sans text-[12px] font-light leading-[1.6] text-ink/55">
             A few prices you&rsquo;ve seen for similar pieces — three is plenty.
@@ -148,7 +149,7 @@ export function BenchmarkSection({
             </p>
           )}
         </div>
-      )}
+      </Collapse>
     </div>
   );
 }
