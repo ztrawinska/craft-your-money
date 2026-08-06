@@ -56,7 +56,10 @@ export function MoneyInput({
         onFocus={pinCaretRight}
         onSelect={pinCaretRight}
         placeholder={placeholder}
-        className={`font-serif tabular-nums ${cur.suffix ? "pr-9" : "pl-6"}`}
+        // Align the number toward the currency so the caret sits right beside
+        // it (matching "your price"): right for a suffix symbol (zł 12.00 →
+        // caret between number and zł), left for a prefix (£12.00).
+        className={`font-serif tabular-nums ${cur.suffix ? "pr-9 text-right" : "pl-6"}`}
       />
     </div>
   );

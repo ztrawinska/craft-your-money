@@ -27,6 +27,10 @@ const RISKY_MAX = 0.15;
 
 const greeting = { date: "Tuesday, 21 July", text: "Good afternoon, Zuza", initial: "Z" };
 
+// The dashboard is derived entirely from the mutable store, so it must render
+// fresh on every request rather than being prerendered from build-time data.
+export const dynamic = "force-dynamic";
+
 export default async function Dashboard() {
   // Everything below is derived from the stored product list, at request time.
   // Archived products are kept but never counted (product-actions spec).
@@ -110,7 +114,7 @@ export default async function Dashboard() {
   const resume = products.find((p) => p.workflow === "draft" && p.finalPrice === null);
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-dvh flex-col">
       <main className="mx-auto w-full max-w-[430px] flex-1">
         {/* header: date + greeting, avatar (Settings lives behind it) */}
         <div className="flex items-start justify-between px-6 pb-1.5 pt-[26px]">

@@ -91,7 +91,7 @@ export function SettingsForm({ initial }: { initial: Settings }) {
     });
 
   return (
-    <main className="mx-auto w-full max-w-[430px] pb-24">
+    <main className="mx-auto w-full max-w-[430px]">
       {/* header */}
       <div className="flex items-center px-6 pt-5">
         <Link

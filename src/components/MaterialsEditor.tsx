@@ -164,7 +164,7 @@ export function MaterialsEditor({ initial }: { initial: LibraryMaterial[] }) {
   const addingNew = edit?.index === "new";
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-dvh flex-col">
       <main className="mx-auto w-full max-w-[430px] flex-1">
         <div className="flex items-baseline justify-between px-6 pb-3.5 pt-[22px]">
           <h1 className="font-serif text-[26px] font-medium tracking-[-0.01em]">Materials</h1>

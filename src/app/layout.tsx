@@ -37,7 +37,7 @@ export default async function RootLayout({
       lang="en"
       className={`${lora.variable} ${ibmPlexSans.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-page text-ink font-sans">
+      <body className="min-h-dvh flex flex-col bg-page text-ink font-sans">
         <CurrencyProvider cur={cur}>{children}</CurrencyProvider>
       </body>
     </html>

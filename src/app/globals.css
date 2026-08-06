@@ -114,3 +114,24 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.12 0 0 0 0 0.10 0 0 0 0 0.08 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
   color: var(--color-ink);
 }
+
+/* A soft settle for the pricing block's evaluation (chip, guidance line) when
+   it updates a beat after you stop typing — a fade up from near-full, never a
+   flash. Paired with a key that changes on the settled value. */
+@keyframes settle {
+  from {
+    opacity: 0.45;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @keyframes settle {
+    from,
+    to {
+      opacity: 1;
+    }
+  }
+}

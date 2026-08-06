@@ -12,6 +12,7 @@
  */
 "use client";
 
+import { useEffect, useState } from "react";
 import { Chip } from "@/components/Chip";
 import { useCurrency } from "@/components/CurrencyContext";
 import { EditableProfit } from "@/components/EditableProfit";
@@ -45,6 +46,22 @@ type PricingPanelProps = {
 const resetLinkClass =
   "font-sans text-[10.5px] font-normal text-clay-deep underline decoration-clay-deep/40 underline-offset-2";
 
+// The typed number must feel instant, but the *evaluation* it drives — status,
+// margin, the guidance line, profit — shouldn't lurch on every keystroke (it
+// flickers through meaningless in-between states and, on mobile, makes the
+// whole block jump). So we let the number lead and the judgement settle a beat
+// after you stop typing (YNAB's "commit on idle"). Cost edits still land at
+// once — they're discrete saves, not per-keystroke — so only the price lags.
+const SETTLE_MS = 400;
+function useSettled<T>(value: T, delay = SETTLE_MS): T {
+  const [settled, setSettled] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setSettled(value), delay);
+    return () => clearTimeout(t);
+  }, [value, delay]);
+  return settled;
+}
+
 export function PricingPanel({
   workflow,
   directCost,
@@ -66,7 +83,9 @@ export function PricingPanel({
   const suggestion = computePricingFromDirect(directCost, { finalPrice: null, ...options });
   const calculatedPrice = suggestion.calculatedPrice;
 
-  const parsed = priceText.trim() === "" ? NaN : Number(priceText.replace(",", "."));
+  // The input shows `priceText` live; everything derived reads the settled copy.
+  const settledPriceText = useSettled(priceText);
+  const parsed = settledPriceText.trim() === "" ? NaN : Number(settledPriceText.replace(",", "."));
   const finalPrice = Number.isFinite(parsed) ? parsed : null;
 
   const pricing = computePricingFromDirect(directCost, { finalPrice, ...options });
@@ -178,7 +197,10 @@ export function PricingPanel({
 
       {/* a calm helper, if the price needs one — plain ink, never an alarm */}
       {warning && (
-        <p className="mb-4 text-[12.5px] font-light leading-[1.5] text-ink/70">
+        <p
+          key={warning.text}
+          className="mb-4 animate-[settle_200ms_ease-out] text-[12.5px] font-light leading-[1.5] text-ink/70"
+        >
           {warning.text}
         </p>
       )}
@@ -201,7 +223,11 @@ export function PricingPanel({
             vatRatePct={vatRatePct}
             onPriceChange={onPriceChange}
           />
-          {pricing.profit != null && <Chip tone={chip.tone}>{chip.label}</Chip>}
+          {pricing.profit != null && (
+            <span key={`${chip.tone}-${chip.label}`} className="inline-flex animate-[settle_200ms_ease-out]">
+              <Chip tone={chip.tone}>{chip.label}</Chip>
+            </span>
+          )}
         </div>
       </div>
 

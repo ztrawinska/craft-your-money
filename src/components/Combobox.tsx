@@ -45,7 +45,10 @@ export function Combobox({
   const listId = useId();
 
   const q = value.trim().toLowerCase();
-  const matches = (q ? options.filter((o) => o.label.toLowerCase().includes(q)) : options).slice(0, 6);
+  // Show every match — a newly-saved material is appended to the library, so
+  // any hard cap here (there used to be a `.slice(0, 6)`) would silently drop
+  // it once the library grew past the cap. The list scrolls instead (below).
+  const matches = q ? options.filter((o) => o.label.toLowerCase().includes(q)) : options;
   // "+ Use as new" appears once there's something to name; it's always last.
   const showUseAsNew = value.trim() !== "";
   const showList = open && (matches.length > 0 || showUseAsNew);
@@ -82,7 +85,7 @@ export function Combobox({
         onInteractOutside={(e) => e.preventDefault()}
         className={listSurface}
       >
-        <ul>
+        <ul className="max-h-[264px] overflow-y-auto">
           {matches.map((o) => (
             <li key={o.id}>
               <button

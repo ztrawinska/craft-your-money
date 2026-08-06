@@ -7,6 +7,9 @@ import { CostsEditor } from "@/components/CostsEditor";
 import { productLabourHours } from "@/lib/products";
 import { getFixedCostConfig, getFixedCosts, listProducts } from "@/lib/store";
 
+// Reads the mutable store (costs + currency), so it must always render fresh.
+export const dynamic = "force-dynamic";
+
 export default async function CostsPage() {
   const example = (await listProducts()).find((p) => p.labour.length > 0) ?? null;
   const sample = example

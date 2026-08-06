@@ -63,7 +63,7 @@ export default async function ProductsOverview({
       : `${visible.length} shown`;
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-dvh flex-col">
       <main className="mx-auto w-full max-w-[430px] flex-1">
         {/* header */}
         <div className="flex items-baseline justify-between px-6 pb-3.5 pt-[22px]">
