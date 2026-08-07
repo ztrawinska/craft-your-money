@@ -65,6 +65,10 @@ export default async function Dashboard() {
   const weakest = [...activePriced].sort(
     (a, b) => (pricingFor(a, settings, shareOf(a)).marginPct ?? 0) - (pricingFor(b, settings, shareOf(b)).marginPct ?? 0),
   )[0];
+  // Whether the weakest is an outright loss or just thin — the briefing line
+  // reads differently for each, so it never claims "losing money" when the
+  // piece is actually clearing a small (but below-target) profit.
+  const weakestProfit = weakest ? pricingFor(weakest, settings, shareOf(weakest)).profit ?? 0 : 0;
 
   // Attention: active risky (worst margin first), then active no-price. Drafts
   // never appear. Built as plain data with the chip precomputed, so the
@@ -156,7 +160,10 @@ export default async function Dashboard() {
             ) : (
               <strong className="font-medium text-ink">this piece</strong>
             )}{" "}
-            is quietly losing money on every sale. Worth two minutes today.
+            {weakestProfit < 0
+              ? "is quietly losing money on every sale."
+              : "is earning far less than it should."}{" "}
+            Worth two minutes today.
           </p>
         </div>
 

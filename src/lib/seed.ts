@@ -82,15 +82,16 @@ export const seedProducts: Product[] = [
     otherCosts: [],
   },
   {
-    // Risky AND losing money — the one piece deliberately under-priced. Large
-    // baroque pearls and slow hand-wrapping, sold at £60, so it loses ~£16 a
-    // sale. This is the dashboard's named problem and the reprice-on-camera
-    // hero: bump it to ~£130 and the chip turns Healthy.
+    // Risky but real — the one piece deliberately under-priced. Large baroque
+    // pearls and slow hand-wrapping, sold at £88, so it still clears ~£7 a pair
+    // but on a ~9% margin, far below the 40% target (which wants ~£133). It
+    // earns — just not enough. This is the dashboard's named problem and the
+    // reprice-on-camera hero: bump it to ~£135 and the chip turns Healthy.
     id: "thetis-pearl-drops",
     name: "Thetis pearl drops",
     type: "Earrings",
     workflow: "active",
-    finalPrice: 60,
+    finalPrice: 88,
     materials: [
       { name: "Baroque pearl (large)", quantity: 2, unit: "", unitCost: 14, fromLibrary: true },
       { name: "Gold-fill wire", quantity: 1.5, unit: "g", unitCost: 1.2, fromLibrary: true },
