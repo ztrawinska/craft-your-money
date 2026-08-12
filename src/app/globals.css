@@ -115,6 +115,16 @@ body {
   color: var(--color-ink);
 }
 
+/* Mobile-first app — the scrollbar track/thumb is chrome, not content.
+   Hidden everywhere; scrolling itself stays fully functional. */
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar {
+  display: none;
+}
+
 /* A soft settle for the pricing block's evaluation (chip, guidance line) when
    it updates a beat after you stop typing — a fade up from near-full, never a
    flash. Paired with a key that changes on the settled value. */
