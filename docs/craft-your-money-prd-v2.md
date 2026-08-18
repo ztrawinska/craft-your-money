@@ -447,6 +447,11 @@ Etsy / PayPal / card fees are a **percentage of the selling price**. The current
 ### Wholesale VAT is quoted net
 Retail is gross-first (§6). B2B wholesale is conventionally quoted **net**. If wholesale is built, it should not inherit the gross-first model.
 
+### Pricing panel — collapse motion (known gap)
+In `PricingPanel.tsx`, the below-target warning line and the status chip fade in (`animate-[settle_200ms_ease-out]`) when they appear, but the warning **unmounts instantly** when it disappears (e.g. typing a price that crosses back above the margin target) — so growing feels animated, collapsing feels like a jump. Same asymmetry would apply to any other conditionally-rendered line driven by `useSettled`.
+
+**Fix, once picked up:** don't conditionally unmount the warning `<p>` on the falsy state — keep it mounted holding its last non-empty text, and drive both the grid-row collapse and the paragraph's opacity together (fade out in sync with the shrink, mirroring the fade-in). Validated in the portfolio case study's `PricingSettle.tsx` code component this session; same pattern should move into the real `PricingPanel.tsx`.
+
 ### Others
 Named per-person labour rates (validate need first — borders the multi-user non-goal). Basing the calculated price on full cost via a Settings toggle. Historical tracking. Batch production scaling.
 

@@ -14,6 +14,7 @@
 
 import { useEffect, useState } from "react";
 import { Chip } from "@/components/Chip";
+import { Collapse } from "@/components/Collapse";
 import { useCurrency } from "@/components/CurrencyContext";
 import { EditableProfit } from "@/components/EditableProfit";
 import { FramedSurface } from "@/components/FramedSurface";
@@ -95,6 +96,13 @@ export function PricingPanel({
     finalPrice != null
       ? priceWarning(pricing, { finalPrice, targetMarginPct, vatRatePct, cur })
       : null;
+  // Retained through the collapse so the line can fade out in place instead
+  // of vanishing the instant `warning` goes null — see PRD §18 "Pricing
+  // panel — collapse motion".
+  const [warningText, setWarningText] = useState<string | null>(null);
+  useEffect(() => {
+    if (warning) setWarningText(warning.text);
+  }, [warning]);
 
   // Everything the Price Check needs — only when there's a price to review.
   const reviewCtx =
@@ -195,15 +203,14 @@ export function PricingPanel({
         </p>
       )}
 
-      {/* a calm helper, if the price needs one — plain ink, never an alarm */}
-      {warning && (
-        <p
-          key={warning.text}
-          className="mb-4 animate-[settle_200ms_ease-out] text-[12.5px] font-light leading-[1.5] text-ink/70"
-        >
-          {warning.text}
+      {/* a calm helper, if the price needs one — plain ink, never an alarm.
+          Collapse fades it in/out in sync with the row's height, so
+          growing and shrinking read as the same motion. */}
+      <Collapse open={!!warning}>
+        <p className="mb-4 text-[12.5px] font-light leading-[1.5] text-ink/70">
+          {warningText}
         </p>
-      )}
+      </Collapse>
 
       {/* profit / loss — the last word, and editable: type a target and the
           price back-solves. A loss never uses the word "profit". */}
