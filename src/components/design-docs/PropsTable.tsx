@@ -12,7 +12,7 @@ export type PropRow = {
 
 export function PropsTable({ rows }: { rows: PropRow[] }) {
   return (
-    <div className="overflow-x-auto">
+    <div className="mt-7 overflow-x-auto">
       <table className="w-full min-w-[520px] border-collapse font-sans text-[13px]">
         <thead>
           <tr className="text-left text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/42">

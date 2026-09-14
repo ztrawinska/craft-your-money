@@ -12,14 +12,22 @@ type SpecimenProps = {
   children: ReactNode;
   /** Remove the inner padding, for full-bleed pieces like the nav. */
   flush?: boolean;
+  /** Shrink to the content (a chip, a link) instead of the app's 430px. */
+  inline?: boolean;
   className?: string;
 };
 
-export function Specimen({ label, children, flush = false, className = "" }: SpecimenProps) {
+export function Specimen({
+  label,
+  children,
+  flush = false,
+  inline = false,
+  className = "",
+}: SpecimenProps) {
   return (
-    <figure className={`min-w-0 ${className}`}>
+    <figure className={`min-w-0 ${inline ? "" : "w-full max-w-[430px]"} ${className}`}>
       <div
-        className={`w-full max-w-[430px] rounded-[8px] border border-dashed border-ink/14 ${
+        className={`rounded-[8px] border border-dashed border-ink/14 ${
           flush ? "overflow-hidden" : "px-6 py-5"
         }`}
       >
