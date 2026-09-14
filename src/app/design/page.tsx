@@ -7,10 +7,8 @@
 import { Chip } from "@/components/Chip";
 import { DocSection } from "@/components/design-docs/DocSection";
 import { DESIGN_SYSTEM_DOC, repo } from "@/components/design-docs/links";
+import { docLink as link } from "@/components/design-docs/styles";
 import type { ChipTone } from "@/lib/status";
-
-const link =
-  "text-clay-deep underline decoration-clay/50 decoration-dotted underline-offset-4";
 
 const PRINCIPLES = [
   ["Flat", "No cards, no drop shadows, no floating panels. Depth comes from hairlines and one framed surface, never from elevation."],
@@ -55,10 +53,14 @@ const FILES = [
 export default function DesignOverview() {
   return (
     <>
-      <p className="mb-8 max-w-[62ch] font-serif text-[19px] font-normal leading-[1.5] text-ink">
-        A pricing tool for people who make things by hand. The system&rsquo;s job is the same as the
-        product&rsquo;s: help someone decide, not just show them numbers. Everything below descends from
-        five principles.
+      <h1 className="font-serif text-[27px] font-medium leading-[1.16] text-ink">Overview</h1>
+      <p className="mt-3 mb-8 max-w-[62ch] font-sans text-[15px] font-light leading-[1.7] text-ink/70">
+        The design system for Craft Your Money, a pricing tool for handmade makers. This library
+        renders the real components from <code className="font-mono text-[13px] text-ink">src/components</code>{" "}
+        and the real tokens from <code className="font-mono text-[13px] text-ink">globals.css</code>.
+        The rationale for each rule is in{" "}
+        <a href={DESIGN_SYSTEM_DOC} className={link}>design-system.md</a>; product behaviour is in{" "}
+        <a href={repo("docs/craft-your-money-prd-v2.md")} className={link}>the PRD</a>.
       </p>
 
       <DocSection id="principles" title="The five principles" spec="§1.1">
@@ -82,14 +84,14 @@ export default function DesignOverview() {
       <DocSection
         id="reading-order"
         title="How the documents fit together"
-        lede="Three documents, one order. Behaviour first, then the components, then the exact layout."
+        lede="Reading order for a new screen: behaviour, then components, then layout."
       >
         <ol className="flex flex-wrap items-center gap-x-3 gap-y-2 font-sans text-[13.5px]">
           {[
             ["PRD", repo("docs/craft-your-money-prd-v2.md"), "what it does and why"],
             ["design-system.md", DESIGN_SYSTEM_DOC, "what things look like and when"],
             ["docs/design/*.html", repo("docs/design"), "the layout of each screen"],
-            ["this library", "/design", "the real components, live"],
+            ["this library", "/design/components", "the real components, rendered"],
           ].map(([name, href, what], i, all) => (
             <li key={name} className="flex items-center gap-3">
               <span>
@@ -108,7 +110,7 @@ export default function DesignOverview() {
         id="enforcement"
         title="Enforced, checked, or convention"
         spec="§6"
-        lede="A rule written down is memory; a rule in a type or a component is enforcement. Knowing which is which is the whole game: never assume prose will hold a line that code doesn't."
+        lede="Which rules the code enforces, which a script checks, and which are still conventions to remember."
       >
         <div className="overflow-x-auto">
           <table className="w-full min-w-[640px] border-collapse font-sans text-[13px]">
@@ -145,7 +147,7 @@ export default function DesignOverview() {
           </table>
         </div>
         <p className="mt-4 max-w-[62ch] font-sans text-[12px] font-light leading-[1.55] text-ink/55">
-          The chips are the app&rsquo;s own: a verdict, a report to check by hand, or a judgment call.
+          Enforced: the type system or a test stops it. Checked: a script reports it. Convention: documented only.
         </p>
       </DocSection>
 
