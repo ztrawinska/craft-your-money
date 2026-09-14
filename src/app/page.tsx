@@ -17,6 +17,12 @@ export default function Home() {
         >
           View products →
         </Link>
+        <Link
+          href="/design"
+          className="w-fit font-sans text-clay-deep underline underline-offset-2"
+        >
+          Design system →
+        </Link>
       </div>
     </main>
   );
