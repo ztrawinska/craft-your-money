@@ -208,7 +208,7 @@ export default function TokensPage() {
         id="radii"
         title="Radii"
         spec="§1.6"
-        lede="Nothing is rounder than 11px except chips and sheets. Generous radii read as app cards, the thing this system avoids."
+        lede="Nothing is rounder than 11px except chips and sheets. Generous radii read as app cards, the thing this system avoids. In code each is an arbitrary Tailwind radius in px; the checker flags any value outside this set."
       >
         <div className="flex flex-wrap gap-6">
           {leaves<string>(tokens.radius).map(([name, t]) => (
@@ -218,9 +218,7 @@ export default function TokensPage() {
                 style={{ borderRadius: t.$value }}
               />
               <p className="mt-2 text-[13px] font-medium text-ink">{name}</p>
-              <p className="font-mono text-[11.5px] text-ink/55 tabular-nums">
-                {t.$value} · rounded-[{t.$value}]
-              </p>
+              <p className="font-mono text-[11.5px] text-ink/55 tabular-nums">{t.$value}</p>
               {t.$description && (
                 <p className="mt-1 text-[11.5px] font-light leading-[1.45] text-ink/70">
                   {t.$description}
