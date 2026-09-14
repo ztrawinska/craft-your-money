@@ -2,6 +2,8 @@
 
 **Status:** the visual source of truth. Values here are extracted from the built r3 mockups in `docs/design/`, not invented.
 
+**Live library:** `/design` in the app (`src/app/design`) renders the real components and tokens; `design/tokens.json` is the DTCG export of `globals.css`, guarded by `src/lib/tokens.test.ts`.
+
 **How this relates to the other docs:**
 - `PRD v2` says *what the product does and why*.
 - **This file** says *what things look like and when to use them*.
@@ -186,7 +188,7 @@ text — e.g. the status chip inside a dashboard attention row's meta line.
 
 **Anti-patterns:** raw coloured status text; a coloured number with a separate badge; chips used for anything that isn't status.
 
-### 2.2 Price — *to build*
+### 2.2 Price — **built**
 
 Guarantees Lora and tabular numerals wherever money appears.
 
@@ -206,7 +208,7 @@ Guarantees Lora and tabular numerals wherever money appears.
 
 **Anti-pattern:** green-when-positive; colouring cost figures; a profit figure whose colour disagrees with its chip.
 
-### 2.3 Button — *to build*
+### 2.3 Button — **built**
 
 Three levels. **Three, not four** — resist adding a fourth.
 
@@ -257,7 +259,7 @@ A filter, sort or select control. **Not a new control level — it is the ghost 
 
 **Type-to-search fields are the one sanctioned exception to "no floating panels."** The currency picker (§14) and the materials-library autofill (§12) are text inputs you type into, with suggestions as you go — a different control from the filter dropdown above. Their list floats in a shadcn **Popover** anchored under the field, not in flow. Rendered in flow, the list pushed the surrounding rows down as it opened and pulled them back as it closed — the UI visibly *jumped*, which read as broken; a stable anchored panel is calmer. The panel wears **page colour**, a `1px ink-14` border and a soft shadow — not the elevated white card the anti-pattern warns against — and it **never steals focus**, so typing continues uninterrupted; picking works because items block the input's blur until the click lands. This is the only floating surface in the app; filters and menus still use the bottom sheet (§2.4, §2.11).
 
-### 2.5 Section header — *to build*
+### 2.5 Section header — **built** (`SectionLabel`)
 
 `SectionLabel` + optional right-aligned total.
 
@@ -293,7 +295,7 @@ The one enclosed area per screen. Currently: the pricing block.
 
 **Rule:** if a second framed surface appears on a screen, one of them is wrong. Reach for hairlines instead.
 
-### 2.8 Tinted band — *to build*
+### 2.8 Tinted band — **built**
 
 For briefings, insight strips and quiet emphasis.
 
@@ -334,7 +336,7 @@ The rule to remember: **iris marks who is speaking, never what the answer is.**
 - **Follow-ups are chips, never free text**, generated from the findings themselves, roughly three exchanges deep. The assistant cannot introduce new UI.
 - **Provenance closes every review:** *Used / Assumed / Can't know*. Admitting the limit is what makes the rest trustworthy.
 
-### 2.10 Bottom navigation — **specified**
+### 2.10 Bottom navigation — **built**
 
 `Home · Products · [+] · Materials · Costs`. Settings is not a tab — it lives behind the dashboard avatar.
 
@@ -473,14 +475,16 @@ A rule written down is memory; a rule in a type or a component is enforcement. A
 |---|---|---|
 | Status only in chips | Convention | Enforced — `Chip` is the only status export |
 | Meaning-named tones | **Enforced** | — (`ChipTone` union) |
-| Label ↔ tone mapping | Convention | Enforced — an explicit table, not remembered |
-| Money always Lora + tnum | Convention | Enforced — `Price` component |
-| Three button levels | Convention | Enforced — `variant` union type |
-| Dropdown = ghost + chevron | Convention | Enforced — a `Dropdown` component, so chip geometry can't leak in |
-| Profit tone matches its chip | Convention | Enforced — derive both from one status value, never set separately |
+| Label ↔ tone mapping | **Enforced** | — (`PROFITABILITY_META` in `lib/status.ts`) |
+| Money always Lora + tnum | **Enforced** (`Price`) | — (the overview row still formats by hand; see `/design/components/list-row`) |
+| Three button levels | **Enforced** | — (`variant` union) |
+| Dropdown = ghost + chevron | **Enforced** | — (`Dropdown`) |
+| Profit tone matches its chip | **Enforced** | — (`profitTone()` feeds both) |
 | One framed surface per screen | Convention | Stays convention — needs judgment |
 | Iris never mixes with clay | Convention | Stays convention — a combination rule, hard to type |
 | Destructive action is last, red, with consequence | Convention | Enforced — an `ActionSheet` item variant |
+| Tokens JSON ↔ CSS agree | **Enforced** | — (`src/lib/tokens.test.ts` fails on drift) |
+| Every component appears in the live library | Convention | Stays convention — `/design` is added to by hand |
 | Hardcoded hex, non-standard radii, banned copy | Convention | Checked — `scripts/check-tells.sh`, run automatically via a `Stop` hook (`.claude/hooks/tell-check-stop.sh`) after every response. Report-only: it surfaces candidates, doesn't block, so a hit still needs a human (or Claude, next turn) call. |
 
 **Convention is fine** for rules that need judgment. What matters is knowing which is which — and never assuming prose will hold a line that code doesn't.
