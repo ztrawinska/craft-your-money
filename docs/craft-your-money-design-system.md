@@ -481,5 +481,6 @@ A rule written down is memory; a rule in a type or a component is enforcement. A
 | One framed surface per screen | Convention | Stays convention — needs judgment |
 | Iris never mixes with clay | Convention | Stays convention — a combination rule, hard to type |
 | Destructive action is last, red, with consequence | Convention | Enforced — an `ActionSheet` item variant |
+| Hardcoded hex, non-standard radii, banned copy | Convention | Checked — `scripts/check-tells.sh`, run automatically via a `Stop` hook (`.claude/hooks/tell-check-stop.sh`) after every response. Report-only: it surfaces candidates, doesn't block, so a hit still needs a human (or Claude, next turn) call. |
 
 **Convention is fine** for rules that need judgment. What matters is knowing which is which — and never assuming prose will hold a line that code doesn't.
