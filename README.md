@@ -34,6 +34,7 @@ The system is documented in three layers, and the app renders it:
 | `src/components/ui/*.tsx` | shadcn/ui primitives (Drawer, Input, Switch, Popover), re-skinned to the tokens. |
 | `src/lib/status.ts` | The status model: label, chip tone and margin threshold in one table. |
 | `/design` (`src/app/design`) | The live library: foundations, every component in every state, patterns. Storybook-style sidebar. |
+| [Figma · Craft Your Money · Design System](https://www.figma.com/design/4SU2FWCR13o15AspvjXI6F) | Generated *from* the code: Colour / Radius / Space variables (code syntax = the CSS), 26 text styles, and Chip, Button, Price, SectionLabel, Dropdown, AssistantSlot, ListRow, BottomNav as variant sets. Code stays upstream. |
 
 ## Checks
 
