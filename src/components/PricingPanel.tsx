@@ -98,11 +98,10 @@ export function PricingPanel({
       : null;
   // Retained through the collapse so the line can fade out in place instead
   // of vanishing the instant `warning` goes null — see PRD §18 "Pricing
-  // panel — collapse motion".
+  // panel — collapse motion". Adjusted during render (the React-sanctioned
+  // "store information from previous renders" pattern), not in an effect.
   const [warningText, setWarningText] = useState<string | null>(null);
-  useEffect(() => {
-    if (warning) setWarningText(warning.text);
-  }, [warning]);
+  if (warning && warning.text !== warningText) setWarningText(warning.text);
 
   // Everything the Price Check needs — only when there's a price to review.
   const reviewCtx =
