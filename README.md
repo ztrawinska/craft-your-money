@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Craft Your Money
 
-## Getting Started
+A pricing and profitability app for people who make things by hand (jewelry first). It helps a maker decide what to charge: costs in, a suggested price out, and a plain verdict on the margin. Mobile-first, Next.js, single-user, flat file store.
 
-First, run the development server:
+## Run it
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open http://localhost:3000. Sample data loads on first run.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+| Route | What |
+|---|---|
+| `/dashboard` | Briefing, profit hero, what needs attention |
+| `/products` | The range, sorted problems-first |
+| `/products/<id>` | Costs, the pricing block, price check |
+| `/materials`, `/costs`, `/settings` | Library, business costs, account |
+| `/design` | The design system, live |
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Design system
 
-## Learn More
+The system is documented in three layers, and the app renders it:
 
-To learn more about Next.js, take a look at the following resources:
+| Where | What it holds |
+|---|---|
+| `docs/craft-your-money-design-system.md` | The rules and the reasoning. Source of truth for *why*. |
+| `docs/craft-your-money-prd-v2.md` | Product behaviour. |
+| `docs/design/*.html` | Reference renders per screen. |
+| `src/app/globals.css` | The tokens (Tailwind `@theme`) and the shadcn bridge. Source of truth for *values*. |
+| `design/tokens.json` | The same tokens in the W3C DTCG format, for tooling and Figma. A checked export: `src/lib/tokens.test.ts` fails if it drifts from the CSS. |
+| `src/components/*.tsx` | The components. Each file opens with the rule it enforces. |
+| `src/components/ui/*.tsx` | shadcn/ui primitives (Drawer, Input, Switch, Popover), re-skinned to the tokens. |
+| `src/lib/status.ts` | The status model: label, chip tone and margin threshold in one table. |
+| `/design` (`src/app/design`) | The live library: foundations, every component in every state, patterns. Storybook-style sidebar. |
+| [Figma · Craft Your Money · Design System](https://www.figma.com/design/4SU2FWCR13o15AspvjXI6F) | Generated *from* the code: Colour / Radius / Space variables (code syntax = the CSS), 26 text styles, and Chip, Button, Price, SectionLabel, Dropdown, AssistantSlot, ListRow, BottomNav as variant sets. Code stays upstream. |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Checks
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm test          # unit tests, including the tokens ↔ CSS guard
+npm run lint
+npm run check:tells
+```
 
-## Deploy on Vercel
+`check:tells` (`scripts/check-tells.sh`) greps `src/` for design-system tells: hex values that aren't tokens, radii outside the documented set, finance jargon in copy, generic AI-copy tells. It reports; it doesn't block. A Stop hook in `.claude/settings.json` runs it after every Claude response.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Working with Claude
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+`CLAUDE.md` is a short pointer into `docs/`. Reading order for a new screen: PRD (behaviour) → design-system.md (components) → the matching mockup (layout). `SETUP.md` records what the project context contains and what was decided against.

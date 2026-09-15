@@ -6,6 +6,7 @@
 > - `docs/craft-your-money-prd-v2.md` — product behaviour. Current source of truth; supersedes anything older.
 > - `docs/craft-your-money-design-system.md` — visual & component source of truth (tokens, type scale, each component).
 > - `docs/design/*.html` — reference renders. Read the matching one when building a given screen.
+> - `/design` (`src/app/design`) — the live library: real components and tokens rendered. `design/tokens.json` mirrors `globals.css` (guarded by `src/lib/tokens.test.ts`). Add new components to the library by hand (`src/components/design-docs/nav.ts` + a doc file).
 >
 > Reading order for a new screen: **PRD (behaviour) → design system (components) → the matching mockup (layout).**
 > This file stays a short standing summary for orientation only. Where it and the PRD disagree, reconcile them in the same breath — never let them drift.

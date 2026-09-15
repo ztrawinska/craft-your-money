@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/tell-check-stop.sh",
+            "statusMessage": "Checking for design-system tells…"
+          }
+        ]
+      }
+    ]
+  }
+}

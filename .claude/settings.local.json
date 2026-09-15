@@ -16,7 +16,16 @@
       "Bash(perl -pi -e 's/\\\\\\(pricingFor\\\\\\(a, settings\\\\\\)\\\\.marginPct \\\\?\\\\? 0\\\\\\) - \\\\\\(pricingFor\\\\\\(b, settings\\\\\\)\\\\.marginPct \\\\?\\\\? 0\\\\\\)/\\(pricingFor\\(a, settings, shareOf\\(a\\)\\).marginPct ?? 0\\) - \\(pricingFor\\(b, settings, shareOf\\(b\\)\\).marginPct ?? 0\\)/g' src/app/dashboard/page.tsx)",
       "Bash(node -e \"console.log\\(require\\('./.data/costs.json'\\).config\\)\")",
       "Bash(node -e \"const p=require\\('./.data/products.json'\\); const t=p.find\\(x=>x.id==='twisted-pendant'\\); console.log\\('twisted-pendant archived:', t?.archived\\); console.log\\('archived products:', p.filter\\(x=>x.archived\\).map\\(x=>x.name\\).join\\(', '\\)\\)\")",
-      "Bash(node -e \"const p=require\\('./.data/products.json'\\); const c=p.find\\(x=>x.id==='copper-hoop'\\); console.log\\('copper-hoop archived:', c?.archived\\); console.log\\('archived count:', p.filter\\(x=>x.archived\\).length\\)\")"
+      "Bash(node -e \"const p=require\\('./.data/products.json'\\); const c=p.find\\(x=>x.id==='copper-hoop'\\); console.log\\('copper-hoop archived:', c?.archived\\); console.log\\('archived count:', p.filter\\(x=>x.archived\\).length\\)\")",
+      "Skill(claude-api)",
+      "Skill(claude-api:*)",
+      "Bash(npm install *)",
+      "Bash(node -e \"console.log\\(require\\('@anthropic-ai/sdk/package.json'\\).version\\)\")",
+      "Bash(node -e \"const A = require\\('@anthropic-ai/sdk'\\); console.log\\('SDK loads OK, default export:', typeof \\(A.default || A\\)\\);\")",
+      "Bash(git add *)",
+      "Bash(git check-ignore *)",
+      "Bash(node -e \"console.log\\('saved currency:', require\\('./.data/settings.json'\\).currency\\)\")",
+      "Bash(curl -s http://localhost:3000/dashboard -o /dev/null)"
     ]
   }
 }
