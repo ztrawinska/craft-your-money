@@ -50,7 +50,7 @@ export function IrisSheetDemo() {
           </button>
         ))}
       </div>
-      <div className="mt-4 border-t border-iris/15 pt-3 font-sans text-[11px] font-light leading-[1.65] text-ink/55">
+      <div className="mt-4 border-t border-iris/15 pt-3 font-sans text-[11px] font-light leading-[1.65] text-ink/62">
         <p>
           <span className="font-medium text-ink/70">Used</span>: your costs, your price, your target
           margin.

@@ -37,9 +37,11 @@ Everything below descends from these. When a decision is unclear, return here.
 | `clay-deep` | `#8A5A52` | Actionable clay: links, buttons, active nav, verb-links, focus. |
 | `iris` | `#6467C9` | The glint only. |
 | `iris-deep` | `#5155B4` | Assistant text and iconography. |
-| `status-green` | `#3A7D52` | Healthy — **chips only**. |
-| `status-amber` | `#9C7B2A` | Caution — **chips only**. |
-| `status-red` | `#B04A40` | Risky / loss — **chips only**, plus the left-edge urgency stripe. |
+| `status-green` | `#336E48` | Healthy — **chips only**. |
+| `status-amber` | `#785F20` | Caution — **chips only**. |
+| `status-red` | `#A2443B` | Risky / loss — **chips only**, plus the left-edge urgency stripe. |
+
+**Contrast rule (2026-09-15):** the three status colours are set so that a chip's text — the status colour on its own 15% fill over `page` — clears WCAG AA (4.5:1) at chip size. Darker than the r3 originals (`#3A7D52` / `#9C7B2A` / `#B04A40`), which sat at 3.1–4.0:1; amber moved the most. Any future tuning re-runs that check before it lands.
 
 **Currency:** £ throughout, including sample data.
 
@@ -51,11 +53,12 @@ Ink is used at fixed opacities rather than as separate greys. This keeps everyth
 |---|---|---|
 | `ink` | 100% | Primary text, all numbers |
 | `ink-70` | 70% | Body copy, briefing paragraphs |
-| `ink-55` | 55% | Secondary labels, meta text |
-| `ink-42` | 42% | Section labels (caps), inactive nav, unit suffixes |
+| `ink-62` | 62% | Secondary labels, meta text, section labels (caps), inactive nav, unit suffixes — **the lightest rung for text** |
 | `ink-30` | 30% | Placeholders, muted marks, the neutral stripe |
 | `ink-14` | 14% | Stronger dividers, input borders, dashed frames |
 | `ink-07` | 7% | Hairline dividers between *sections* (no longer between rows in a list — see §2.6) |
+
+**Why the ladder stops at 62% for text (2026-09-15):** on `page`, ink needs ≥61% to reach WCAG AA (4.5:1) for text under 18px. The r3 ladder had `ink-62` (3.8:1) and `ink-62` (2.6:1) carrying 12px meta and 9–11px labels; both merged into `ink-62` (4.7:1). Hierarchy below body copy now comes from size, caps and tracking — which the type scale already does — not from a lighter ink. `ink-30` and below are for placeholders, marks and lines, never for words that must be read.
 
 **Tinted bands** (briefing, insight strip) use `rgba(ink, 0.035)` — deliberately lighter than `cream-mid`, which read as shouting. Backgrounds should sit very close to the page.
 
@@ -74,14 +77,14 @@ Lora was validated against Fraunces, Newsreader and Literata on the real pricing
 
 | Role | Size | Family | Weight | Notes |
 |---|---|---|---|---|
-| Hero figure (dashboard profit) | 46px | Lora | 500 | Currency symbol at 29px, `ink-42` |
+| Hero figure (dashboard profit) | 46px | Lora | 500 | Currency symbol at 29px, `ink-62` |
 | Final price | 56px | Lora | 500 | Whole number; decimals at 25px, currency at 22px |
 | Profit amount | 34px | Lora | 500 | |
 | Greeting / page title | 27px | Lora | 500 | |
 | Product name (detail header) | 27px | Lora | 500 | Line-height 1.16 |
 | Direct cost total | 24px | Lora | 500 | |
-| Supporting metric | 20px | Lora | 500 | Unit suffix 10.5px sans, `ink-42` |
-| Section total | 13px | Lora | 400 | `ink-55` |
+| Supporting metric | 20px | Lora | 500 | Unit suffix 10.5px sans, `ink-62` |
+| Section total | 13px | Lora | 400 | `ink-62` |
 | Product name (list row) | 15–16px | Lora | 500 | |
 | Row value | 15.5px | Lora | 400 | |
 | Briefing paragraph | 15px | Plex | 300 | Line-height 1.7 |
@@ -89,8 +92,8 @@ Lora was validated against Fraunces, Newsreader and Literata on the real pricing
 | Body / helper | 13px | Plex | 300 | |
 | Verb-link | 13.5px | Plex | 600 | clay-deep |
 | Chip | 12px | Plex | 600 | |
-| Meta line | 11.5px | Plex | 300 | `ink-55` |
-| Section label (caps) | 10px | Plex | 600 | `letter-spacing: 0.2em`, uppercase, `ink-42` |
+| Meta line | 11.5px | Plex | 300 | `ink-62` |
+| Section label (caps) | 10px | Plex | 600 | `letter-spacing: 0.2em`, uppercase, `ink-62` |
 | Metric label (caps) | 9px | Plex | 600 | `letter-spacing: 0.13em`, uppercase |
 | Workflow stamp | 9.5px | Plex | 600 | `letter-spacing: 0.22em`, uppercase |
 | Nav label | 9px | Plex | 500 | |
@@ -157,8 +160,8 @@ The only way to show status in this system.
 | Caution · 22% | `caution` | amber at 15% bg, amber text |
 | Risky · 8% | `critical` | red at 15% bg, red text |
 | No price | `neutral` | ink at 10% bg, ink-70 text |
-| Draft | `inactive` | transparent bg, ink-14 border, ink-42 text |
-| Archived | `inactive` | transparent bg, ink-14 border, ink-42 text |
+| Draft | `inactive` | transparent bg, ink-14 border, ink-62 text |
+| Archived | `inactive` | transparent bg, ink-14 border, ink-62 text |
 | Would be Healthy · 52% | `positive` | draft preview — "Would be" carries the tentativeness |
 
 **Why `neutral` and `inactive` are separate tones.** The status model has two
@@ -195,7 +198,7 @@ Guarantees Lora and tabular numerals wherever money appears.
 **Variants:** `hero` (46px, dashboard), `primary` (56px, the final price), `figure` (24px, totals), `inline` (15.5px, row values).
 
 **Rules**
-- Currency symbol is always smaller and `ink-42`; the number carries the weight.
+- Currency symbol is always smaller and `ink-62`; the number carries the weight.
 - Large prices split the decimals down (56px whole, 25px decimals) so the eye lands on pounds.
 - **Cost and price figures are always monochrome ink.** Materials, labour, totals, direct cost, full cost, calculated price, your price, "you keep" — all ink.
 - **One exception: the profit figure takes its chip's tone.** On Product Detail the profit carries the *same* status colour as the chip beside it (`positive` / `caution` / `critical`), so the two can never disagree.
@@ -215,7 +218,7 @@ Three levels. **Three, not four** — resist adding a fourth.
 | Variant | Appearance | Used for |
 |---|---|---|
 | `primary` | Filled `clay-deep`, `#FDFBF9` text, 7px radius, 14px 600 | The one main action per screen (Save and activate) |
-| `ghost` | Transparent, `1px ink-14` border, `ink-55` text, 500 | Secondary action beside a primary (Save draft) |
+| `ghost` | Transparent, `1px ink-14` border, `ink-62` text, 500 | Secondary action beside a primary (Save draft) |
 | `link` | Clay-deep text + optional chevron, no border, no background | Everything else: verb-links, add-row, reset, inline actions |
 
 **Rules**
@@ -231,7 +234,7 @@ Three levels. **Three, not four** — resist adding a fourth.
 
 A trailing chevron is a promise that something opens. Putting one on an action that completes in place — like Restore — would be a lie about what the tap does. Restore uses `rotate-ccw`; `archive-restore` is more literal but too busy at this size (the same lesson the Costs icon taught us).
 
-**Back is the mirror of navigate:** a **leading** `chevron-left` (22px, `ink-55`), not an arrow — same chevron family as the forward-nav promise. It sits in a **44×44 target** (`size-11`, pulled left with a negative margin so the glyph still hugs the edge) to meet WCAG 2.5.5.
+**Back is the mirror of navigate:** a **leading** `chevron-left` (22px, `ink-62`), not an arrow — same chevron family as the forward-nav promise. It sits in a **44×44 target** (`size-11`, pulled left with a negative margin so the glyph still hugs the edge) to meet WCAG 2.5.5.
 
 **Anti-pattern:** a "soft filled" fourth level (clay wash + outline). It was built, tested and rejected — it added weight without adding clarity.
 
@@ -239,13 +242,13 @@ A trailing chevron is a promise that something opens. Putting one on an action t
 
 A filter, sort or select control. **Not a new control level — it is the ghost button plus a chevron.**
 
-**Anatomy:** 7px radius, `1px ink-14` border, transparent background, 12.5px Plex 500 in `ink-55`, Lucide `chevron-down` at 14px in `ink-42`, padding 8px 12px.
+**Anatomy:** 7px radius, `1px ink-14` border, transparent background, 12.5px Plex 500 in `ink-62`, Lucide `chevron-down` at 14px in `ink-62`, padding 8px 12px.
 
 **States**
 
 | State | Appearance |
 |---|---|
-| Default | ghost treatment, `ink-55` label |
+| Default | ghost treatment, `ink-62` label |
 | Filtered / value set | `clay-deep` label, `rgba(clay-deep, .45)` border, `clay-wash` background |
 | Open | `clay-deep` label and border, clay focus ring `0 0 0 3px rgba(clay, .12)`, chevron rotated 180° |
 
@@ -253,7 +256,7 @@ A filter, sort or select control. **Not a new control level — it is the ghost 
 - Background stays **transparent**. A white fill would create a new surface on a flat page.
 - Radius is **7px**, never 100px — that geometry belongs to chips and means "status".
 - The chevron comes from the icon set, never a text caret (`▾`).
-- Filters are dropdowns; **sort is not**. Sort is a mode, not a value to filter by, so it sits at the right of the control row as a bare `arrow-up-down` icon (18px, `ink-55`, 38px tap target) and opens a sheet. Keeping it out of the dropdown family stops the row from reading as three equal boxes.
+- Filters are dropdowns; **sort is not**. Sort is a mode, not a value to filter by, so it sits at the right of the control row as a bare `arrow-up-down` icon (18px, `ink-62`, 38px tap target) and opens a sheet. Keeping it out of the dropdown family stops the row from reading as three equal boxes.
 
 **Anti-pattern:** chip-shaped dropdowns; white pills floating on the page; text carets.
 
@@ -263,8 +266,8 @@ A filter, sort or select control. **Not a new control level — it is the ghost 
 
 `SectionLabel` + optional right-aligned total.
 
-- Label: 10px Plex 600, uppercase, 0.2em tracking, `ink-42`.
-- Total: 13px Lora, `ink-55`, right-aligned on the same baseline.
+- Label: 10px Plex 600, uppercase, 0.2em tracking, `ink-62`.
+- Total: 13px Lora, `ink-62`, right-aligned on the same baseline.
 - Followed by rows separated with `ink-07` hairlines.
 
 ### 2.6 List row — *built*
@@ -274,14 +277,14 @@ The workhorse. Two lines, optional left stripe, optional right slot.
 **Anatomy**
 ```
  │  Primary label (Lora 15–16px)              Final price (Lora 16px)
- │  Meta line / category (Plex 12px ink-55)         Status chip (sm)
+ │  Meta line / category (Plex 12px ink-62)         Status chip (sm)
 ```
 
 - **Left stripe:** a `3px` **inset, rounded** bar sitting in the page gutter (≈`left-3`, vertically inset ≈14px, `rounded-full`) — *not* a full-bleed border glued to the screen edge. Status-coloured, urgency-scaled (red full, amber 55%, green 38%, none for No price / Draft). A secondary scan aid — the chip is primary. *Exception:* on the dashboard's curated attention list — where every row already needs action — a No-price row takes a neutral `ink-30` stripe rather than none, since "no stripe" would there read as "nothing here".
 - **No rules between rows.** A product list separates by row rhythm (56–64px height) and the inset stripe alone — no `ink-07` hairline per row. Lines return only between larger *sections*, not between siblings in one list. (This supersedes the older "rows separated with `ink-07` hairlines" convention.)
 - **Right slot:** varies by use. On the **product overview** it's a stacked cell — the **final price leads** (Lora 16px, medium, tabular, ink) with the **status chip beneath it** (`sm` size). Price leads because the overview's everyday job is a quick price lookup (shop, a fair, "how much is this one?"); the chip is the caption. A No-price row drops the figure and shows the chip alone at full (`default`) size. Elsewhere the slot is a single element — a `sm`/`default` chip, or a verb-link (dashboard attention). *Trade-off (was chip-only):* profit isn't shown here — it's a detail deferred to the product's own screen, worth revisiting with real users later.
 - **Margin isn't repeated in the row** — the chip label already carries it (`Healthy · 76%`, `Would be Healthy · 52%`), so the meta line and the price cell stay clear of it.
-- **Meta line** carries the arithmetic in the quiet voice at `12px ink-55` (Plex, normal weight — not `font-light`, which read too thin): `4g × £0.62/g`, `20 min · £15/hr`. On the overview product row it's now just the **category** (`Ring`) — the price moved up into the right slot, so it's no longer restated here.
+- **Meta line** carries the arithmetic in the quiet voice at `12px ink-62` (Plex, normal weight — not `font-light`, which read too thin): `4g × £0.62/g`, `20 min · £15/hr`. On the overview product row it's now just the **category** (`Ring`) — the price moved up into the right slot, so it's no longer restated here.
 - Height 56–64px. Whole row is tappable; no hover-only affordances.
 - **When a row is muted (draft, archived), dim the content — never the action.** Dimming the whole row makes a live action read as disabled. The name and meta line recede; the verb-link stays full-strength clay.
 
@@ -340,7 +343,7 @@ The rule to remember: **iris marks who is speaking, never what the answer is.**
 
 `Home · Products · [+] · Materials · Costs`. Settings is not a tab — it lives behind the dashboard avatar.
 
-- Icons: neutral Lucide (house, tag, layers, wallet, plus), 22px, 1.6px stroke, `ink-42`.
+- Icons: neutral Lucide (house, tag, layers, wallet, plus), 22px, 1.6px stroke, `ink-62`.
 - Active: 2px clay top-tick, clay icon stroke, clay label at 600.
 - Central "+": flat clay square, 42px, 11px radius, **bottom-aligned with the tabs**. No lift, no shadow, no FAB.
 - Labels always visible. Full column is the tap target.
@@ -351,7 +354,7 @@ The rule to remember: **iris marks who is speaking, never what the answer is.**
 
 Holds destructive and secondary actions for an object (the ⋯ menu). **A bottom sheet, not a floating popover** — no card hovering over a flat page, full-width 44px+ targets, identical behaviour by tap at any size.
 
-**Anatomy:** page background, `1px ink-14` top border, 14px top corners, a small grab handle, then items separated by `ink-07` hairlines. Each item: 18px Lucide icon, 14.5px label, optional 11px `ink-42` sub-label explaining consequence. A "Cancel" row closes it.
+**Anatomy:** page background, `1px ink-14` top border, 14px top corners, a small grab handle, then items separated by `ink-07` hairlines. Each item: 18px Lucide icon, 14.5px label, optional 11px `ink-62` sub-label explaining consequence. A "Cancel" row closes it.
 
 **Rules**
 - Destructive items take `red` for both icon and label, and always sit **last**.

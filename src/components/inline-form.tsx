@@ -24,7 +24,7 @@ export type EditState<D> = { index: number | "new"; draft: D; confirmingDelete: 
 
 export function FieldLabel({ children }: { children: ReactNode }) {
   return (
-    <span className="mb-1 block text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/42">
+    <span className="mb-1 block text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/62">
       {children}
     </span>
   );
@@ -43,7 +43,7 @@ export function MoneyInput({
   return (
     <div className="relative">
       <span
-        className={`pointer-events-none absolute top-1/2 -translate-y-1/2 font-serif text-[15px] text-ink/42 ${
+        className={`pointer-events-none absolute top-1/2 -translate-y-1/2 font-serif text-[15px] text-ink/62 ${
           cur.suffix ? "right-3" : "left-3"
         }`}
       >
@@ -96,7 +96,7 @@ export function FormFooter({
   return (
     <>
       <div className="mt-3 flex items-baseline justify-between border-t border-dashed border-ink/14 pt-2.5">
-        <span className="text-[11px] font-light text-ink/55">{costLabel}</span>
+        <span className="text-[11px] font-light text-ink/62">{costLabel}</span>
         <span className="font-serif text-[15px] tabular-nums text-ink">
           {lineCost != null ? formatMoney(lineCost, cur) : "—"}
         </span>
@@ -106,7 +106,7 @@ export function FormFooter({
         <div className="mt-3">
           <p className="mb-2 text-[12px] font-light leading-[1.5] text-ink/70">{deleteCopy}</p>
           <div className="flex items-center gap-5">
-            <button type="button" onClick={onCancelDelete} className="text-[13px] text-ink/55">
+            <button type="button" onClick={onCancelDelete} className="text-[13px] text-ink/62">
               Keep it
             </button>
             <button
@@ -130,7 +130,7 @@ export function FormFooter({
           >
             Save
           </button>
-          <button type="button" onClick={onCancel} className="text-[13px] text-ink/55">
+          <button type="button" onClick={onCancel} className="text-[13px] text-ink/62">
             Cancel
           </button>
           {!isNew && (

@@ -16,7 +16,7 @@ type SectionLabelProps = {
 export function SectionLabel({ children, total }: SectionLabelProps) {
   return (
     <div className="mb-1 flex items-baseline justify-between">
-      <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/42">
+      <span className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
         {children}
       </span>
       {total}

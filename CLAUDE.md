@@ -26,7 +26,7 @@ Name things by meaning, not implementation. "product" is the canonical entity te
 * One accent only: clay `#A0716A` / clay-deep `#8A5A52` — actions, links, focus, pricing frame.
 * Status lives ONLY in chips, never as raw coloured text. Numbers are monochrome ink `#1E1916`; colour lives only in chips + the clay accent (Stripe discipline).
 * Fonts: Lora (serif) for product names, prices, numbers; IBM Plex Sans for all UI/body.
-* Tokens: page `#F7F4F0`, ink `#1E1916`, status green `#3A7D52` / amber `#9C7B2A` / red `#B04A40`.
+* Tokens: page `#F7F4F0`, ink `#1E1916`, status green `#336E48` / amber `#785F20` / red `#A2443B` (tuned so chip text clears AA on its own 15% fill).
 * Iris `#6467C9` ("the glint") appears ONLY when the AI assistant is involved. Never mixes with clay on one element, never with status colours.
 
 ## Status model

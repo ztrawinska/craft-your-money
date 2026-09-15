@@ -25,9 +25,9 @@
   --color-iris: #6467c9;
   --color-iris-deep: #5155b4;
 
-  --color-status-green: #3a7d52;
-  --color-status-amber: #9c7b2a;
-  --color-status-red: #b04a40;
+  --color-status-green: #336e48;
+  --color-status-amber: #785f20;
+  --color-status-red: #a2443b;
 
   --font-sans: var(--font-ibm-plex-sans);
   --font-serif: var(--font-lora);
@@ -36,7 +36,7 @@
 /*
  * The ink opacity ladder (design system §1.3: ink-07 … ink-70) isn't a set of
  * separate tokens — it's just the one ink colour at fixed opacities, which
- * Tailwind expresses directly as `text-ink/55`, `border-ink/7`, and so on.
+ * Tailwind expresses directly as `text-ink/62`, `border-ink/7`, and so on.
  * That keeps everything in one hue family with nothing extra to define.
  */
 
@@ -46,7 +46,7 @@
  * shadcn components reference semantic tokens (--primary, --background,
  * --border …). We map those onto the Craft Your Money palette above so any
  * shadcn primitive lands on-brand by default. Where our system uses opacity
- * (ink/14, ink/55) we bake the nearest solid hex here — hand-skinned
+ * (ink/14, ink/62) we bake the nearest solid hex here — hand-skinned
  * components (like Switch) still use the real ink/opacity utilities directly,
  * so this bridge is only the fallback for anything not individually tuned.
  *
@@ -69,10 +69,10 @@
   --secondary: #efe9e2;
   --secondary-foreground: #1e1916;
   --muted: #efe9e2;
-  --muted-foreground: #7d756e; /* ≈ ink at 55% on page */
+  --muted-foreground: #706c69; /* ≈ ink at 62% on page */
   --accent: #efe9e2;
   --accent-foreground: #1e1916;
-  --destructive: #b04a40; /* status-red */
+  --destructive: #a2443b; /* status-red */
   --destructive-foreground: #fdfbf9;
   --border: #e5ded6; /* ≈ ink at 14% on page */
   --input: #e5ded6;

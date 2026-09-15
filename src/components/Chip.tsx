@@ -19,7 +19,7 @@ const toneClasses: Record<ChipTone, string> = {
   critical: "bg-status-red/15 text-status-red",
   neutral: "bg-ink/10 text-ink/70",
   // outlined, not filled: a product outside the live range (Draft, Archived).
-  inactive: "border border-ink/14 text-ink/42",
+  inactive: "border border-ink/14 text-ink/62",
 };
 
 // Default is the standalone chip. `sm` is only for a chip sitting inline in

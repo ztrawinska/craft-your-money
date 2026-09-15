@@ -26,7 +26,7 @@ export function DocSection({ id, title, spec, source, lede, page = false, childr
   const sources = source ? (Array.isArray(source) ? source : [source]) : [];
   const Heading = page ? "h1" : "h2";
   const meta = (spec || sources.length > 0) && (
-    <p className="font-sans text-[11.5px] text-ink/55">
+    <p className="font-sans text-[11.5px] text-ink/62">
       {spec && (
         <a href={DESIGN_SYSTEM_DOC} className={docLink}>
           design-system.md {spec}

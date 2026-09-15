@@ -137,7 +137,7 @@ export function PricingPanel({
         <div>
           <p className="text-[12.5px] text-clay-deep">Calculated price</p>
           {suggestion.calculatedBeforeVat != null && (
-            <p className="mt-0.5 text-[11px] font-light text-ink/42">
+            <p className="mt-0.5 text-[11px] font-light text-ink/62">
               {formatMoney(suggestion.calculatedBeforeVat, cur)} before VAT · {targetMarginPct}%
               target
             </p>
@@ -146,12 +146,12 @@ export function PricingPanel({
         {calculatedPrice != null ? (
           <Price value={calculatedPrice} variant="calc" />
         ) : (
-          <span className="text-[12px] font-light text-ink/42">Add costs first</span>
+          <span className="text-[12px] font-light text-ink/62">Add costs first</span>
         )}
       </div>
 
       {/* your price — the editable decision */}
-      <div className="mb-2 flex items-baseline justify-between text-[9.5px] font-semibold uppercase tracking-[0.18em] text-ink/55">
+      <div className="mb-2 flex items-baseline justify-between text-[9.5px] font-semibold uppercase tracking-[0.18em] text-ink/62">
         <span>Your price</span>
         {diverged ? (
           <button type="button" onClick={onReset} className={resetLinkClass}>
@@ -169,7 +169,7 @@ export function PricingPanel({
           hugged left under the clay rule */}
       <label className="mb-3 flex w-full cursor-text items-baseline">
         <span className="inline-flex items-baseline border-b-2 border-clay pb-[5px]">
-          {!cur.suffix && <span className="mr-[2px] font-serif text-[22px] text-ink/42">{cur.symbol}</span>}
+          {!cur.suffix && <span className="mr-[2px] font-serif text-[22px] text-ink/62">{cur.symbol}</span>}
           {/* the input hugs its text: an invisible sizer sets the exact width
               (so a suffix symbol sits right after the number, not after slack) */}
           <span className="relative inline-block font-serif text-[44px] font-medium leading-none tracking-[-0.02em] tabular-nums">
@@ -187,13 +187,13 @@ export function PricingPanel({
               className="absolute inset-0 w-full bg-transparent text-ink caret-clay-deep outline-none placeholder:text-ink/25"
             />
           </span>
-          {cur.suffix && <span className="ml-[2px] font-serif text-[22px] text-ink/42">{cur.symbol}</span>}
+          {cur.suffix && <span className="ml-[2px] font-serif text-[22px] text-ink/62">{cur.symbol}</span>}
         </span>
       </label>
 
       {/* VAT — what you keep, reserved wording for VAT only */}
       {pricing.net != null && vatRatePct != null && (
-        <p className="mb-4 text-[13px] font-light text-ink/55">
+        <p className="mb-4 text-[13px] font-light text-ink/62">
           You keep{" "}
           <strong className="font-medium text-ink tabular-nums">
             {formatMoney(pricing.net, cur)}
@@ -214,7 +214,7 @@ export function PricingPanel({
       {/* profit / loss — the last word, and editable: type a target and the
           price back-solves. A loss never uses the word "profit". */}
       <div className="border-t border-ink/7 pt-[18px]">
-        <p className="mb-2 text-[12px] text-ink/55">
+        <p className="mb-2 text-[12px] text-ink/62">
           {pricing.profit == null
             ? "Or set what you want to make per piece"
             : isLoss

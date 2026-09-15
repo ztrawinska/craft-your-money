@@ -90,7 +90,7 @@ export function NeedsAttention({ items }: { items: AttentionItem[] }) {
         </DrawerTrigger>
       </div>
       <DrawerContent className="pb-4">
-        <DrawerTitle className="px-6 pb-1 pt-1 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/42">
+        <DrawerTitle className="px-6 pb-1 pt-1 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
           Needs attention
         </DrawerTitle>
         <div>

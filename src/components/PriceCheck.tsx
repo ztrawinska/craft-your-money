@@ -102,7 +102,7 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
       }
     >
       {busy ? (
-        <p className="py-2 font-sans text-[13px] font-light text-ink/55">Reading your numbers…</p>
+        <p className="py-2 font-sans text-[13px] font-light text-ink/62">Reading your numbers…</p>
       ) : (
         <>
           {/* verdict — the answer, in ink (never iris) */}
@@ -152,7 +152,7 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
           )}
 
           {/* provenance — Used / Assumed / Can't know, and who wrote it */}
-          <div className="mt-4 border-t border-iris/15 pt-3 font-sans text-[11px] font-light leading-[1.65] text-ink/55">
+          <div className="mt-4 border-t border-iris/15 pt-3 font-sans text-[11px] font-light leading-[1.65] text-ink/62">
             <p>
               <span className="font-medium text-ink/70">Used</span> — {provenance.used.join(", ")}.
             </p>
@@ -164,7 +164,7 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
               {provenance.cantKnow.join(", ")}.
             </p>
             {source === "live" && (
-              <p className="text-ink/42">
+              <p className="text-ink/62">
                 <span className="font-medium text-iris-deep">Written</span> — by Claude, just now.
               </p>
             )}

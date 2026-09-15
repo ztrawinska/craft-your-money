@@ -23,7 +23,7 @@ export function VoiceDoc() {
       <div className="overflow-x-auto">
         <table className="w-full max-w-[560px] border-collapse font-sans text-[13.5px]">
           <thead>
-            <tr className="text-left text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/42">
+            <tr className="text-left text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
               <th className="border-b border-ink/14 py-2 pr-4 font-semibold">Say</th>
               <th className="border-b border-ink/14 py-2 font-semibold">Not</th>
             </tr>
@@ -32,7 +32,7 @@ export function VoiceDoc() {
             {SAY.map(([say, not]) => (
               <tr key={say}>
                 <td className="border-b border-ink/7 py-2.5 pr-4 text-ink">{say}</td>
-                <td className="border-b border-ink/7 py-2.5 text-ink/55 line-through decoration-ink/30">
+                <td className="border-b border-ink/7 py-2.5 text-ink/62 line-through decoration-ink/30">
                   {not}
                 </td>
               </tr>

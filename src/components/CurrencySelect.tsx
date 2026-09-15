@@ -90,7 +90,7 @@ export function CurrencySelect({
                   <span className="min-w-0 flex-1 truncate font-sans text-[13px] text-ink">
                     {c.name}
                   </span>
-                  <span className="shrink-0 font-sans text-[11px] text-ink/42">{c.code}</span>
+                  <span className="shrink-0 font-sans text-[11px] text-ink/62">{c.code}</span>
                   {c.code === value && (
                     <Check size={13} strokeWidth={2.2} className="shrink-0 text-clay-deep" />
                   )}

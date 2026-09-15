@@ -25,7 +25,7 @@ export function TokenSwatch({
       />
       <div className="min-w-0 font-sans">
         <p className="text-[14px] font-medium text-ink">{name}</p>
-        <p className="mt-0.5 font-mono text-[11.5px] text-ink/55 tabular-nums">
+        <p className="mt-0.5 font-mono text-[11.5px] text-ink/62 tabular-nums">
           {value.toUpperCase()} · {utility} · {cssVar}
         </p>
         {description && (

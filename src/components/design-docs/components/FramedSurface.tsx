@@ -24,18 +24,18 @@ export function FramedSurfaceDoc() {
               <div className="mb-[18px] flex items-center justify-between gap-2.5 border-b border-ink/7 pb-[18px]">
                 <div>
                   <p className="text-[12.5px] text-clay-deep">Calculated price</p>
-                  <p className="mt-0.5 text-[11px] font-light text-ink/42">30% target</p>
+                  <p className="mt-0.5 text-[11px] font-light text-ink/62">30% target</p>
                 </div>
                 <Price value={40.17} variant="calc" />
               </div>
-              <p className="mb-2 text-[9.5px] font-semibold uppercase tracking-[0.18em] text-ink/55">
+              <p className="mb-2 text-[9.5px] font-semibold uppercase tracking-[0.18em] text-ink/62">
                 Your price
               </p>
               <div className="mb-5">
                 <Price value={42.6} variant="primary" />
               </div>
               <div className="border-t border-ink/7 pt-[18px]">
-                <p className="mb-2 text-[12px] text-ink/55">Profit per piece, after all costs</p>
+                <p className="mb-2 text-[12px] text-ink/62">Profit per piece, after all costs</p>
                 <div className="flex items-center justify-between gap-2.5">
                   <Price value={18.2} variant="profit" tone="positive" />
                   <Chip tone="positive">{chipFor(ACTIVE(0.52)).label}</Chip>

@@ -18,7 +18,7 @@ FAIL=0
 # appear literally in component code. Anything else outside globals.css is
 # either a new token that should be added there, or a value that should
 # reuse an existing one.
-ALLOWED_HEX_REGEX='#(f7f4f0|ffffff|fdfbf9|1e1916|a0716a|8a5a52|6467c9|5155b4|3a7d52|9c7b2a|b04a40|efe9e2|7d756e|e5ded6)\b'
+ALLOWED_HEX_REGEX='#(f7f4f0|ffffff|fdfbf9|1e1916|a0716a|8a5a52|6467c9|5155b4|336e48|785f20|a2443b|efe9e2|706c69|e5ded6)\b'
 
 # Radii from design-system.md §1.6 + the documented §2.12 input exception.
 ALLOWED_RADIUS_PX='2|5|6|7|8|11|100'

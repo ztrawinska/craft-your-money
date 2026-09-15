@@ -81,7 +81,7 @@ export default async function ProductsOverview({
           <h1 className="font-serif text-[26px] font-medium tracking-[-0.01em]">
             Products
           </h1>
-          <span className="font-sans text-[11px] font-light text-ink/42">
+          <span className="font-sans text-[11px] font-light text-ink/62">
             {count}
           </span>
         </div>
@@ -95,7 +95,7 @@ export default async function ProductsOverview({
             aria-label="Sort"
             className="ml-auto flex h-[38px] w-[38px] items-center justify-center"
           >
-            <ArrowUpDown size={18} strokeWidth={1.7} className="text-ink/55" />
+            <ArrowUpDown size={18} strokeWidth={1.7} className="text-ink/62" />
           </button>
         </div>
 
@@ -139,7 +139,7 @@ export default async function ProductsOverview({
             );
           })}
           {sorted.length === 0 && (
-            <p className="px-6 py-8 font-sans text-[13px] font-light text-ink/55">
+            <p className="px-6 py-8 font-sans text-[13px] font-light text-ink/62">
               Nothing here.
             </p>
           )}
