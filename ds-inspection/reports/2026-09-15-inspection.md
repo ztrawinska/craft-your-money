@@ -35,6 +35,7 @@ A conversation starter, not a grade. Two lights are on (accessibility, testing);
 - **Figma** — live via figma-console MCP (Desktop Bridge plugin, Plugin API): full-file sweeps of pages, component sets, variant properties, variable bindings on all 64 component nodes (instances excluded), 52 variables, 26 text styles, node descriptions. WCAG lint run on the Chip page; its contrast results were discarded (it cannot resolve alpha fills) and contrast was recomputed from token values with opacity blended over `page`.
 - **Interview** — scale, source of truth, scope (2026-09-15).
 - **Benchmarks** — from the inspector's own knowledge; no design-systems knowledge MCP was connected.
+- **The inspection kit** — only the orchestrator (`SKILL.md`) was installed; the station files, intake script and report/work-order templates were absent. Station procedures follow the orchestrator's one-line definitions, and the 0–10 anchors are the inspector's own, calibrated to the solo profile in GARAGE.md. Treat the absolute score with that in mind; the *deltas* at the next inspection are what matter.
 - **Not inspected:** screen-reader or keyboard walk-through of the running app; per-control touch-target audit; the `Foundations` Figma page's frames; GitHub issues; any research kept outside the repo; per-variant visual parity (does Figma's `Chip/Tone=caution` look like the rendered one) — only names were compared.
 
 Every finding below is `[verified]` unless marked otherwise.
@@ -162,3 +163,52 @@ How a change flows `[verified]`:
 - **Deep inspection:** quarterly, or after any change to `globals.css` token *values* (the contrast light depends on them).
 - **Wire into CI now** (a single GitHub Actions workflow on push/PR): `npm test`, `npm run lint`, `scripts/check-tells.sh` (advisory output), and — once written — a Figma↔tokens parity script. This alone turns stations 5 and 6 from red/yellow to green territory.
 - **Re-run stations 3 and 5 first** at the next inspection; compare against this sheet.
+
+---
+
+# Decisions and method notes (same day)
+
+Recorded so the report stands on its own: what was considered, what was chosen, and why. The chooser was Zuzanna; the inspector proposed.
+
+## F1 — the contrast retune
+
+**The constraint, from the maths:** on `page` (`#F7F4F0`), ink needs ≥61% opacity for 4.5:1, so no text rung below that can meet AA for text under 18px. `ink/55` and `ink/42` were used *only* as text (52 + 41 uses); `ink/14` and `ink/07` only as lines. So the change touches words, not lines.
+
+**Ladder options considered:**
+
+| Option | What | Verdict |
+|---|---|---|
+| Three text rungs — `ink` · `ink/70` · `ink/62` | Merge 55 and 42 into 62 (4.7:1); hierarchy below body copy from size, caps, tracking | **Chosen.** Simplest honest ladder; the type scale already carries that hierarchy |
+| Four rungs pushed up — `ink` · 78 · 68 · 62 | Keep four steps (7.4 / 5.7 / 4.7:1) | Rejected: everything darker and the steps too small to read as steps |
+| Labels only — 42 → 62, keep 55 | Fix the worst, leave meta at 3.8:1 | Rejected: leaves the light on |
+
+**Chip options considered:**
+
+| Option | What | Verdict |
+|---|---|---|
+| Darken the three base colours | green `#336E48`, amber `#785F20`, red `#A2443B` — each the smallest darkening that puts chip text on its own 15% fill at ≥4.5:1 | **Chosen.** Three values; chips, stripes, profit figures and Figma all follow |
+| `-deep` text variants | Keep fills/stripes, add three tokens for chip text | Rejected: more tokens, and raw `text-status-amber` at 13–15px would still fail |
+
+Raising the chip fill was not an option: contrast *falls* as the fill gets stronger. Amber had to darken regardless — it failed even as plain text on page (3.6:1).
+
+**Amber reviewed in the running app and accepted** (Zuzanna, 2026-09-15). The ochre shift is a decision, not an accident. If it is ever revisited, any candidate must pass the same check: status colour on its own 15% fill over `page` ≥ 4.5:1.
+
+**Method:** contrast computed by blending the ink opacity (or the 15% fill) over `page` in sRGB and applying the WCAG 2.x relative-luminance formula. Figma's lint was not used for contrast because it cannot resolve alpha fills (it reported green-on-green 1.0:1).
+
+**Left as is, deliberately:** `docs/design/*.html` (static r3 reference renders — snapshots, not a source); the AssistantSlot description's "opacity 55%" (a disabled state, not a ladder rung); icons that sat on `ink/55` moved to `ink/62` with the text rather than keeping a separate icon rung.
+
+## F2 — the tests and CI
+
+- The two failing tests referenced sample ids from before the authored collection. Rather than only fixing ids, the test now guards the *story* the seed's header promises — flagship figures (Harmonia collar), the one Risky piece (Thetis, thin not underwater), one Caution, one active No-price, two drafts — so a future edit to the sample range fails loudly if it breaks that story. One stale word in the seed header ("into a loss") was reconciled.
+- CI runs tests, types and lint as gates; the tell-check runs after them as advisory output, because §6 says it surfaces candidates for a human to judge, not failures.
+- To let lint be a gate, the one pre-existing `react-hooks/set-state-in-effect` error in `PricingPanel` was moved to the React-sanctioned render-time adjustment (`if (warning && warning.text !== warningText) setWarningText(…)`). Same behaviour, one render pass fewer.
+- Pushing a workflow file needed the `workflow` OAuth scope on the `gh` token; granted by Zuzanna via `gh auth refresh -s workflow`.
+
+## Figma sync
+
+Done live through the Desktop Bridge, in this order: re-value the 8 `status/*` variables (same alphas) → rename `ink/55` to `ink/62` and set 0.62 (97 bindings preserved) → rebind 53 paints from `ink/42` → delete `ink/42` only after confirming zero bindings remained → update the Foundations swatch tiles (remove `ink/42`, relabel) and 5 component descriptions. Parity Figma ↔ `tokens.json`: 17/17 shared values.
+
+## Delivery
+
+Branch `ds-inspection` off `main`; three commits (F2, F1, report), squash-merged as PR #3 (`811c59f`). CI's first run: 3/3 green.
+
