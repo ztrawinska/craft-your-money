@@ -74,13 +74,13 @@ export function HeroProfit({
             filter: "blur(11px)",
           }}
         />
-        <p className="relative mb-[9px] font-sans text-[9.5px] font-semibold uppercase tracking-[0.14em] text-ink/42">
+        <p className="relative mb-[9px] font-sans text-[9.5px] font-semibold uppercase tracking-[0.14em] text-ink/62">
           Avg profit / piece
         </p>
         <div className="relative">
           <Price value={shown} variant="hero" />
         </div>
-        <p className="relative mt-[9px] font-sans text-[12px] leading-[1.5] text-ink/55">
+        <p className="relative mt-[9px] font-sans text-[12px] leading-[1.5] text-ink/62">
           across your {count} priced products, after all costs
         </p>
       </div>
@@ -114,7 +114,7 @@ export function HeroProfit({
                 </div>
               ))}
               <div className="mt-1 flex items-baseline justify-between border-t border-ink/7 pt-2">
-                <span className="font-sans text-[11.5px] text-ink/55">
+                <span className="font-sans text-[11.5px] text-ink/62">
                   Average across {count}
                 </span>
                 <span className="font-serif text-[13px] font-medium tabular-nums text-ink">

@@ -67,7 +67,7 @@ export default function DesignOverview() {
         <ol className="max-w-[62ch] space-y-4">
           {PRINCIPLES.map(([name, line], i) => (
             <li key={name} className="flex gap-4">
-              <span className="w-5 shrink-0 font-serif text-[15px] text-ink/42 tabular-nums">
+              <span className="w-5 shrink-0 font-serif text-[15px] text-ink/62 tabular-nums">
                 {i + 1}
               </span>
               <div>
@@ -98,7 +98,7 @@ export default function DesignOverview() {
                 <a href={href} className={`font-medium ${link}`}>
                   {name}
                 </a>
-                <span className="text-ink/55"> · {what}</span>
+                <span className="text-ink/62"> · {what}</span>
               </span>
               {i < all.length - 1 && <span className="text-ink/30">→</span>}
             </li>
@@ -115,7 +115,7 @@ export default function DesignOverview() {
         <div className="overflow-x-auto">
           <table className="w-full min-w-[640px] border-collapse font-sans text-[13px]">
             <thead>
-              <tr className="text-left text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/42">
+              <tr className="text-left text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
                 <th className="border-b border-ink/14 py-2 pr-4 font-semibold">Rule</th>
                 <th className="border-b border-ink/14 py-2 pr-4 font-semibold">Level</th>
                 <th className="border-b border-ink/14 py-2 font-semibold">Where</th>
@@ -146,7 +146,7 @@ export default function DesignOverview() {
             </tbody>
           </table>
         </div>
-        <p className="mt-4 max-w-[62ch] font-sans text-[12px] font-light leading-[1.55] text-ink/55">
+        <p className="mt-4 max-w-[62ch] font-sans text-[12px] font-light leading-[1.55] text-ink/62">
           Enforced: the type system or a test stops it. Checked: a script reports it. Convention: documented only.
         </p>
       </DocSection>

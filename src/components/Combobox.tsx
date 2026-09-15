@@ -103,7 +103,7 @@ export function Combobox({
                   {o.label}
                 </span>
                 {o.hint && (
-                  <span className="shrink-0 font-serif text-[12px] tabular-nums text-ink/42">
+                  <span className="shrink-0 font-serif text-[12px] tabular-nums text-ink/62">
                     {o.hint}
                   </span>
                 )}

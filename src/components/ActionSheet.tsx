@@ -55,14 +55,14 @@ export function ActionSheet({
             <p className="mb-1.5 font-serif text-[15px] font-medium text-status-red">
               {confirming.confirm!.title}
             </p>
-            <p className="mb-3.5 font-sans text-[12px] font-light leading-[1.55] text-ink/55">
+            <p className="mb-3.5 font-sans text-[12px] font-light leading-[1.55] text-ink/62">
               {confirming.confirm!.body}
             </p>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setConfirming(null)}
-                className="flex-1 rounded-[7px] border border-ink/14 py-[11px] font-sans text-[13.5px] font-medium text-ink/55"
+                className="flex-1 rounded-[7px] border border-ink/14 py-[11px] font-sans text-[13.5px] font-medium text-ink/62"
               >
                 Keep
               </button>
@@ -98,11 +98,11 @@ export function ActionSheet({
                     a.danger ? "text-status-red" : "text-ink"
                   } ${firstDanger ? "border-t border-ink/7" : ""}`}
                 >
-                  <span className={a.danger ? "text-status-red" : "text-ink/55"}>{a.icon}</span>
+                  <span className={a.danger ? "text-status-red" : "text-ink/62"}>{a.icon}</span>
                   <span>
                     {a.label}
                     {a.sublabel && (
-                      <span className="mt-0.5 block text-[11px] font-light text-ink/42">
+                      <span className="mt-0.5 block text-[11px] font-light text-ink/62">
                         {a.sublabel}
                       </span>
                     )}
@@ -114,7 +114,7 @@ export function ActionSheet({
               <button
                 type="button"
                 onClick={close}
-                className="w-full rounded-[7px] border border-ink/14 py-[13px] font-sans text-[14px] font-medium text-ink/55"
+                className="w-full rounded-[7px] border border-ink/14 py-[13px] font-sans text-[14px] font-medium text-ink/62"
               >
                 Cancel
               </button>

@@ -45,7 +45,7 @@ export function ButtonDoc() {
           </Button>
         </Specimen>
         <Specimen label="back · mirror of navigate, 44px target" inline>
-          <span className="-ml-3 inline-flex size-11 items-center justify-center text-ink/55">
+          <span className="-ml-3 inline-flex size-11 items-center justify-center text-ink/62">
             <ChevronLeft size={22} strokeWidth={1.8} />
           </span>
         </Specimen>

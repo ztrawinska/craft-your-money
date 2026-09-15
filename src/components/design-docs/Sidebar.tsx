@@ -38,7 +38,7 @@ function Tree() {
       </ul>
       {NAV.map((g) => (
         <div key={`${g.base}/${g.name}`} className="mb-4">
-          <p className="mb-1 pl-4 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/42">
+          <p className="mb-1 pl-4 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
             {g.name}
           </p>
           <ul>
@@ -59,7 +59,7 @@ export function Sidebar() {
       <aside className="hidden border-r border-ink/7 lg:block">
         <div className="sticky top-0 h-dvh overflow-y-auto px-4 py-8">
           <div className="mb-6 pl-4">
-            <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/42">
+            <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
               Craft Your Money
             </p>
             <p className="mt-0.5 font-serif text-[19px] font-medium text-ink">Design system</p>

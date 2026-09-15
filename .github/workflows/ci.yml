@@ -1,0 +1,27 @@
+# The checks that keep the system honest, run on every push and pull request.
+# Same three commands as README "Checks": tests (incl. the tokens.json ↔
+# globals.css guard), types, lint. The design-system tell-check is advisory
+# by design (design-system.md §6) — it runs last and never fails the build;
+# its output is there to read in the job log.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npx tsc --noEmit
+      - run: npm run lint
+      - name: Design-system tells (advisory)
+        run: scripts/check-tells.sh || true

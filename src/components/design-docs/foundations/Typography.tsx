@@ -22,7 +22,7 @@ export function TypographyDoc() {
             >
               <div className="font-sans">
                 <p className="text-[13px] font-medium text-ink">{name}</p>
-                <p className="mt-0.5 font-mono text-[11px] text-ink/55 tabular-nums">
+                <p className="mt-0.5 font-mono text-[11px] text-ink/62 tabular-nums">
                   {v.fontSize} · {fam === "font-serif" ? "Lora" : "Plex"} · {v.fontWeight}
                   {v.letterSpacing ? ` · ${v.letterSpacing}` : ""}
                   {v.textCase ? " · caps" : ""}

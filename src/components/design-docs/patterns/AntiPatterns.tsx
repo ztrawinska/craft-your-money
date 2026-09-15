@@ -30,7 +30,7 @@ export function AntiPatternsDoc() {
       <div className="overflow-x-auto">
         <table className="w-full min-w-[520px] border-collapse font-sans text-[13.5px]">
           <thead>
-            <tr className="text-left text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/42">
+            <tr className="text-left text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
               <th className="border-b border-ink/14 py-2 pr-4 font-semibold">Anti-pattern</th>
               <th className="border-b border-ink/14 py-2 font-semibold">Why rejected</th>
             </tr>

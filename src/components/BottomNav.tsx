@@ -41,11 +41,11 @@ function Tab({ item, active }: { item: NavItem; active?: NavKey }) {
       <Icon
         size={22}
         strokeWidth={1.6}
-        className={on ? "text-clay-deep" : "text-ink/42"}
+        className={on ? "text-clay-deep" : "text-ink/62"}
       />
       <span
         className={`text-[9px] ${
-          on ? "font-semibold text-clay-deep" : "font-medium text-ink/42"
+          on ? "font-semibold text-clay-deep" : "font-medium text-ink/62"
         }`}
       >
         {item.label}

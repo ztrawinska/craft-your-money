@@ -52,7 +52,7 @@ export function IrisSheet({
           <DrawerTitle className="flex-1 text-left font-sans text-[13.5px] font-medium text-iris-deep">
             {label}
           </DrawerTitle>
-          <DrawerClose aria-label="Dismiss" className="text-ink/42">
+          <DrawerClose aria-label="Dismiss" className="text-ink/62">
             <X size={18} />
           </DrawerClose>
         </div>

@@ -23,7 +23,7 @@ const variantClass: Record<ButtonVariant, string> = {
   primary:
     "block w-full text-center rounded-[7px] px-4 py-[14px] text-[14.5px] font-semibold bg-clay-deep text-[#FDFBF9] shadow-[0_1px_2px_rgba(138,90,82,0.3)]",
   ghost:
-    "block w-full text-center rounded-[7px] px-4 py-[14px] text-[14.5px] font-medium border border-ink/14 text-ink/55",
+    "block w-full text-center rounded-[7px] px-4 py-[14px] text-[14.5px] font-medium border border-ink/14 text-ink/62",
   link: "inline-flex items-center gap-[7px] text-clay-deep",
 };
 

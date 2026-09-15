@@ -9,7 +9,7 @@ export function InkDoc() {
       id="ink"
       title="Ink ladder"
       spec="§1.3"
-      lede="The ink colour at seven fixed opacities, used instead of a grey scale."
+      lede="The ink colour at six fixed opacities, used instead of a grey scale. Text never goes below 62%."
     >
       <div className="flex flex-wrap gap-x-5 gap-y-5">
         {inkSteps.map(([name, o]) => {
@@ -20,7 +20,7 @@ export function InkDoc() {
               <p className="mt-2 font-serif text-[18px] text-ink" style={{ opacity: o }}>
                 Aa 1234
               </p>
-              <p className="font-mono text-[11.5px] text-ink/55">
+              <p className="font-mono text-[11.5px] text-ink/62">
                 {name} · {Math.round(o * 100)}%
               </p>
               {t?.$description && (
@@ -39,7 +39,7 @@ export function InkDoc() {
             chip&rsquo;s fill is its status colour at {tokens.opacity["chip-fill"].$value * 100}%.
             Backgrounds sit very close to the page.
           </>,
-          "Written in Tailwind as text-ink/55, border-ink/14, bg-ink/7. There is nothing extra to define.",
+          "Written in Tailwind as text-ink/62, border-ink/14, bg-ink/7. There is nothing extra to define.",
         ]}
       />
     </DocSection>

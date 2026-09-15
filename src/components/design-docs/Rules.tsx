@@ -13,7 +13,7 @@ export function Rules({
 }) {
   return (
     <div className="mt-6">
-      <p className="mb-2 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/42">
+      <p className="mb-2 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
         {title}
       </p>
       <ul className="max-w-[62ch] space-y-1.5 font-sans text-[13.5px] font-light leading-[1.55] text-ink/70">
@@ -47,7 +47,7 @@ export function BuiltOn({
       >
         shadcn/ui {name}
       </a>
-      {note && <span className="text-ink/55">. {note}</span>}
+      {note && <span className="text-ink/62">. {note}</span>}
     </p>
   );
 }
@@ -55,7 +55,7 @@ export function BuiltOn({
 /** A small-caps label above a group of specimens. */
 export function GroupLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="mb-3 mt-7 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/42 first:mt-0">
+    <p className="mb-3 mt-7 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62 first:mt-0">
       {children}
     </p>
   );

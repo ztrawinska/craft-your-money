@@ -64,7 +64,7 @@ export function ListRow({
 
   const labelClass = isProduct
     ? `font-serif text-[16px] leading-[1.2] ${
-        muted ? "font-normal text-ink/55" : "font-medium text-ink"
+        muted ? "font-normal text-ink/62" : "font-medium text-ink"
       }`
     : "font-sans text-[15px] text-ink";
 
@@ -99,7 +99,7 @@ export function ListRow({
         {meta && (
           <p
             className={`mt-[3px] font-sans text-[12px] ${
-              muted ? "text-ink/40" : "text-ink/55"
+              muted ? "text-ink/40" : "text-ink/62"
             }`}
           >
             {meta}

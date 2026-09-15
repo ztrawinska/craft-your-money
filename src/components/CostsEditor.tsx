@@ -102,7 +102,7 @@ function CostFields({
               className={`rounded-full border px-3 py-1.5 font-sans text-[12px] capitalize ${
                 draft.period === p
                   ? "border-clay-deep bg-clay-deep text-[#FDFBF9]"
-                  : "border-ink/14 text-ink/55"
+                  : "border-ink/14 text-ink/62"
               }`}
             >
               {p}
@@ -237,7 +237,7 @@ export function CostsEditor({
       <main className="mx-auto w-full max-w-[430px] flex-1">
         <div className="px-6 pb-1 pt-[22px]">
           <h1 className="font-serif text-[26px] font-medium tracking-[-0.01em]">Business costs</h1>
-          <p className="mt-1 font-sans text-[12px] font-light text-ink/55">
+          <p className="mt-1 font-sans text-[12px] font-light text-ink/62">
             Rent, tools, insurance — the costs of being open, shared across what you make.
           </p>
         </div>
@@ -317,7 +317,7 @@ export function CostsEditor({
                 placeholder="0"
                 className="w-[72px] text-right font-serif tabular-nums"
               />
-              <span className="font-sans text-[12px] text-ink/55">{volumeLabel}</span>
+              <span className="font-sans text-[12px] text-ink/62">{volumeLabel}</span>
             </span>
           </label>
         </div>
@@ -339,7 +339,7 @@ export function CostsEditor({
             </TintedBand>
           ) : (
             <div className="rounded-[8px] border border-clay/34 bg-card px-5 py-4">
-              <p className="font-sans text-[12px] font-light text-ink/55">
+              <p className="font-sans text-[12px] font-light text-ink/62">
                 {method === "per-unit"
                   ? "Every piece carries"
                   : sample
@@ -349,7 +349,7 @@ export function CostsEditor({
               <p className="mt-1 font-serif text-[28px] font-medium tabular-nums text-ink">
                 {formatMoney(share, cur)}
               </p>
-              <p className="mt-1 font-sans text-[12px] font-light text-ink/55">
+              <p className="mt-1 font-sans text-[12px] font-light text-ink/62">
                 of business costs, added on top of its direct cost.
               </p>
             </div>

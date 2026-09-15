@@ -25,14 +25,14 @@ export function Dropdown({ children, filtered = false }: DropdownProps) {
       className={`inline-flex items-center gap-[7px] whitespace-nowrap rounded-[7px] border bg-transparent px-3 py-2 text-[12.5px] font-medium font-sans ${
         filtered
           ? "border-clay-deep/45 bg-clay/7 text-clay-deep"
-          : "border-ink/14 text-ink/55"
+          : "border-ink/14 text-ink/62"
       }`}
     >
       {children}
       <ChevronDown
         size={14}
         strokeWidth={2}
-        className={filtered ? "text-clay-deep" : "text-ink/42"}
+        className={filtered ? "text-clay-deep" : "text-ink/62"}
       />
     </button>
   );

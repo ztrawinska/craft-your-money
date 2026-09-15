@@ -22,7 +22,7 @@ export function LinesDoc() {
             <div key={name} className="grid gap-x-8 gap-y-1.5 font-sans md:grid-cols-[220px_minmax(0,1fr)]">
               <div>
                 <p className="text-[13px] font-medium text-ink">{name}</p>
-                <p className="font-mono text-[11px] text-ink/55">
+                <p className="font-mono text-[11px] text-ink/62">
                   {t.$value.width} {t.$value.style} · {t.$value.color.replace(/[{}]/g, "")}
                 </p>
               </div>

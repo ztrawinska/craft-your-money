@@ -21,7 +21,7 @@ export default function NewProduct() {
         <Link
           href="/products"
           aria-label="Back"
-          className="-ml-3.5 flex size-11 items-center justify-center text-ink/55"
+          className="-ml-3.5 flex size-11 items-center justify-center text-ink/62"
         >
           <ChevronLeft size={22} strokeWidth={2} />
         </Link>
@@ -41,7 +41,7 @@ export default function NewProduct() {
 
       <form action={createProductAction} className="px-6 pt-6">
         <label className="block">
-          <span className="mb-1.5 block text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/42">
+          <span className="mb-1.5 block text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/62">
             Name
           </span>
           <Input
@@ -54,8 +54,8 @@ export default function NewProduct() {
         </label>
 
         <fieldset className="mt-6">
-          <legend className="mb-2 text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/42">
-            Type <span className="font-normal normal-case tracking-normal text-ink/30">· optional</span>
+          <legend className="mb-2 text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/62">
+            Type <span className="font-normal normal-case tracking-normal text-ink/62">· optional</span>
           </legend>
           <div className="flex flex-wrap gap-2">
             {PRODUCT_TYPES.map((t) => (
@@ -76,7 +76,7 @@ export default function NewProduct() {
           </div>
         </fieldset>
 
-        <p className="mt-6 text-[12px] font-light text-ink/55">
+        <p className="mt-6 text-[12px] font-light text-ink/62">
           Saved as a draft — you&rsquo;ll add costs next.
         </p>
 

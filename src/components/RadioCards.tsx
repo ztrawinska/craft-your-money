@@ -39,7 +39,7 @@ export function RadioCards({ name, options, value, onChange }: RadioCardsProps) 
               className="sr-only"
             />
             <p className="font-sans text-[14px] font-medium text-ink">{o.title}</p>
-            <p className="mt-1 font-sans text-[12px] font-light leading-[1.5] text-ink/55">
+            <p className="mt-1 font-sans text-[12px] font-light leading-[1.5] text-ink/62">
               {o.description}
             </p>
           </label>

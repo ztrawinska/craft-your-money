@@ -13,10 +13,10 @@
  *
  * Prices are still chosen so the range shows one intentional example of every
  * state the app can display — most pieces Healthy, one Caution (Thalassa), and
- * exactly one piece deliberately under-priced into a loss (Thetis) so the
- * dashboard's "needs attention" / "below target" / reprice story has something
- * real to catch. Prices are GROSS (the sample account has VAT on at 20%); margin
- * and profit run on the net figure.
+ * exactly one piece deliberately under-priced into Risky (Thetis — thin, not
+ * underwater) so the dashboard's "needs attention" / "below target" / reprice
+ * story has something real to catch. Prices are GROSS (the sample account has
+ * VAT on at 20%); margin and profit run on the net figure.
  */
 import type { FixedCost, FixedCostConfig } from "@/lib/fixed-costs";
 import type { LibraryMaterial } from "@/lib/materials";

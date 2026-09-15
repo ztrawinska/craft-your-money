@@ -40,7 +40,7 @@ export function ActionSheetDemo() {
     <div className="flex items-center justify-between">
       <div>
         <p className="font-serif text-[16px] font-medium text-ink">Selene hammered band</p>
-        <p className="mt-[3px] font-sans text-[12px] text-ink/55">
+        <p className="mt-[3px] font-sans text-[12px] text-ink/62">
           {last ? `Last action: ${last}` : "Ring"}
         </p>
       </div>
@@ -48,7 +48,7 @@ export function ActionSheetDemo() {
         type="button"
         aria-label="More actions"
         onClick={() => setOpen(true)}
-        className="flex h-11 w-11 items-center justify-center rounded-[7px] text-ink/55"
+        className="flex h-11 w-11 items-center justify-center rounded-[7px] text-ink/62"
       >
         <Ellipsis size={20} strokeWidth={1.8} />
       </button>

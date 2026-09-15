@@ -124,7 +124,7 @@ export default async function Dashboard() {
         {/* header: date + greeting, avatar (Settings lives behind it) */}
         <div className="flex items-start justify-between px-6 pb-1.5 pt-[26px]">
           <div>
-            <p className="mb-[5px] font-sans text-[11px] tracking-[0.02em] text-ink/42">
+            <p className="mb-[5px] font-sans text-[11px] tracking-[0.02em] text-ink/62">
               {greeting.date}
             </p>
             <h1 className="font-serif text-[27px] font-medium leading-[1.1] tracking-[-0.01em]">
@@ -173,19 +173,19 @@ export default async function Dashboard() {
         {/* supporting metrics — centred to match the redesign */}
         <div className="mx-6 mt-5 grid grid-cols-2 border-t border-ink/7 pt-4">
           <div className="text-center">
-            <p className="mb-1.5 font-sans text-[9px] font-semibold uppercase tracking-[0.12em] text-ink/42">
+            <p className="mb-1.5 font-sans text-[9px] font-semibold uppercase tracking-[0.12em] text-ink/62">
               Priced
             </p>
             <p className="font-serif text-[20px] font-medium tabular-nums">
               {pricedDone}
-              <span className="font-sans text-[10.5px] font-light text-ink/42">
+              <span className="font-sans text-[10.5px] font-light text-ink/62">
                 {" "}
                 / {activeTotal}
               </span>
             </p>
           </div>
           <div className="border-l border-ink/7 text-center">
-            <p className="mb-1.5 font-sans text-[9px] font-semibold uppercase tracking-[0.12em] text-ink/42">
+            <p className="mb-1.5 font-sans text-[9px] font-semibold uppercase tracking-[0.12em] text-ink/62">
               Below target
             </p>
             {belowTarget > 0 ? (
@@ -199,7 +199,7 @@ export default async function Dashboard() {
             ) : (
               // A metric cell must hold its grid position, so it switches to a
               // quiet italic state rather than showing a proud "0".
-              <p className="font-serif text-[14px] italic text-ink/55">all on target</p>
+              <p className="font-serif text-[14px] italic text-ink/62">all on target</p>
             )}
           </div>
         </div>
@@ -214,11 +214,11 @@ export default async function Dashboard() {
             className="mx-6 mt-3 flex items-center justify-between rounded-[8px] border border-dashed border-ink/14 px-[18px] py-4"
           >
             <div>
-              <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/42">
+              <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/62">
                 Continue where you left off
               </p>
               <p className="mt-1 font-serif text-[16px] font-medium leading-[1.2]">{resume.name}</p>
-              <p className="mt-[3px] font-sans text-[12px] text-ink/55">
+              <p className="mt-[3px] font-sans text-[12px] text-ink/62">
                 Draft · edited 2 days ago
               </p>
             </div>

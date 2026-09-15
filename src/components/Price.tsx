@@ -44,7 +44,7 @@ const variantClass: Record<Exclude<PriceVariant, "primary" | "hero">, string> = 
   figure: "text-[24px] font-medium text-ink leading-none",
   inline: "text-[15.5px] text-ink",
   calc: "text-[17px] text-ink/70",
-  sectionTotal: "text-[13px] text-ink/55",
+  sectionTotal: "text-[13px] text-ink/62",
   summary: "text-[13.5px] text-ink/70",
   profit: "text-[34px] font-medium leading-none",
 };
@@ -64,7 +64,7 @@ export function Price({ value, variant = "inline", tone }: PriceProps): ReactNod
     const [whole, dec] = value.toFixed(2).split(".");
     const sym = (
       <span
-        className={`${cur.suffix ? "ml-[4px]" : "mr-[2px]"} -translate-y-[15px] text-[22px] text-ink/42`}
+        className={`${cur.suffix ? "ml-[4px]" : "mr-[2px]"} -translate-y-[15px] text-[22px] text-ink/62`}
       >
         {cur.symbol}
       </span>
@@ -86,7 +86,7 @@ export function Price({ value, variant = "inline", tone }: PriceProps): ReactNod
   if (variant === "hero") {
     const sym = (
       <span
-        className={`text-[29px] text-ink/42 ${cur.suffix ? "ml-[3px]" : ""}`}
+        className={`text-[29px] text-ink/62 ${cur.suffix ? "ml-[3px]" : ""}`}
         style={{ verticalAlign: "1px" }}
       >
         {cur.symbol}

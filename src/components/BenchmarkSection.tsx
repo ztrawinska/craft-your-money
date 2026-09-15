@@ -79,7 +79,7 @@ export function BenchmarkSection({
 
       <Collapse open={open}>
         <div className="pb-1 pt-4">
-          <p className="font-sans text-[12px] font-light leading-[1.6] text-ink/55">
+          <p className="font-sans text-[12px] font-light leading-[1.6] text-ink/62">
             A few prices you&rsquo;ve seen for similar pieces — three is plenty.
           </p>
 
@@ -92,7 +92,7 @@ export function BenchmarkSection({
                 >
                   {formatMoney(b.price, cur)}
                   {b.label && (
-                    <span className="font-sans text-[11px] font-light not-italic text-ink/42">
+                    <span className="font-sans text-[11px] font-light not-italic text-ink/62">
                       {b.label}
                     </span>
                   )}
@@ -100,7 +100,7 @@ export function BenchmarkSection({
                     type="button"
                     onClick={() => remove(i)}
                     aria-label={`Remove ${b.label || formatMoney(b.price, cur)}`}
-                    className="text-ink/30 hover:text-ink/55"
+                    className="text-ink/30 hover:text-ink/62"
                   >
                     <X size={13} />
                   </button>
@@ -137,7 +137,7 @@ export function BenchmarkSection({
           </Button>
 
           {market && (
-            <p className="mt-3 border-t border-ink/7 pt-3 font-sans text-[12px] font-light leading-[1.6] text-ink/55">
+            <p className="mt-3 border-t border-ink/7 pt-3 font-sans text-[12px] font-light leading-[1.6] text-ink/62">
               {market.count} price{market.count === 1 ? "" : "s"} ·{" "}
               <span className="tabular-nums">
                 {market.min === market.max

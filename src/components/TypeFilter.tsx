@@ -37,19 +37,19 @@ export function TypeFilter({
           className={`inline-flex items-center gap-[7px] whitespace-nowrap rounded-[7px] border bg-transparent px-3 py-2 font-sans text-[12.5px] font-medium ${
             filtered
               ? "border-clay-deep/45 bg-clay/7 text-clay-deep"
-              : "border-ink/14 text-ink/55"
+              : "border-ink/14 text-ink/62"
           }`}
         >
           {label}
           <ChevronDown
             size={14}
             strokeWidth={2}
-            className={filtered ? "text-clay-deep" : "text-ink/42"}
+            className={filtered ? "text-clay-deep" : "text-ink/62"}
           />
         </button>
       </DrawerTrigger>
       <DrawerContent className="pb-4">
-        <DrawerTitle className="px-5 pb-1 pt-1 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/42">
+        <DrawerTitle className="px-5 pb-1 pt-1 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
           Type
         </DrawerTitle>
         {options.map((t) => (
