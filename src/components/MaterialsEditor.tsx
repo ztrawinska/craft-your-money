@@ -166,7 +166,7 @@ export function MaterialsEditor({ initial }: { initial: LibraryMaterial[] }) {
   return (
     <div className="flex min-h-dvh flex-col">
       <main className="mx-auto w-full max-w-[430px] flex-1">
-        <div className="flex items-baseline justify-between px-6 pb-3.5 pt-[22px]">
+        <div className="flex items-baseline justify-between px-6 pb-3.5 pt-section">
           <h1 className="font-serif text-[26px] font-medium tracking-[-0.01em]">Materials</h1>
           <span className="font-sans text-[11px] font-light text-ink/62">
             {materials.length} saved

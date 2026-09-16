@@ -131,9 +131,9 @@ export function PricingPanel({
   const isLoss = pricing.profit != null && pricing.profit < -0.005;
 
   return (
-    <FramedSurface className="mx-6 mt-[26px] px-6 pb-5 pt-[22px]">
+    <FramedSurface className="mx-6 mt-section px-6 pb-5 pt-section">
       {/* calculated price — the suggestion */}
-      <div className="mb-[18px] flex items-center justify-between gap-2.5 border-b border-ink/7 pb-[18px]">
+      <div className="mb-4 flex items-center justify-between gap-2.5 border-b border-ink/7 pb-4">
         <div>
           <p className="text-[12.5px] text-clay-deep">Calculated price</p>
           {suggestion.calculatedBeforeVat != null && (
@@ -168,12 +168,12 @@ export function PricingPanel({
           including the currency and the empty space); the number+symbol stay
           hugged left under the clay rule */}
       <label className="mb-3 flex w-full cursor-text items-baseline">
-        <span className="inline-flex items-baseline border-b-2 border-clay pb-[5px]">
-          {!cur.suffix && <span className="mr-[2px] font-serif text-[22px] text-ink/62">{cur.symbol}</span>}
+        <span className="inline-flex items-baseline border-b-2 border-clay pb-1">
+          {!cur.suffix && <span className="mr-0.5 font-serif text-[22px] text-ink/62">{cur.symbol}</span>}
           {/* the input hugs its text: an invisible sizer sets the exact width
               (so a suffix symbol sits right after the number, not after slack) */}
           <span className="relative inline-block font-serif text-[44px] font-medium leading-none tracking-[-0.02em] tabular-nums">
-            <span aria-hidden className="invisible block whitespace-pre pr-[2px]">
+            <span aria-hidden className="invisible block whitespace-pre pr-0.5">
               {priceText || "0.00"}
             </span>
             <input
@@ -187,7 +187,7 @@ export function PricingPanel({
               className="absolute inset-0 w-full bg-transparent text-ink caret-clay-deep outline-none placeholder:text-ink/25"
             />
           </span>
-          {cur.suffix && <span className="ml-[2px] font-serif text-[22px] text-ink/62">{cur.symbol}</span>}
+          {cur.suffix && <span className="ml-0.5 font-serif text-[22px] text-ink/62">{cur.symbol}</span>}
         </span>
       </label>
 
@@ -213,7 +213,7 @@ export function PricingPanel({
 
       {/* profit / loss — the last word, and editable: type a target and the
           price back-solves. A loss never uses the word "profit". */}
-      <div className="border-t border-ink/7 pt-[18px]">
+      <div className="border-t border-ink/7 pt-4">
         <p className="mb-2 text-[12px] text-ink/62">
           {pricing.profit == null
             ? "Or set what you want to make per piece"

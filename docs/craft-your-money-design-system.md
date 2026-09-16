@@ -104,16 +104,24 @@ Lora was validated against Fraunces, Newsreader and Literata on the real pricing
 
 ### 1.5 Spacing
 
-Horizontal gutter is **24px** on every screen. Vertical rhythm:
+**The grid (decided 2026-09-15):** layout-level spacing sits on an **8pt rhythm** and is named; inside a component the grid is **4pt** (Tailwind's default scale); **2px and 1px** exist only as optical nudges. Until r3 this section gave ranges ("22–26px") and the code picked a value by eye each time — 69 of 70 hand-typed spacings sat off both grids. Every range below contained an 8pt value, so the rhythm was adopted without moving anything outside its old range.
 
-| Gap | Value | Between |
+Horizontal gutter is **24px** on every screen. Vertical rhythm — each step is a token (`design/tokens.json` `space.*`) and a Tailwind utility (`pt-section`, `py-row`, `min-h-row-height`, `gap-tight`…), guarded by `src/lib/tokens.test.ts`:
+
+| Step | Value | Between |
 |---|---|---|
-| Tight | 4–8px | Label and its value |
-| Row | 13–16px | Vertical padding inside list rows |
-| Section | 22–26px | Between subsections within a zone |
-| Zone | 30–34px | Between major zones (briefing / attention / metrics / resume) |
+| Tight | 8px | Label and its value |
+| Row | 16px | Vertical padding of a single-line row: sheet items, attention rows |
+| Section | 24px | Between subsections within a zone; the top padding of a section |
+| Zone | 32px | Between major zones (briefing / attention / metrics / resume) |
+| Row height | 64px | A product row: `min-h-row-height` with `py-tight`, so name + meta land on exactly 64px |
+| Tap target | 44px | Minimum touch target (WCAG 2.5.8) — deliberately off the 8pt rhythm |
 
-**Lists are compact; briefings breathe.** These are different screen types. A list row is 56–64px tall to keep context visible; dashboard zones get 30px+ so each reads as a separate thought.
+**Inside a component** use the 4pt scale: `gap-2` (8px) between an icon and its label, `py-3` (12px) in a button, `mt-1` (4px) under a row's name for its meta line. Never `p-[11px]` — if a value isn't on the scale, the design wants the nearest step, not a new number.
+
+**Named exceptions** — the only sub-4pt values, and why: the currency symbol sits `ml-0.5` / `mr-px` (2px / 1px) from its Lora figure so the two read as one glyph group; nothing else uses them.
+
+**Lists are compact; briefings breathe.** These are different screen types. A list row is 64px tall to keep context visible; dashboard zones get 32px so each reads as a separate thought.
 
 ### 1.6 Radii
 

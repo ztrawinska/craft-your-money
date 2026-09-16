@@ -74,7 +74,7 @@ export function NeedsAttention({ items }: { items: AttentionItem[] }) {
         <DrawerTrigger asChild>
           <button
             type="button"
-            className="flex w-full items-center justify-between gap-3 rounded-[8px] border border-ink/12 px-[18px] py-[14px] text-left"
+            className="flex w-full items-center justify-between gap-3 rounded-[8px] border border-ink/12 px-4 py-row text-left"
           >
             <span className="flex items-center gap-3">
               <span className="inline-grid h-[24px] min-w-[24px] place-items-center rounded-full bg-clay/12 px-1.5 font-sans text-[12.5px] font-semibold text-clay-deep">

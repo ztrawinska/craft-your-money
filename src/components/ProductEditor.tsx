@@ -543,11 +543,11 @@ export function ProductEditor({
           <ChevronLeft size={22} strokeWidth={2} />
         </Link>
         {product.archived ? (
-          <span className="rounded-[2px] border border-ink/30 px-[11px] pb-[3px] pt-1 text-[9.5px] font-semibold uppercase tracking-[0.22em] text-ink/62">
+          <span className="rounded-[2px] border border-ink/30 px-3 pb-1 pt-1 text-[9.5px] font-semibold uppercase tracking-[0.22em] text-ink/62">
             Archived
           </span>
         ) : product.workflow === "draft" ? (
-          <span className="rounded-[2px] border border-ink/30 px-[11px] pb-[3px] pt-1 text-[9.5px] font-semibold uppercase tracking-[0.22em] text-ink/62">
+          <span className="rounded-[2px] border border-ink/30 px-3 pb-1 pt-1 text-[9.5px] font-semibold uppercase tracking-[0.22em] text-ink/62">
             Draft
           </span>
         ) : (
@@ -578,7 +578,7 @@ export function ProductEditor({
       {/* ── ledger ── */}
       <div className="px-6">
         {/* materials — editable */}
-        <section className="pb-1.5 pt-[22px]">
+        <section className="pb-1.5 pt-section">
           <SectionLabel
             total={materials.length > 0 ? <Price value={materialsTotal} variant="sectionTotal" /> : undefined}
           >
@@ -630,7 +630,7 @@ export function ProductEditor({
         </section>
 
         {/* labour — editable */}
-        <section className="border-t border-ink/7 pb-1.5 pt-[22px]">
+        <section className="border-t border-ink/7 pb-1.5 pt-section">
           <SectionLabel
             total={labour.length > 0 ? <Price value={labourTotal} variant="sectionTotal" /> : undefined}
           >
@@ -682,7 +682,7 @@ export function ProductEditor({
 
         {/* other costs — read-only for now */}
         {/* other costs — editable */}
-        <section className="border-t border-ink/7 pb-1.5 pt-[22px]">
+        <section className="border-t border-ink/7 pb-1.5 pt-section">
           <SectionLabel
             total={otherCosts.length > 0 ? <Price value={otherTotal} variant="sectionTotal" /> : undefined}
           >
@@ -726,38 +726,38 @@ export function ProductEditor({
         </section>
 
         {/* reconciling summary — live */}
-        <div className="mt-[22px] border-t border-ink/14 pb-1 pt-5">
+        <div className="mt-section border-t border-ink/14 pb-1 pt-5">
           {materials.length > 0 && (
-            <div className="flex items-baseline justify-between py-[3px] text-[13px] text-ink/62">
+            <div className="flex items-baseline justify-between py-1 text-[13px] text-ink/62">
               <span>Materials</span>
               <Price value={materialsTotal} variant="summary" />
             </div>
           )}
           {labour.length > 0 && (
-            <div className="flex items-baseline justify-between py-[3px] text-[13px] text-ink/62">
+            <div className="flex items-baseline justify-between py-1 text-[13px] text-ink/62">
               <span>Labour</span>
               <Price value={labourTotal} variant="summary" />
             </div>
           )}
           {otherCosts.length > 0 && (
-            <div className="flex items-baseline justify-between py-[3px] text-[13px] text-ink/62">
+            <div className="flex items-baseline justify-between py-1 text-[13px] text-ink/62">
               <span>Other costs</span>
               <Price value={otherTotal} variant="summary" />
             </div>
           )}
-          <div className="mt-[10px] flex items-baseline justify-between border-t border-ink/7 pt-3">
+          <div className="mt-3 flex items-baseline justify-between border-t border-ink/7 pt-3">
             <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-ink/62">
               Direct cost
             </span>
             <Price value={directCost} variant="figure" />
           </div>
           {businessCostShare !== null && (
-            <div className="mt-[11px] border-t border-dashed border-ink/14 pt-[10px]">
-              <div className="flex items-baseline justify-between py-[3px] text-[12px] text-ink/62">
+            <div className="mt-3 border-t border-dashed border-ink/14 pt-3">
+              <div className="flex items-baseline justify-between py-1 text-[12px] text-ink/62">
                 <span className="font-light italic">Share of business costs</span>
                 <Price value={businessCostShare} variant="summary" />
               </div>
-              <div className="flex items-baseline justify-between py-[3px] text-[12px]">
+              <div className="flex items-baseline justify-between py-1 text-[12px]">
                 <span className="font-medium text-ink/70">Full cost</span>
                 <Price value={directCost + businessCostShare} variant="inline" />
               </div>
@@ -792,8 +792,8 @@ export function ProductEditor({
       <BenchmarkSection benchmark={benchmark} onChange={setBenchmark} market={market} />
 
       {/* ── save bar ── */}
-      <div className="mt-[22px] border-t border-ink/7 bg-page px-6 pb-5 pt-[14px] shadow-[0_-6px_18px_-12px_rgba(30,25,22,0.12)]">
-        <p className="mb-[11px] flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.12em] text-ink/62 before:h-[5px] before:w-[5px] before:rounded-full before:bg-clay before:content-['']">
+      <div className="mt-section border-t border-ink/7 bg-page px-6 pb-5 pt-4 shadow-[0_-6px_18px_-12px_rgba(30,25,22,0.12)]">
+        <p className="mb-3 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.12em] text-ink/62 before:h-[5px] before:w-[5px] before:rounded-full before:bg-clay before:content-['']">
           Unsaved changes
         </p>
         <div className="mb-2">

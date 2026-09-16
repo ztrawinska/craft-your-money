@@ -74,13 +74,13 @@ export function HeroProfit({
             filter: "blur(11px)",
           }}
         />
-        <p className="relative mb-[9px] font-sans text-[9.5px] font-semibold uppercase tracking-[0.14em] text-ink/62">
+        <p className="relative mb-2 font-sans text-[9.5px] font-semibold uppercase tracking-[0.14em] text-ink/62">
           Avg profit / piece
         </p>
         <div className="relative">
           <Price value={shown} variant="hero" />
         </div>
-        <p className="relative mt-[9px] font-sans text-[12px] leading-[1.5] text-ink/62">
+        <p className="relative mt-2 font-sans text-[12px] leading-[1.5] text-ink/62">
           across your {count} priced products, after all costs
         </p>
       </div>
@@ -104,7 +104,7 @@ export function HeroProfit({
           <Collapse open={open}>
             <div className="mt-2.5 border-t border-ink/7 pt-1 text-left">
               {contributions.map((c) => (
-                <div key={c.name} className="flex items-baseline justify-between gap-3 py-[5px]">
+                <div key={c.name} className="flex items-baseline justify-between gap-3 py-1">
                   <span className="min-w-0 truncate font-sans text-[12.5px] text-ink/70">
                     {c.name}
                   </span>

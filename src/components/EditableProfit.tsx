@@ -48,12 +48,12 @@ export function EditableProfit({
 
   return (
     <label
-      className={`inline-flex cursor-text items-baseline border-b border-dashed border-ink/25 pb-[2px] font-serif text-[34px] font-medium leading-none tabular-nums ${color}`}
+      className={`inline-flex cursor-text items-baseline border-b border-dashed border-ink/25 pb-0.5 font-serif text-[34px] font-medium leading-none tabular-nums ${color}`}
     >
-      {!cur.suffix && <span className="mr-[1px]">{cur.symbol}</span>}
+      {!cur.suffix && <span className="mr-px">{cur.symbol}</span>}
       {/* input hugs its text via an invisible sizer, so a suffix symbol sits close */}
       <span className="relative inline-block">
-        <span aria-hidden className="invisible block whitespace-pre pr-[2px]">
+        <span aria-hidden className="invisible block whitespace-pre pr-0.5">
           {shown || "0.00"}
         </span>
         <input
@@ -85,7 +85,7 @@ export function EditableProfit({
           className={`absolute inset-0 w-full bg-transparent caret-clay-deep outline-none placeholder:text-ink/25 ${color}`}
         />
       </span>
-      {cur.suffix && <span className="ml-[2px]">{cur.symbol}</span>}
+      {cur.suffix && <span className="ml-0.5">{cur.symbol}</span>}
     </label>
   );
 }

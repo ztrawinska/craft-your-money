@@ -38,7 +38,7 @@ export function StatusFilter({ current, type }: { current: string; type: string 
       <DrawerTrigger asChild>
         <button
           type="button"
-          className={`inline-flex items-center gap-[7px] whitespace-nowrap rounded-[7px] border bg-transparent px-3 py-2 font-sans text-[12.5px] font-medium ${
+          className={`inline-flex items-center gap-2 whitespace-nowrap rounded-[7px] border bg-transparent px-3 py-2 font-sans text-[12.5px] font-medium ${
             filtered
               ? "border-clay-deep/45 bg-clay/7 text-clay-deep"
               : "border-ink/14 text-ink/62"
