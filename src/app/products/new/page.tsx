@@ -21,7 +21,7 @@ export default function NewProduct() {
         <Link
           href="/products"
           aria-label="Back"
-          className="-ml-3.5 flex size-11 items-center justify-center text-ink/62"
+          className="-ml-3 flex size-tap items-center justify-center text-ink/62"
         >
           <ChevronLeft size={22} strokeWidth={2} />
         </Link>
@@ -41,7 +41,7 @@ export default function NewProduct() {
 
       <form action={createProductAction} className="px-6 pt-6">
         <label className="block">
-          <span className="mb-1.5 block text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/62">
+          <span className="mb-1 block text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/62">
             Name
           </span>
           <Input

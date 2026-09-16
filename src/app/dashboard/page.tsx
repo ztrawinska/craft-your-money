@@ -122,7 +122,7 @@ export default async function Dashboard() {
     <div className="flex min-h-dvh flex-col">
       <main className="mx-auto w-full max-w-[430px] flex-1">
         {/* header: date + greeting, avatar (Settings lives behind it) */}
-        <div className="flex items-start justify-between px-6 pb-1.5 pt-section">
+        <div className="flex items-start justify-between px-6 pb-2 pt-section">
           <div>
             <p className="mb-1 font-sans text-[11px] tracking-[0.02em] text-ink/62">
               {greeting.date}
@@ -173,7 +173,7 @@ export default async function Dashboard() {
         {/* supporting metrics — centred to match the redesign */}
         <div className="mx-6 mt-5 grid grid-cols-2 border-t border-ink/7 pt-4">
           <div className="text-center">
-            <p className="mb-1.5 font-sans text-[9px] font-semibold uppercase tracking-[0.12em] text-ink/62">
+            <p className="mb-1 font-sans text-[9px] font-semibold uppercase tracking-[0.12em] text-ink/62">
               Priced
             </p>
             <p className="font-serif text-[20px] font-medium tabular-nums">
@@ -185,7 +185,7 @@ export default async function Dashboard() {
             </p>
           </div>
           <div className="border-l border-ink/7 text-center">
-            <p className="mb-1.5 font-sans text-[9px] font-semibold uppercase tracking-[0.12em] text-ink/62">
+            <p className="mb-1 font-sans text-[9px] font-semibold uppercase tracking-[0.12em] text-ink/62">
               Below target
             </p>
             {belowTarget > 0 ? (
@@ -194,7 +194,7 @@ export default async function Dashboard() {
                 className="inline-flex items-center justify-center font-serif text-[20px] font-medium tabular-nums text-ink"
               >
                 {belowTarget}
-                <ChevronRight size={14} strokeWidth={2} className="ml-0.5 text-clay-deep" />
+                <ChevronRight size={14} strokeWidth={2} className="ml-nudge text-clay-deep" />
               </Link>
             ) : (
               // A metric cell must hold its grid position, so it switches to a

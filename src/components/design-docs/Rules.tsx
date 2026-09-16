@@ -16,10 +16,10 @@ export function Rules({
       <p className="mb-2 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
         {title}
       </p>
-      <ul className="max-w-[62ch] space-y-1.5 font-sans text-[13.5px] font-light leading-[1.55] text-ink/70">
+      <ul className="max-w-[62ch] space-y-2 font-sans text-[13.5px] font-light leading-[1.55] text-ink/70">
         {items.map((it, i) => (
-          <li key={i} className="flex gap-2.5">
-            <span aria-hidden className="mt-[9px] h-px w-3 shrink-0 bg-ink/30" />
+          <li key={i} className="flex gap-2">
+            <span aria-hidden className="mt-2 h-px w-3 shrink-0 bg-ink/30" />
             <span>{it}</span>
           </li>
         ))}
@@ -55,7 +55,7 @@ export function BuiltOn({
 /** A small-caps label above a group of specimens. */
 export function GroupLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="mb-3 mt-7 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62 first:mt-0">
+    <p className="mb-3 mt-8 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62 first:mt-0">
       {children}
     </p>
   );

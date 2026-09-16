@@ -17,12 +17,12 @@ function Item({ href, name }: { href: string; name: string }) {
       <Link
         href={href}
         aria-current={on ? "page" : undefined}
-        className={`relative block py-[5px] pl-4 font-sans text-[13px] ${
+        className={`relative block py-1 pl-4 font-sans text-[13px] ${
           on ? "font-semibold text-clay-deep" : "text-ink/70 hover:text-ink"
         }`}
       >
         {on && (
-          <span aria-hidden className="absolute bottom-1 left-0 top-1 w-0.5 rounded-r-[2px] bg-clay-deep" />
+          <span aria-hidden className="absolute bottom-1 left-0 top-1 w-[2px] rounded-r-[2px] bg-clay-deep" />
         )}
         {name}
       </Link>
@@ -62,7 +62,7 @@ export function Sidebar() {
             <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
               Craft Your Money
             </p>
-            <p className="mt-0.5 font-serif text-[19px] font-medium text-ink">Design system</p>
+            <p className="mt-1 font-serif text-[19px] font-medium text-ink">Design system</p>
           </div>
           <Tree />
         </div>

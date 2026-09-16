@@ -93,13 +93,13 @@ function CostFields({
           <FieldLabel>Amount</FieldLabel>
           <MoneyInput value={draft.amount} onChange={(v) => onPatch({ amount: v })} />
         </label>
-        <div className="flex gap-1.5 pb-0.5">
+        <div className="flex gap-2 pb-0">
           {(["monthly", "seasonal"] as const).map((p) => (
             <button
               key={p}
               type="button"
               onClick={() => onPatch({ period: p })}
-              className={`rounded-full border px-3 py-1.5 font-sans text-[12px] capitalize ${
+              className={`rounded-full border px-3 py-2 font-sans text-[12px] capitalize ${
                 draft.period === p
                   ? "border-clay-deep bg-clay-deep text-on-clay"
                   : "border-ink/14 text-ink/62"
@@ -308,7 +308,7 @@ export function CostsEditor({
             <span className="font-sans text-[15px] text-ink">
               {method === "per-unit" ? "Pieces you make" : "Your bench hours"}
             </span>
-            <span className="inline-flex items-center gap-1.5">
+            <span className="inline-flex items-center gap-2">
               <Input
                 inputMode="decimal"
                 value={volume}

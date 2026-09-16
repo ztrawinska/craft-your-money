@@ -64,7 +64,7 @@ export function Price({ value, variant = "inline", tone }: PriceProps): ReactNod
     const [whole, dec] = value.toFixed(2).split(".");
     const sym = (
       <span
-        className={`${cur.suffix ? "ml-1" : "mr-0.5"} -translate-y-[15px] text-[22px] text-ink/62`}
+        className={`${cur.suffix ? "ml-1" : "mr-nudge"} -translate-y-[15px] text-[22px] text-ink/62`}
       >
         {cur.symbol}
       </span>
@@ -75,7 +75,7 @@ export function Price({ value, variant = "inline", tone }: PriceProps): ReactNod
         <span className="text-[56px] font-medium leading-[0.86] tracking-[-0.025em]">
           {whole}
         </span>
-        <span className="ml-0.5 -translate-y-[15px] text-[25px] text-ink/70">.{dec}</span>
+        <span className="ml-nudge -translate-y-[15px] text-[25px] text-ink/70">.{dec}</span>
         {cur.suffix && sym}
       </span>
     );

@@ -20,12 +20,12 @@ export function TokenSwatch({
     <div className="flex gap-4">
       <div
         aria-hidden
-        className="h-14 w-14 shrink-0 rounded-[6px] border border-ink/14"
+        className="size-[56px] shrink-0 rounded-[6px] border border-ink/14"
         style={{ backgroundColor: value }}
       />
       <div className="min-w-0 font-sans">
         <p className="text-[14px] font-medium text-ink">{name}</p>
-        <p className="mt-0.5 font-mono text-[11.5px] text-ink/62 tabular-nums">
+        <p className="mt-1 font-mono text-[11.5px] text-ink/62 tabular-nums">
           {value.toUpperCase()} · {utility} · {cssVar}
         </p>
         {description && (

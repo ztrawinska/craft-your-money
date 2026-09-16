@@ -72,7 +72,7 @@ export default function DesignOverview() {
               </span>
               <div>
                 <p className="font-sans text-[15px] font-medium text-ink">{name}</p>
-                <p className="mt-0.5 font-sans text-[13.5px] font-light leading-[1.55] text-ink/70">
+                <p className="mt-1 font-sans text-[13.5px] font-light leading-[1.55] text-ink/70">
                   {line}
                 </p>
               </div>
@@ -124,13 +124,13 @@ export default function DesignOverview() {
             <tbody>
               {ENFORCEMENT.map((r) => (
                 <tr key={r.rule} className="align-top">
-                  <td className="border-b border-ink/7 py-2.5 pr-4 text-ink">{r.rule}</td>
+                  <td className="border-b border-ink/7 py-3 pr-4 text-ink">{r.rule}</td>
                   <td className="border-b border-ink/7 py-2 pr-4">
                     <Chip tone={levelTone[r.level]} size="sm">
                       {r.level}
                     </Chip>
                   </td>
-                  <td className="border-b border-ink/7 py-2.5 font-light leading-[1.5] text-ink/70">
+                  <td className="border-b border-ink/7 py-3 font-light leading-[1.5] text-ink/70">
                     {r.where}
                     {r.path && (
                       <>
@@ -154,7 +154,7 @@ export default function DesignOverview() {
       <DocSection id="files" title="Where things live">
         <ul className="max-w-[70ch] space-y-3">
           {FILES.map(([path, what]) => (
-            <li key={path} className="flex flex-col gap-0.5 sm:flex-row sm:gap-4">
+            <li key={path} className="flex flex-col gap-1 sm:flex-row sm:gap-4">
               <a
                 href={repo(path.replace("*.tsx", ""))}
                 className={`shrink-0 font-mono text-[12.5px] sm:w-[300px] ${link}`}

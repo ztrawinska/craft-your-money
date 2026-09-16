@@ -13,6 +13,10 @@ set -uo pipefail
 
 ROOT="${1:-src}"
 FAIL=0
+# Advisory sections set FAIL (a report for a human); sections that guard a
+# rule the build already enforces set HARD too, and that is the exit code CI
+# sees. The Stop hook ignores the exit code either way.
+HARD=0
 
 # Tokens defined in src/app/globals.css — the only hex values allowed to
 # appear literally in component code. Anything else outside globals.css is
@@ -87,13 +91,27 @@ if [ -n "$TYPE_ARBS" ]; then
 fi
 
 echo
-echo "== Arbitrary spacing values (design-system §1.5: named steps pt-section/py-row/… or the 4pt scale, never p-[11px]) =="
-SPACING_HITS=$(grep -rnoE '\b(-?(p|m)[xytblr]?|gap|space-[xy]|inset(-[xy])?|top|left|right|bottom)-\[-?[0-9]+(\.[0-9]+)?px\]' "$ROOT" --include="*.tsx" \
-  | grep -v '/design-docs/')
-if [ -n "$SPACING_HITS" ]; then
-  echo "$SPACING_HITS"
-  echo "  -> §1.5: layout steps are named (section, row, zone, tight, gutter); inside a component use the 4pt scale. 2px/1px only as the documented optical nudges (ml-0.5, mr-px)."
+echo "== Spacing off the closed scale (design-system §1.5: steps 0 1 2 3 4 5 6 8 10 12 16 24, sizes xs…2xl, roles; never p-2.5 or p-[11px]) =="
+# Two shapes of miss. (1) A numeric step Tailwind used to accept but the
+# closed scale doesn't (0.5, 1.5, 2.5, 3.5, 7, 9, 11, 14…): since
+# `--spacing: initial` these render NOTHING, so they are bugs, not style.
+# (2) An arbitrary [Npx]. Both are checked on every utility that draws from
+# the spacing scale, variant prefixes included (sm:, hover:, data-[…]:).
+# /design-docs/ is not excluded here: those pages compile the same way.
+SPACING_UTILS='(p|px|py|pt|pr|pb|pl|m|mx|my|mt|mr|mb|ml|gap|gap-x|gap-y|space-x|space-y|inset|inset-x|inset-y|top|right|bottom|left|w|h|size|min-w|min-h|max-w|max-h|basis|translate-x|translate-y|scroll-m[xytrbl]?|scroll-p[xytrbl]?|indent)'
+ALLOWED_STEPS='0|1|2|3|4|5|6|8|10|12|16|24'
+SPACING_HITS=$(grep -rnE "(^|[^a-zA-Z0-9_/.-])-?${SPACING_UTILS}-([0-9]+(\.[0-9]+)?)\b" "$ROOT" --include="*.tsx" --include="*.ts" \
+  | grep -vE '^[^:]+:[0-9]+: *(//|\*|/\*|\{/\*)' \
+  | grep -vE '\.test\.ts:' \
+  | perl -ne 'if (/^([^:]+:\d+):(.*)$/) { my ($loc, $line) = ($1, $2);
+      while ($line =~ /(?:^|[^a-zA-Z0-9_\/.-])(-?'"${SPACING_UTILS}"'-(\d+(?:\.\d+)?))\b/g) { my ($cls, $step) = ($1, $3); next if $step =~ /^(?:'"${ALLOWED_STEPS}"')$/; print "$loc:$cls\n" } }')
+ARB_SPACING_HITS=$(grep -rnoE "\b-?(p|m)[xytblr]?-\[-?[0-9]+(\.[0-9]+)?px\]|\b(gap|space-[xy]|inset(-[xy])?|top|left|right|bottom)-\[-?[0-9]+(\.[0-9]+)?px\]" "$ROOT" --include="*.tsx")
+if [ -n "$SPACING_HITS$ARB_SPACING_HITS" ]; then
+  [ -n "$SPACING_HITS" ] && echo "$SPACING_HITS"
+  [ -n "$ARB_SPACING_HITS" ] && echo "$ARB_SPACING_HITS"
+  echo "  -> §1.5: the scale is closed. A step that isn't declared renders nothing; pick the nearest step, a size (xs…2xl) or a role (section, row, tight…). 2px only as the named nudge."
   FAIL=1
+  HARD=1
 else
   echo "  none"
 fi
@@ -130,9 +148,11 @@ else
 fi
 
 echo
-if [ "$FAIL" -eq 1 ]; then
+if [ "$HARD" -eq 1 ]; then
+  echo "Result: hard hits above (spacing off the closed scale) — these render nothing and fail CI. Other hits are candidates, per docs/craft-your-money-design-system.md §6."
+elif [ "$FAIL" -eq 1 ]; then
   echo "Result: hits found above. Each is a candidate, not an automatic failure — decide per-line, per docs/craft-your-money-design-system.md §6."
 else
   echo "Result: clean."
 fi
-exit 0
+exit "$HARD"

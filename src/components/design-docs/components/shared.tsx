@@ -15,7 +15,7 @@ export function chipFor(input: ProductStatusInput) {
 export function ProductSlot({ price, input }: { price: number | null; input: ProductStatusInput }) {
   const chip = chipFor(input);
   return (
-    <div className="flex flex-col items-end gap-1.5">
+    <div className="flex flex-col items-end gap-1">
       {price !== null && (
         <span className="font-serif text-[16px] font-medium leading-none tabular-nums text-ink">
           <Price value={price} variant="inline" />

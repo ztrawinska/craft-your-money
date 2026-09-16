@@ -110,24 +110,41 @@ Lora was validated against Fraunces, Newsreader and Literata on the real pricing
 
 ### 1.5 Spacing
 
-**The grid (decided 2026-09-15):** layout-level spacing sits on an **8pt rhythm** and is named; inside a component the grid is **4pt** (Tailwind's default scale); **2px and 1px** exist only as optical nudges. Until r3 this section gave ranges ("22–26px") and the code picked a value by eye each time — 69 of 70 hand-typed spacings sat off both grids. Every range below contained an 8pt value, so the rhythm was adopted without moving anything outside its old range.
+**One closed scale in three tiers (decided 2026-09-16, after Brad Frost's Eddie).** The scale is closed in the build: `globals.css` switches off Tailwind's open multiplier (`--spacing: initial`) and declares every step by hand, so an off-scale class (`p-2.5`, `gap-7`) renders *nothing* — and `scripts/check-tells.sh` fails CI when it finds one. Every tier is mirrored in `design/tokens.json` `space.*` and in the Figma `Space` collection, guarded by `src/lib/tokens.test.ts` (values *and* alias relationships).
 
-Horizontal gutter is **24px** on every screen. Vertical rhythm — each step is a token (`design/tokens.json` `space.*`) and a Tailwind utility (`pt-section`, `py-row`, `min-h-row-height`, `gap-tight`…), guarded by `src/lib/tokens.test.ts`:
+**Tier 1 — the steps.** Tailwind's index names; 4pt to 24, 8pt to 64, then 96 for a page's bottom clearance. Nothing between them exists.
 
-| Step | Value | Between |
+| `p-0` | `p-1` | `p-2` | `p-3` | `p-4` | `p-5` | `p-6` | `p-8` | `p-10` | `p-12` | `p-16` | `p-24` |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0 | 4 | 8 | 12 | 16 | 20 | 24 | 32 | 40 | 48 | 64 | 96 |
+
+**Tier 2 — the sizes.** T-shirt aliases onto the steps, the vocabulary this document and Figma speak: `xs` 4 · `sm` 8 · `md` 16 · `lg` 24 · `xl` 32 · `2xl` 64. Reach for a size only when no role names the relationship.
+
+**Tier 2 — the roles.** A role names the *relationship* between two things, not the amount, so a screen says `pt-section`, not `pt-6`. Each aliases a size; retuning the rhythm is a change to one line per role.
+
+| Role | = | Between |
 |---|---|---|
-| Tight | 8px | Label and its value |
-| Row | 16px | Vertical padding of a single-line row: sheet items, attention rows |
-| Section | 24px | Between subsections within a zone; the top padding of a section |
-| Zone | 32px | Between major zones (briefing / attention / metrics / resume) |
-| Row height | 64px | A product row: `min-h-row-height` with `py-tight`, so name + meta land on exactly 64px |
-| Tap target | 44px | Minimum touch target (WCAG 2.5.8) — deliberately off the 8pt rhythm |
+| `gutter` | lg 24 | The screen edge and everything on it |
+| `tight` | sm 8 | Inside a lockup: an icon and its label, a label and its value |
+| `row` | md 16 | Vertical padding of a single-line row: sheet items, attention rows |
+| `section` | lg 24 | Blocks inside a zone; the top padding of a section |
+| `zone` | xl 32 | Major zones (briefing / attention / metrics / resume) |
+| `row-height` | 64 | A product row: `min-h-row-height` with `py-tight`, so name + meta land on exactly 64px |
+| `tap` | 44 | Minimum touch target (WCAG 2.5.8) — deliberately off the rhythm |
+| `nudge` | 2 | **The only sub-4pt step, and never a rhythm.** A currency glyph or decimals against their figure (`ml-nudge`, `mr-nudge`), a figure above its dashed underline (`pb-nudge`), the sm chip's vertical inset (`py-nudge`). Nothing else. |
 
-**Inside a component** use the 4pt scale: `gap-2` (8px) between an icon and its label, `py-3` (12px) in a button, `mt-1` (4px) under a row's name for its meta line. Never `p-[11px]` — if a value isn't on the scale, the design wants the nearest step, not a new number.
+**Who owns the space — the four rules.** (Doctrine from 2026-09-16; enforced in code by P4 of the foundations plan, convention until then.)
 
-**Named exceptions** — the only sub-4pt values, and why: the currency symbol sits `ml-0.5` / `mr-px` (2px / 1px) from its Lora figure so the two read as one glyph group; nothing else uses them.
+1. **A component never carries a margin on its root.** It doesn't know its context, so it can't know its spacing; a baked-in margin is a bet that every other placement has to undo.
+2. **The space between siblings belongs to the container that arranged them** — a column-flex with `gap-section` / `gap-zone`, never `mt-*` on each child.
+3. **Prose owns its flow.** Paragraphs and headings in running text space themselves with `margin-block-end`; the last one trims it.
+4. **A painted surface owns its padding.** The pricing block, a tinted band, a sheet ship the inset that makes bare content presentable.
 
-**Lists are compact; briefings breathe.** These are different screen types. A list row is 64px tall to keep context visible; dashboard zones get 32px so each reads as a separate thought.
+**Inside a component** the same steps apply — `gap-2` (8) between an icon and its label, `py-3` (12) in a button, `mt-1` (4) under a row's name for its meta line. 6px and 10px do not exist; the 2026-09-16 migration moved 57 such uses to the nearest step (see the foundations plan for the per-use calls). Component heights are not on the rhythm: buttons and inputs are 44 (`min-h-tap`), chips sit at their text height.
+
+**Lists are compact; briefings breathe.** A list row is 64px tall to keep context visible; dashboard zones get 32px so each reads as a separate thought.
+
+**History.** r3 gave ranges ("22–26px") and the code picked by eye — 69 of 70 hand-typed spacings sat off both grids. 2026-09-15 named the layout steps on an 8pt rhythm (#5). 2026-09-16 closed the scale and added the tiers (#23): the previous "4pt inside components" rule turned out to be a 2pt grid in practice, because Tailwind's half-steps compiled.
 
 ### 1.6 Radii
 
@@ -502,6 +519,7 @@ A rule written down is memory; a rule in a type or a component is enforcement. A
 | Destructive action is last, red, with consequence | Convention | Enforced — an `ActionSheet` item variant |
 | Tokens JSON ↔ CSS agree | **Enforced** | — (`src/lib/tokens.test.ts` fails on drift) |
 | Every component appears in the live library | Convention | Stays convention — `/design` is added to by hand |
-| Hardcoded hex, non-standard radii, hand-typed spacing, banned copy | Convention | Checked — `scripts/check-tells.sh`, run automatically via a `Stop` hook (`.claude/hooks/tell-check-stop.sh`) after every response. Report-only: it surfaces candidates, doesn't block, so a hit still needs a human (or Claude, next turn) call. It also meters what §1.4/§1.6 haven't tokenised yet (`text-[…px]`, `rounded-[…]` counts) so that migration is a number, not a feeling. Pure black/white inside a `gradient(`/mask line is ignored — a stencil, not a colour. |
+| Hardcoded hex, non-standard radii, banned copy | Convention | Checked — `scripts/check-tells.sh`, run automatically via a `Stop` hook (`.claude/hooks/tell-check-stop.sh`) after every response. Report-only: it surfaces candidates, doesn't block, so a hit still needs a human (or Claude, next turn) call. It also meters what §1.4/§1.6 haven't tokenised yet (`text-[…px]`, `rounded-[…]` counts) so that migration is a number, not a feeling. Pure black/white inside a `gradient(`/mask line is ignored — a stencil, not a colour. |
+| Spacing is on the closed scale (§1.5) | **Enforced** | Two layers: the build (`--spacing: initial` — an off-scale class renders nothing) and the checker's spacing section, which exits 1 in CI on any off-scale step or `[Npx]` value, variants included. |
 
 **Convention is fine** for rules that need judgment. What matters is knowing which is which — and never assuming prose will hold a line that code doesn't.

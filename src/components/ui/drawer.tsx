@@ -65,7 +65,7 @@ function DrawerContent({
         )}
         {...props}
       >
-        <div className="mx-auto mt-2 mb-1.5 hidden h-[3px] w-[34px] shrink-0 rounded-full bg-ink/14 group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
+        <div className="mx-auto mt-2 mb-1 hidden h-[3px] w-[34px] shrink-0 rounded-full bg-ink/14 group-data-[vaul-drawer-direction=bottom]/drawer-content:block" />
         {children}
       </DrawerPrimitive.Content>
     </DrawerPortal>
@@ -77,7 +77,7 @@ function DrawerHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="drawer-header"
       className={cn(
-        "flex flex-col gap-0.5 p-4 group-data-[vaul-drawer-direction=bottom]/drawer-content:text-center group-data-[vaul-drawer-direction=top]/drawer-content:text-center md:gap-1.5 md:text-left",
+        "flex flex-col gap-1 p-4 group-data-[vaul-drawer-direction=bottom]/drawer-content:text-center group-data-[vaul-drawer-direction=top]/drawer-content:text-center md:gap-2 md:text-left",
         className
       )}
       {...props}

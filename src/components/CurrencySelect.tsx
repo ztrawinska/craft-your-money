@@ -84,7 +84,7 @@ export function CurrencySelect({
                     onChange(c.code);
                     setOpen(false);
                   }}
-                  className="flex w-full items-center gap-2.5 px-3 py-2 text-left hover:bg-ink/5"
+                  className="flex w-full items-center gap-3 px-3 py-2 text-left hover:bg-ink/5"
                 >
                   <span className="w-6 shrink-0 font-serif text-[15px] text-ink">{c.symbol}</span>
                   <span className="min-w-0 flex-1 truncate font-sans text-[13px] text-ink">

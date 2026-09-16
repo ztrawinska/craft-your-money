@@ -23,5 +23,6 @@ jobs:
       - run: npm test
       - run: npx tsc --noEmit
       - run: npm run lint
-      - name: Design-system tells (advisory)
-        run: scripts/check-tells.sh || true
+      # Advisory sections only print; the spacing section exits 1 (design-system §6).
+      - name: Design-system tells
+        run: scripts/check-tells.sh

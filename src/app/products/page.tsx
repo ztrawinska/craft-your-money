@@ -77,7 +77,7 @@ export default async function ProductsOverview({
     <div className="flex min-h-dvh flex-col">
       <main className="mx-auto w-full max-w-[430px] flex-1">
         {/* header */}
-        <div className="flex items-baseline justify-between px-6 pb-3.5 pt-section">
+        <div className="flex items-baseline justify-between px-6 pb-3 pt-section">
           <h1 className="font-serif text-[26px] font-medium tracking-[-0.01em]">
             Products
           </h1>
@@ -87,7 +87,7 @@ export default async function ProductsOverview({
         </div>
 
         {/* controls: filters (dropdowns) left, sort (bare icon) right */}
-        <div className="flex items-center gap-2 px-6 pb-3.5 pt-1">
+        <div className="flex items-center gap-2 px-6 pb-4 pt-1">
           <StatusFilter current={status} type={type} />
           <TypeFilter current={type} status={status} types={typesInUse} />
           <button
@@ -123,7 +123,7 @@ export default async function ProductsOverview({
                     // Margin already lives inside the chip label, so it's not
                     // repeated. No-price rows drop the figure and show the chip
                     // alone at full size.
-                    <div className="flex flex-col items-end gap-1.5">
+                    <div className="flex flex-col items-end gap-1">
                       {p.finalPrice !== null && (
                         <span className="font-serif text-[16px] font-medium leading-none tabular-nums text-ink">
                           {formatMoney(p.finalPrice, cur)}
