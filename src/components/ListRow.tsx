@@ -71,7 +71,7 @@ export function ListRow({
   const rowClass = [
     "flex justify-between gap-3",
     isProduct
-      ? "relative min-h-[64px] items-center py-[13px] pl-6 pr-6"
+      ? "relative min-h-row-height items-center py-tight pl-6 pr-6"
       : "items-baseline py-3",
   ].join(" ");
 
@@ -79,7 +79,7 @@ export function ListRow({
     isProduct && stripe ? (
       <span
         aria-hidden
-        className={`absolute bottom-[14px] left-3 top-[14px] w-[3px] rounded-full ${stripeBg[stripe]}`}
+        className={`absolute bottom-row left-3 top-row w-[3px] rounded-full ${stripeBg[stripe]}`}
       />
     ) : null;
 
@@ -98,7 +98,7 @@ export function ListRow({
         </span>
         {meta && (
           <p
-            className={`mt-[3px] font-sans text-[12px] ${
+            className={`mt-1 font-sans text-[12px] ${
               muted ? "text-ink/40" : "text-ink/62"
             }`}
           >

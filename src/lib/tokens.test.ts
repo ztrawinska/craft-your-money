@@ -36,6 +36,14 @@ function hexVars(body: string, prefix = ""): Map<string, string> {
 const themeColors = hexVars(block(/@theme inline/), "color-");
 const rootVars = hexVars(block(/:root/));
 
+/** `--spacing-name: 24px;` declarations in the @theme block, as name → "24px". */
+function spacingVars(body: string): Map<string, string> {
+  const out = new Map<string, string>();
+  for (const m of body.matchAll(/--spacing-([a-z0-9-]+)\s*:\s*([0-9.]+px)\b/g)) out.set(m[1], m[2]);
+  return out;
+}
+const themeSpacing = spacingVars(block(/@theme inline/));
+
 // ── read the JSON ─────────────────────────────────────────────────────────
 
 type Group = Record<string, unknown>;
@@ -60,8 +68,17 @@ const upper = (m: Map<string, unknown>) =>
 
 const jsonColors = upper(flatten(tokens.color as Group));
 const jsonShadcn = upper(flatten(tokens.shadcn as Group));
+const jsonSpace = flatten(tokens.space as Group);
 
 // ── the guards ────────────────────────────────────────────────────────────
+
+test("every @theme spacing step is in tokens.json, with the same value, and vice versa", () => {
+  // tokens.json says "tap-target"; the utility is the shorter `tap` (min-h-tap).
+  const alias: Record<string, string> = { tap: "tap-target" };
+  for (const [name, px] of themeSpacing) expect(jsonSpace.get(alias[name] ?? name), name).toBe(px);
+  const cssNames = new Set([...themeSpacing.keys()].map((n) => alias[n] ?? n));
+  for (const name of jsonSpace.keys()) expect(cssNames.has(name), `tokens.json space.${name} has no --spacing-* in @theme`).toBe(true);
+});
 
 test("every @theme colour is in tokens.json, with the same value", () => {
   expect(new Map(themeColors)).toEqual(jsonColors);

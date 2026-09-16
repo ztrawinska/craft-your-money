@@ -235,7 +235,7 @@ export function CostsEditor({
   return (
     <div className="flex min-h-dvh flex-col">
       <main className="mx-auto w-full max-w-[430px] flex-1">
-        <div className="px-6 pb-1 pt-[22px]">
+        <div className="px-6 pb-1 pt-section">
           <h1 className="font-serif text-[26px] font-medium tracking-[-0.01em]">Business costs</h1>
           <p className="mt-1 font-sans text-[12px] font-light text-ink/62">
             Rent, tools, insurance — the costs of being open, shared across what you make.

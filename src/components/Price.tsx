@@ -64,18 +64,18 @@ export function Price({ value, variant = "inline", tone }: PriceProps): ReactNod
     const [whole, dec] = value.toFixed(2).split(".");
     const sym = (
       <span
-        className={`${cur.suffix ? "ml-[4px]" : "mr-[2px]"} -translate-y-[15px] text-[22px] text-ink/62`}
+        className={`${cur.suffix ? "ml-1" : "mr-0.5"} -translate-y-[15px] text-[22px] text-ink/62`}
       >
         {cur.symbol}
       </span>
     );
     return (
-      <span className={`${base} inline-flex items-baseline border-b-2 border-clay pb-[5px]`}>
+      <span className={`${base} inline-flex items-baseline border-b-2 border-clay pb-1`}>
         {!cur.suffix && sym}
         <span className="text-[56px] font-medium leading-[0.86] tracking-[-0.025em]">
           {whole}
         </span>
-        <span className="ml-[2px] -translate-y-[15px] text-[25px] text-ink/70">.{dec}</span>
+        <span className="ml-0.5 -translate-y-[15px] text-[25px] text-ink/70">.{dec}</span>
         {cur.suffix && sym}
       </span>
     );
@@ -86,7 +86,7 @@ export function Price({ value, variant = "inline", tone }: PriceProps): ReactNod
   if (variant === "hero") {
     const sym = (
       <span
-        className={`text-[29px] text-ink/62 ${cur.suffix ? "ml-[3px]" : ""}`}
+        className={`text-[29px] text-ink/62 ${cur.suffix ? "ml-1" : ""}`}
         style={{ verticalAlign: "1px" }}
       >
         {cur.symbol}

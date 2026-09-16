@@ -122,9 +122,9 @@ export default async function Dashboard() {
     <div className="flex min-h-dvh flex-col">
       <main className="mx-auto w-full max-w-[430px] flex-1">
         {/* header: date + greeting, avatar (Settings lives behind it) */}
-        <div className="flex items-start justify-between px-6 pb-1.5 pt-[26px]">
+        <div className="flex items-start justify-between px-6 pb-1.5 pt-section">
           <div>
-            <p className="mb-[5px] font-sans text-[11px] tracking-[0.02em] text-ink/62">
+            <p className="mb-1 font-sans text-[11px] tracking-[0.02em] text-ink/62">
               {greeting.date}
             </p>
             <h1 className="font-serif text-[27px] font-medium leading-[1.1] tracking-[-0.01em]">
@@ -211,14 +211,14 @@ export default async function Dashboard() {
         {resume && (
           <Link
             href={`/products/${resume.id}`}
-            className="mx-6 mt-3 flex items-center justify-between rounded-[8px] border border-dashed border-ink/14 px-[18px] py-4"
+            className="mx-6 mt-3 flex items-center justify-between rounded-[8px] border border-dashed border-ink/14 px-4 py-4"
           >
             <div>
               <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/62">
                 Continue where you left off
               </p>
               <p className="mt-1 font-serif text-[16px] font-medium leading-[1.2]">{resume.name}</p>
-              <p className="mt-[3px] font-sans text-[12px] text-ink/62">
+              <p className="mt-1 font-sans text-[12px] text-ink/62">
                 Draft · edited 2 days ago
               </p>
             </div>

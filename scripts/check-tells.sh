@@ -60,6 +60,18 @@ else
 fi
 
 echo
+echo "== Arbitrary spacing values (design-system §1.5: named steps pt-section/py-row/… or the 4pt scale, never p-[11px]) =="
+SPACING_HITS=$(grep -rnoE '\b(-?(p|m)[xytblr]?|gap|space-[xy]|inset(-[xy])?|top|left|right|bottom)-\[-?[0-9]+(\.[0-9]+)?px\]' "$ROOT" --include="*.tsx" \
+  | grep -v '/design-docs/')
+if [ -n "$SPACING_HITS" ]; then
+  echo "$SPACING_HITS"
+  echo "  -> §1.5: layout steps are named (section, row, zone, tight, gutter); inside a component use the 4pt scale. 2px/1px only as the documented optical nudges (ml-0.5, mr-px)."
+  FAIL=1
+else
+  echo "  none"
+fi
+
+echo
 echo "== Distinct radius classes in use (design-system §1.6: nothing rounder than 11px except chips) =="
 grep -rnoE 'rounded-\[[^]]+\]|rounded-(none|sm|md|lg|xl|2xl|3xl|full)\b' "$ROOT" --include="*.tsx" \
   | sed -E 's/^[^:]+:[0-9]+://' | sort | uniq -c | sort -rn

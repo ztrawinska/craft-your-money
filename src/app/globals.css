@@ -31,6 +31,19 @@
 
   --font-sans: var(--font-ibm-plex-sans);
   --font-serif: var(--font-lora);
+
+  /* Spacing (design system §1.5). Layout-level steps sit on an 8pt rhythm
+     and are named, so a screen says `pt-section`, not `pt-[22px]`. Inside a
+     component, Tailwind's default 4pt scale (p-1 … p-6) is the grid; 2px and
+     1px are allowed only as optical nudges (ml-0.5, mr-px). tap-target is
+     44px by WCAG, deliberately off the 8pt rhythm. */
+  --spacing-gutter: 24px;
+  --spacing-tight: 8px;
+  --spacing-row: 16px;
+  --spacing-section: 24px;
+  --spacing-zone: 32px;
+  --spacing-row-height: 64px;
+  --spacing-tap: 44px;
 }
 
 /*

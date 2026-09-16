@@ -62,7 +62,7 @@ export function ActionSheet({
               <button
                 type="button"
                 onClick={() => setConfirming(null)}
-                className="flex-1 rounded-[7px] border border-ink/14 py-[11px] font-sans text-[13.5px] font-medium text-ink/62"
+                className="flex-1 rounded-[7px] border border-ink/14 py-3 font-sans text-[13.5px] font-medium text-ink/62"
               >
                 Keep
               </button>
@@ -73,7 +73,7 @@ export function ActionSheet({
                   close();
                   a.onSelect();
                 }}
-                className="flex-1 rounded-[7px] bg-status-red py-[11px] font-sans text-[13.5px] font-semibold text-[#FDFBF9]"
+                className="flex-1 rounded-[7px] bg-status-red py-3 font-sans text-[13.5px] font-semibold text-[#FDFBF9]"
               >
                 {confirming.confirm!.confirmLabel}
               </button>
@@ -94,7 +94,7 @@ export function ActionSheet({
                       a.onSelect();
                     }
                   }}
-                  className={`flex w-full items-center gap-3 px-5 py-[15px] text-left font-sans text-[14.5px] font-medium ${
+                  className={`flex w-full items-center gap-3 px-5 py-row text-left font-sans text-[14.5px] font-medium ${
                     a.danger ? "text-status-red" : "text-ink"
                   } ${firstDanger ? "border-t border-ink/7" : ""}`}
                 >
@@ -114,7 +114,7 @@ export function ActionSheet({
               <button
                 type="button"
                 onClick={close}
-                className="w-full rounded-[7px] border border-ink/14 py-[13px] font-sans text-[14px] font-medium text-ink/62"
+                className="w-full rounded-[7px] border border-ink/14 py-row font-sans text-[14px] font-medium text-ink/62"
               >
                 Cancel
               </button>
