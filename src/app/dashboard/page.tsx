@@ -134,7 +134,7 @@ export default async function Dashboard() {
           <Link
             href="/settings"
             aria-label="Settings"
-            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-clay-deep font-serif text-[15px] text-[#FDFBF9]"
+            className="flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-full bg-clay-deep font-serif text-[15px] text-on-clay"
           >
             {greeting.initial}
           </Link>

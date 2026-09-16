@@ -35,6 +35,7 @@ Everything below descends from these. When a decision is unclear, return here.
 | `ink` | `#1E1916` | All primary text and **all numbers**. |
 | `clay` | `#A0716A` | Identity accent: framing, top rules, the "+" square. |
 | `clay-deep` | `#8A5A52` | Actionable clay: links, buttons, active nav, verb-links, focus. |
+| `on-clay` | `#FDFBF9` | Text and icons on a `clay-deep` fill: the primary button, the nav plus square, the send button. Warm off-white, not pure white, so it doesn't glare on clay. Named 2026-09-16; was a literal in 8 files. |
 | `iris` | `#6467C9` | The glint only. |
 | `iris-deep` | `#5155B4` | Assistant text and iconography. |
 | `status-green` | `#336E48` | Healthy — **chips only**. |
@@ -56,9 +57,10 @@ Ink is used at fixed opacities rather than as separate greys. This keeps everyth
 | `ink-62` | 62% | Secondary labels, meta text, section labels (caps), inactive nav, unit suffixes — **the lightest rung for text** |
 | `ink-30` | 30% | Placeholders, muted marks, the neutral stripe |
 | `ink-14` | 14% | Stronger dividers, input borders, dashed frames |
+| `ink-10` | 10% | The neutral chip's fill, a disabled send button. A fill, never a line or text |
 | `ink-07` | 7% | Hairline dividers between *sections* (no longer between rows in a list — see §2.6) |
 
-**Why the ladder stops at 62% for text (2026-09-15):** on `page`, ink needs ≥61% to reach WCAG AA (4.5:1) for text under 18px. The r3 ladder had `ink-62` (3.8:1) and `ink-62` (2.6:1) carrying 12px meta and 9–11px labels; both merged into `ink-62` (4.7:1). Hierarchy below body copy now comes from size, caps and tracking — which the type scale already does — not from a lighter ink. `ink-30` and below are for placeholders, marks and lines, never for words that must be read.
+**Why the ladder stops at 62% for text (2026-09-15):** on `page`, ink needs ≥61% to reach WCAG AA (4.5:1) for text under 18px. The r3 ladder had `ink-55` (3.8:1) and `ink-42` (2.6:1) carrying 12px meta and 9–11px labels; both merged into `ink-62` (4.7:1). Hierarchy below body copy now comes from size, caps and tracking — which the type scale already does — not from a lighter ink. `ink-30` and below are for placeholders, marks and lines, never for words that must be read.
 
 **Tinted bands** (briefing, insight strip) use `rgba(ink, 0.035)` — deliberately lighter than `cream-mid`, which read as shouting. Backgrounds should sit very close to the page.
 
@@ -90,8 +92,12 @@ Lora was validated against Fraunces, Newsreader and Literata on the real pricing
 | Briefing paragraph | 15px | Plex | 300 | Line-height 1.7 |
 | Row label | 15px | Plex | 400 | |
 | Body / helper | 13px | Plex | 300 | |
+| Button | 14.5px | Plex | 600 | Primary |
+| Button, ghost | 14.5px | Plex | 500 | Medium, not semibold, so it sits back from the primary beside it |
 | Verb-link | 13.5px | Plex | 600 | clay-deep |
+| Assistant label | 13.5px | Plex | 500 | `iris-deep` — the only text that wears the glint |
 | Chip | 12px | Plex | 600 | |
+| Chip, sm | 10.5px | Plex | 600 | Inline in dense text (an attention row's meta line) |
 | Meta line | 11.5px | Plex | 300 | `ink-62` |
 | Section label (caps) | 10px | Plex | 600 | `letter-spacing: 0.2em`, uppercase, `ink-62` |
 | Metric label (caps) | 9px | Plex | 600 | `letter-spacing: 0.13em`, uppercase |
@@ -225,7 +231,7 @@ Three levels. **Three, not four** — resist adding a fourth.
 
 | Variant | Appearance | Used for |
 |---|---|---|
-| `primary` | Filled `clay-deep`, `#FDFBF9` text, 7px radius, 14px 600 | The one main action per screen (Save and activate) |
+| `primary` | Filled `clay-deep`, `on-clay` text, 7px radius, 14.5px 600 | The one main action per screen (Save and activate) |
 | `ghost` | Transparent, `1px ink-14` border, `ink-62` text, 500 | Secondary action beside a primary (Save draft) |
 | `link` | Clay-deep text + optional chevron, no border, no background | Everything else: verb-links, add-row, reset, inline actions |
 

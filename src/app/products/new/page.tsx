@@ -61,7 +61,7 @@ export default function NewProduct() {
             {PRODUCT_TYPES.map((t) => (
               <label
                 key={t}
-                className="cursor-pointer rounded-full border border-ink/14 px-4 py-2 font-sans text-[13px] text-ink/70 has-[:checked]:border-clay-deep has-[:checked]:bg-clay-deep has-[:checked]:text-[#FDFBF9]"
+                className="cursor-pointer rounded-full border border-ink/14 px-4 py-2 font-sans text-[13px] text-ink/70 has-[:checked]:border-clay-deep has-[:checked]:bg-clay-deep has-[:checked]:text-on-clay"
               >
                 <input
                   type="radio"

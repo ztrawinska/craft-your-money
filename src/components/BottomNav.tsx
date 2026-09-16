@@ -67,7 +67,7 @@ export function BottomNav({ active }: { active?: NavKey }) {
             aria-label="New product"
             className="mb-px flex h-[42px] w-[42px] items-center justify-center rounded-[11px] bg-clay-deep"
           >
-            <Plus size={19} strokeWidth={1.9} className="text-[#FDFBF9]" />
+            <Plus size={19} strokeWidth={1.9} className="text-on-clay" />
           </Link>
         </div>
         {RIGHT.map((item) => (

@@ -20,6 +20,10 @@
 
   --color-clay: #a0716a;
   --color-clay-deep: #8a5a52;
+  /* on-clay: text and icons on a clay-deep fill. Warm off-white, not pure
+     white, so it doesn't glare on clay. The shadcn bridge below bakes the
+     same hex into --primary-foreground. */
+  --color-on-clay: #fdfbf9;
 
   /* iris ("the glint") — appears ONLY when the AI assistant is involved. */
   --color-iris: #6467c9;
@@ -78,7 +82,7 @@
   --popover: #ffffff;
   --popover-foreground: #1e1916;
   --primary: #8a5a52; /* clay-deep */
-  --primary-foreground: #fdfbf9;
+  --primary-foreground: #fdfbf9; /* on-clay */
   --secondary: #efe9e2;
   --secondary-foreground: #1e1916;
   --muted: #efe9e2;
@@ -86,7 +90,7 @@
   --accent: #efe9e2;
   --accent-foreground: #1e1916;
   --destructive: #a2443b; /* status-red */
-  --destructive-foreground: #fdfbf9;
+  --destructive-foreground: #fdfbf9; /* on-clay */
   --border: #e5ded6; /* ≈ ink at 14% on page */
   --input: #e5ded6;
   --ring: #a0716a; /* clay — the focus accent */
