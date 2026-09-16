@@ -57,7 +57,8 @@ From [2026-09-15-inspection.md](../reports/2026-09-15-inspection.md) (54/100). R
 **First move:** either remove them or add a line to §2.3 / §2.12 sanctioning them (a "lift on the primary action" and "a sticky bar's fold" are defensible). Either way the spec and code stop disagreeing.
 
 ### S8 · Fix the tell-checker's standing false positive and widen its eye — station 5
-**Issue:** #15
+**Issue:** #15 — done 2026-09-16
+**Status 2026-09-16 — done.** `#000`/`#fff` inside a `gradient(`/mask line no longer count as colours (the hex sections now share one pass that drops them); the top of every report is clean. New section "Type and radius still written by hand" prints `text-[…px]` / `leading-`+`tracking-[…]` / `rounded-[…]` counts (174 / 60 / 24 today) with the five most common sizes — non-failing until the §1.4/§1.6 utilities exist, then it becomes a hard flag like spacing. Spec §6 table row updated.
 **Evidence:** `#000` in FramedSurface.tsx:39–40 is a CSS mask, reported every turn; the checker doesn't see type/space arbitraries.
 **First move:** allow-list `#000` inside `mask-image`/`gradient(` lines; add a count of `text-[`/`rounded-[`/`p*-[` arbitraries so S1's migration is visible as a number going down.
 

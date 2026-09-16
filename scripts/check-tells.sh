@@ -23,10 +23,17 @@ ALLOWED_HEX_REGEX='#(f7f4f0|ffffff|fdfbf9|1e1916|a0716a|8a5a52|6467c9|5155b4|336
 # Radii from design-system.md §1.6 + the documented §2.12 input exception.
 ALLOWED_RADIUS_PX='2|5|6|7|8|11|100'
 
-echo "== Hardcoded hex outside globals.css =="
-HEX_HITS=$(grep -rnoiE '#[0-9a-fA-F]{3,8}\b' "$ROOT" --include="*.tsx" --include="*.ts" \
+# Every hex in src, one "file:line:#hex" per hit. Pure black/white inside a
+# gradient( or mask line is dropped first: in a CSS mask only alpha matters,
+# so the #000 in FramedSurface's torn edge is a stencil, not a colour, and
+# reporting it every turn taught everyone to skim past this section.
+HEX_ALL=$(grep -rnE '#[0-9a-fA-F]{3,8}\b' "$ROOT" --include="*.tsx" --include="*.ts" \
   | grep -v '/globals\.css' \
-  | grep -viE "$ALLOWED_HEX_REGEX")
+  | perl -ne 'if (/^([^:]+:\d+):(.*)$/) { my ($loc, $line) = ($1, $2); my $stencil = $line =~ /gradient\(|mask/i;
+      while ($line =~ /(#[0-9a-fA-F]{3,8})\b/g) { my $h = $1; next if $stencil && $h =~ /^#(000|000000|fff|ffffff)$/i; print "$loc:$h\n" } }')
+
+echo "== Hardcoded hex outside globals.css =="
+HEX_HITS=$(echo "$HEX_ALL" | grep -viE "$ALLOWED_HEX_REGEX" | grep .)
 if [ -n "$HEX_HITS" ]; then
   echo "$HEX_HITS"
   echo "  -> not one of the tokens in src/app/globals.css. Add it as a token, or reuse an existing one."
@@ -38,9 +45,7 @@ fi
 echo
 echo "== Hex values that already have a token, spelled out literally =="
 # Catches e.g. #FDFBF9 typed directly instead of using text-primary-foreground / --color-*.
-TOKEN_HEX_HITS=$(grep -rnoiE '#[0-9a-fA-F]{3,8}\b' "$ROOT" --include="*.tsx" --include="*.ts" \
-  | grep -v '/globals\.css' \
-  | grep -iE "$ALLOWED_HEX_REGEX")
+TOKEN_HEX_HITS=$(echo "$HEX_ALL" | grep -iE "$ALLOWED_HEX_REGEX")
 if [ -n "$TOKEN_HEX_HITS" ]; then
   echo "$TOKEN_HEX_HITS"
   echo "  -> valid token value, but written as a raw hex instead of the Tailwind/CSS var. Not a hard fail, but worth a pass."
@@ -57,6 +62,25 @@ if [ -n "$RADIUS_HITS" ]; then
   FAIL=1
 else
   echo "  none"
+fi
+
+echo
+echo "== Type and radius still written by hand (S1 meter: design-system §1.4 / §1.6 — should only go down) =="
+# Not a fail yet: the named utilities don't exist, so there is nothing to
+# migrate to. Once they do, this section turns into a hard flag like the
+# spacing one below. /design-docs/ is excluded: the library pages quote the
+# raw values on purpose.
+count_arbs() { grep -rnoE "$1" "$ROOT" --include="*.tsx" | grep -v '/design-docs/'; }
+TYPE_ARBS=$(count_arbs 'text-\[[0-9]+(\.[0-9]+)?px\]')
+LINE_ARBS=$(count_arbs '(leading|tracking)-\[[^]]+\]')
+RADIUS_ARBS=$(count_arbs 'rounded-\[[^]]+\]')
+n() { if [ -n "$1" ]; then echo "$1" | wc -l | tr -d ' '; else echo 0; fi; }
+echo "  text-[…px]:            $(n "$TYPE_ARBS")"
+echo "  leading-/tracking-[…]: $(n "$LINE_ARBS")"
+echo "  rounded-[…]:           $(n "$RADIUS_ARBS")"
+if [ -n "$TYPE_ARBS" ]; then
+  echo "  most common sizes:"
+  echo "$TYPE_ARBS" | sed -E 's/^[^:]+:[0-9]+://' | sort | uniq -c | sort -rn | head -5 | sed 's/^/   /'
 fi
 
 echo
