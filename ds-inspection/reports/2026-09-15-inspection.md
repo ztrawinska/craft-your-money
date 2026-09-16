@@ -1,7 +1,7 @@
 # Craft Your Money — design system inspection
 
 **Date:** 2026-09-15 · **Inspected at:** `main` @ `17a7aa9` · **Figma:** Craft Your Money · Design System (`4SU2FWCR13o15AspvjXI6F`) · **Profile:** solo, one app, code is the source of truth (see [GARAGE.md](../GARAGE.md))
-**Work order:** [2026-09-15-work-order.md](../work-orders/2026-09-15-work-order.md)
+**Work order:** [2026-09-15-work-order.md](../work-orders/2026-09-15-work-order.md) · **Tracked as:** GitHub issues #6–#19, milestone *DS inspection 2026-09-15* (added 2026-09-16)
 
 ## Score: 54 / 100
 
