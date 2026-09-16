@@ -101,7 +101,7 @@ function CostFields({
               onClick={() => onPatch({ period: p })}
               className={`rounded-full border px-3 py-1.5 font-sans text-[12px] capitalize ${
                 draft.period === p
-                  ? "border-clay-deep bg-clay-deep text-[#FDFBF9]"
+                  ? "border-clay-deep bg-clay-deep text-on-clay"
                   : "border-ink/14 text-ink/62"
               }`}
             >

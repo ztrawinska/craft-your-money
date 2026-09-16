@@ -125,7 +125,7 @@ export function FormFooter({
             onClick={onSave}
             disabled={!valid}
             className={`rounded-[7px] px-4 py-2 text-[13px] font-semibold ${
-              valid ? "bg-clay-deep text-[#FDFBF9]" : "bg-ink/10 text-ink/30"
+              valid ? "bg-clay-deep text-on-clay" : "bg-ink/10 text-ink/30"
             }`}
           >
             Save

@@ -45,7 +45,10 @@ fi
 echo
 echo "== Hex values that already have a token, spelled out literally =="
 # Catches e.g. #FDFBF9 typed directly instead of using text-primary-foreground / --color-*.
-TOKEN_HEX_HITS=$(echo "$HEX_ALL" | grep -iE "$ALLOWED_HEX_REGEX")
+# app/manifest.ts is excluded: the PWA manifest is JSON handed to the browser,
+# so it cannot reference a CSS variable and the page-colour literal is the only
+# spelling available there.
+TOKEN_HEX_HITS=$(echo "$HEX_ALL" | grep -iE "$ALLOWED_HEX_REGEX" | grep -v '/app/manifest\.ts:')
 if [ -n "$TOKEN_HEX_HITS" ]; then
   echo "$TOKEN_HEX_HITS"
   echo "  -> valid token value, but written as a raw hex instead of the Tailwind/CSS var. Not a hard fail, but worth a pass."
