@@ -496,6 +496,6 @@ A rule written down is memory; a rule in a type or a component is enforcement. A
 | Destructive action is last, red, with consequence | Convention | Enforced — an `ActionSheet` item variant |
 | Tokens JSON ↔ CSS agree | **Enforced** | — (`src/lib/tokens.test.ts` fails on drift) |
 | Every component appears in the live library | Convention | Stays convention — `/design` is added to by hand |
-| Hardcoded hex, non-standard radii, banned copy | Convention | Checked — `scripts/check-tells.sh`, run automatically via a `Stop` hook (`.claude/hooks/tell-check-stop.sh`) after every response. Report-only: it surfaces candidates, doesn't block, so a hit still needs a human (or Claude, next turn) call. |
+| Hardcoded hex, non-standard radii, hand-typed spacing, banned copy | Convention | Checked — `scripts/check-tells.sh`, run automatically via a `Stop` hook (`.claude/hooks/tell-check-stop.sh`) after every response. Report-only: it surfaces candidates, doesn't block, so a hit still needs a human (or Claude, next turn) call. It also meters what §1.4/§1.6 haven't tokenised yet (`text-[…px]`, `rounded-[…]` counts) so that migration is a number, not a feeling. Pure black/white inside a `gradient(`/mask line is ignored — a stencil, not a colour. |
 
 **Convention is fine** for rules that need judgment. What matters is knowing which is which — and never assuming prose will hold a line that code doesn't.
