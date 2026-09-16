@@ -31,8 +31,8 @@ export function VoiceDoc() {
           <tbody>
             {SAY.map(([say, not]) => (
               <tr key={say}>
-                <td className="border-b border-ink/7 py-2.5 pr-4 text-ink">{say}</td>
-                <td className="border-b border-ink/7 py-2.5 text-ink/62 line-through decoration-ink/30">
+                <td className="border-b border-ink/7 py-3 pr-4 text-ink">{say}</td>
+                <td className="border-b border-ink/7 py-3 text-ink/62 line-through decoration-ink/30">
                   {not}
                 </td>
               </tr>

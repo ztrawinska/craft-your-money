@@ -13,7 +13,7 @@ export function RadiiDoc() {
         {leaves<string>(tokens.radius).map(([name, t]) => (
           <div key={name} className="w-[112px] font-sans">
             <div
-              className="h-14 w-full border border-ink/30 bg-ink/[0.035]"
+              className="h-[56px] w-full border border-ink/30 bg-ink/[0.035]"
               style={{ borderRadius: t.$value }}
             />
             <p className="mt-2 text-[13px] font-medium text-ink">{name}</p>

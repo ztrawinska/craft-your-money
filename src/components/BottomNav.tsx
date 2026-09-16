@@ -33,10 +33,10 @@ function Tab({ item, active }: { item: NavItem; active?: NavKey }) {
   return (
     <Link
       href={item.href}
-      className="relative flex flex-1 flex-col items-center justify-end gap-1 px-2.5"
+      className="relative flex flex-1 flex-col items-center justify-end gap-1 px-2"
     >
       {on && (
-        <span className="absolute -top-3 left-1/2 h-0.5 w-[22px] -translate-x-1/2 rounded-b-[2px] bg-clay-deep" />
+        <span className="absolute -top-3 left-1/2 h-[2px] w-[22px] -translate-x-1/2 rounded-b-[2px] bg-clay-deep" />
       )}
       <Icon
         size={22}
@@ -57,7 +57,7 @@ function Tab({ item, active }: { item: NavItem; active?: NavKey }) {
 export function BottomNav({ active }: { active?: NavKey }) {
   return (
     <nav className="sticky bottom-0 border-t border-ink/7 bg-page">
-      <div className="mx-auto flex max-w-[430px] items-end justify-around px-2 pb-3.5 pt-3">
+      <div className="mx-auto flex max-w-[430px] items-end justify-around px-2 pb-3 pt-3">
         {LEFT.map((item) => (
           <Tab key={item.key} item={item} active={active} />
         ))}

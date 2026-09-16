@@ -6,7 +6,7 @@ export function DocFooter({ href }: { href: string }) {
   const { prev, next } = neighbours(href);
   if (!prev && !next) return null;
   return (
-    <div className="mt-14 flex justify-between border-t border-ink/14 pt-5 font-sans text-[13px]">
+    <div className="mt-16 flex justify-between border-t border-ink/14 pt-5 font-sans text-[13px]">
       <span>
         {prev && (
           <Link href={prev.href} className="text-clay-deep">

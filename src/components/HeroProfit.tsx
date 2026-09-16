@@ -86,7 +86,7 @@ export function HeroProfit({
       </div>
 
       {contributions.length > 0 && (
-        <div className="mt-1.5">
+        <div className="mt-2">
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
@@ -102,7 +102,7 @@ export function HeroProfit({
           </button>
 
           <Collapse open={open}>
-            <div className="mt-2.5 border-t border-ink/7 pt-1 text-left">
+            <div className="mt-3 border-t border-ink/7 pt-1 text-left">
               {contributions.map((c) => (
                 <div key={c.name} className="flex items-baseline justify-between gap-3 py-1">
                   <span className="min-w-0 truncate font-sans text-[12.5px] text-ink/70">

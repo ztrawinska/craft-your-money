@@ -26,7 +26,7 @@ const toneClasses: Record<ChipTone, string> = {
 // dense text — e.g. inside a dashboard attention row's meta line.
 const sizeClasses = {
   default: "px-3 py-1 text-[12px]",
-  sm: "px-2 py-0.5 text-[10.5px]",
+  sm: "px-2 py-nudge text-[10.5px]",
 } as const;
 
 type ChipProps = {

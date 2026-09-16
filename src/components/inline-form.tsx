@@ -59,7 +59,7 @@ export function MoneyInput({
         // Align the number toward the currency so the caret sits right beside
         // it (matching "your price"): right for a suffix symbol (zł 12.00 →
         // caret between number and zł), left for a prefix (£12.00).
-        className={`font-serif tabular-nums ${cur.suffix ? "pr-9 text-right" : "pl-6"}`}
+        className={`font-serif tabular-nums ${cur.suffix ? "pr-10 text-right" : "pl-6"}`}
       />
     </div>
   );
@@ -95,7 +95,7 @@ export function FormFooter({
   const cur = useCurrency();
   return (
     <>
-      <div className="mt-3 flex items-baseline justify-between border-t border-dashed border-ink/14 pt-2.5">
+      <div className="mt-3 flex items-baseline justify-between border-t border-dashed border-ink/14 pt-3">
         <span className="text-[11px] font-light text-ink/62">{costLabel}</span>
         <span className="font-serif text-[15px] tabular-nums text-ink">
           {lineCost != null ? formatMoney(lineCost, cur) : "—"}

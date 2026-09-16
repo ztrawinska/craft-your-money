@@ -96,7 +96,7 @@ export function Combobox({
                   onPick(o);
                   setOpen(false);
                 }}
-                className="flex w-full items-center justify-between gap-3 px-3 py-2.5 text-left hover:bg-ink/5"
+                className="flex w-full items-center justify-between gap-3 px-3 py-3 text-left hover:bg-ink/5"
               >
                 <span className="flex items-center gap-2 font-sans text-[14px] text-ink">
                   <Diamond size={8} className="shrink-0 fill-ink/30 text-ink/30" />
@@ -119,7 +119,7 @@ export function Combobox({
                   onUseAsNew();
                   setOpen(false);
                 }}
-                className="flex w-full items-center gap-1.5 px-3 py-2.5 text-left font-sans text-[13px] font-medium text-clay-deep hover:bg-ink/5"
+                className="flex w-full items-center gap-2 px-3 py-3 text-left font-sans text-[13px] font-medium text-clay-deep hover:bg-ink/5"
               >
                 <Plus size={14} strokeWidth={2} />
                 Use as new

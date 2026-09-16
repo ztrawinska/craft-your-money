@@ -79,7 +79,7 @@ To make Price Check live, copy `.env.example` to `.env.local` and add an Anthrop
 ```bash
 npm test             # unit tests, including the tokens ↔ CSS guard
 npm run lint
-npm run check:tells  # design-system tells in src/ — reports, doesn't block
+npm run check:tells  # design-system tells in src/ — reports; fails only on spacing off the closed scale
 ```
 
 ## Where to look

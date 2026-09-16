@@ -52,10 +52,10 @@ export function ActionSheet({
 
         {confirming ? (
           <div className="px-5 pb-1 pt-2">
-            <p className="mb-1.5 font-serif text-[15px] font-medium text-status-red">
+            <p className="mb-1 font-serif text-[15px] font-medium text-status-red">
               {confirming.confirm!.title}
             </p>
-            <p className="mb-3.5 font-sans text-[12px] font-light leading-[1.55] text-ink/62">
+            <p className="mb-4 font-sans text-[12px] font-light leading-[1.55] text-ink/62">
               {confirming.confirm!.body}
             </p>
             <div className="flex gap-2">
@@ -102,7 +102,7 @@ export function ActionSheet({
                   <span>
                     {a.label}
                     {a.sublabel && (
-                      <span className="mt-0.5 block text-[11px] font-light text-ink/62">
+                      <span className="mt-1 block text-[11px] font-light text-ink/62">
                         {a.sublabel}
                       </span>
                     )}

@@ -36,17 +36,51 @@
   --font-sans: var(--font-ibm-plex-sans);
   --font-serif: var(--font-lora);
 
-  /* Spacing (design system §1.5). Layout-level steps sit on an 8pt rhythm
-     and are named, so a screen says `pt-section`, not `pt-[22px]`. Inside a
-     component, Tailwind's default 4pt scale (p-1 … p-6) is the grid; 2px and
-     1px are allowed only as optical nudges (ml-0.5, mr-px). tap-target is
-     44px by WCAG, deliberately off the 8pt rhythm. */
-  --spacing-gutter: 24px;
-  --spacing-tight: 8px;
-  --spacing-row: 16px;
-  --spacing-section: 24px;
-  --spacing-zone: 32px;
-  --spacing-row-height: 64px;
+  /* Spacing (design system §1.5) — one closed scale in three tiers.
+
+     Tier 1, the steps. Tailwind's index names (p-1 = 4px … p-6 = 24px), 4pt
+     to 24 and 8pt to 64, plus 96 for a page's bottom clearance. `--spacing:
+     initial` switches off Tailwind's open multiplier, so p-2.5, p-7, size-3.5
+     no longer exist: an off-scale class now renders nothing, and
+     scripts/check-tells.sh reports it (hard fail in CI).
+
+     Tier 2, the sizes: xs … 2xl — the vocabulary the spec and Figma speak.
+
+     Tier 2, the roles: the relationship between two things on a screen, so a
+     page says `pt-section`, not `pt-6`. Each role aliases a size.
+
+     `nudge` (2px) is the only sub-4pt step and never a rhythm: optical
+     alignment of a currency glyph or decimals against their figure, and the
+     sm chip's vertical inset. `tap` is 44px by WCAG, deliberately off the
+     rhythm. */
+  --spacing: initial;
+  --spacing-0: 0px;
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-16: 64px;
+  --spacing-24: 96px;
+
+  --spacing-xs: var(--spacing-1);
+  --spacing-sm: var(--spacing-2);
+  --spacing-md: var(--spacing-4);
+  --spacing-lg: var(--spacing-6);
+  --spacing-xl: var(--spacing-8);
+  --spacing-2xl: var(--spacing-16);
+
+  --spacing-nudge: 2px;
+  --spacing-gutter: var(--spacing-lg);
+  --spacing-tight: var(--spacing-sm);
+  --spacing-row: var(--spacing-md);
+  --spacing-section: var(--spacing-lg);
+  --spacing-zone: var(--spacing-xl);
+  --spacing-row-height: var(--spacing-16);
   --spacing-tap: 44px;
 }
 

@@ -36,10 +36,27 @@ function hexVars(body: string, prefix = ""): Map<string, string> {
 const themeColors = hexVars(block(/@theme inline/), "color-");
 const rootVars = hexVars(block(/:root/));
 
-/** `--spacing-name: 24px;` declarations in the @theme block, as name → "24px". */
-function spacingVars(body: string): Map<string, string> {
-  const out = new Map<string, string>();
-  for (const m of body.matchAll(/--spacing-([a-z0-9-]+)\s*:\s*([0-9.]+px)\b/g)) out.set(m[1], m[2]);
+/**
+ * `--spacing-<name>: 24px;` and `--spacing-<name>: var(--spacing-<other>);`
+ * declarations in the @theme block. The scale is three tiers (§1.5): steps
+ * carry a px value, sizes and roles alias another key. Returns name →
+ * { px, alias } with the alias chain resolved to px.
+ */
+function spacingVars(body: string): Map<string, { px: string; alias?: string }> {
+  const raw = new Map<string, string>();
+  for (const m of body.matchAll(/--spacing-([a-z0-9-]+)\s*:\s*([^;]+);/g)) raw.set(m[1], m[2].trim());
+  const resolve = (name: string, depth = 0): string => {
+    const v = raw.get(name);
+    if (!v) throw new Error(`--spacing-${name} is not defined in @theme`);
+    if (depth > 5) throw new Error(`--spacing-${name}: alias loop`);
+    const ref = v.match(/^var\(--spacing-([a-z0-9-]+)\)$/);
+    return ref ? resolve(ref[1], depth + 1) : v;
+  };
+  const out = new Map<string, { px: string; alias?: string }>();
+  for (const [name, v] of raw) {
+    const ref = v.match(/^var\(--spacing-([a-z0-9-]+)\)$/);
+    out.set(name, { px: resolve(name), alias: ref?.[1] });
+  }
   return out;
 }
 const themeSpacing = spacingVars(block(/@theme inline/));
@@ -72,12 +89,37 @@ const jsonSpace = flatten(tokens.space as Group);
 
 // ── the guards ────────────────────────────────────────────────────────────
 
-test("every @theme spacing step is in tokens.json, with the same value, and vice versa", () => {
+test("the @theme spacing scale is closed, and its three tiers mirror tokens.json exactly", () => {
+  // `--spacing: initial` switches off Tailwind's open multiplier, so p-2.5 and
+  // p-7 no longer exist; every step in use must be declared.
+  expect(block(/@theme inline/)).toMatch(/--spacing:\s*initial;/);
+
   // tokens.json says "tap-target"; the utility is the shorter `tap` (min-h-tap).
   const alias: Record<string, string> = { tap: "tap-target" };
-  for (const [name, px] of themeSpacing) expect(jsonSpace.get(alias[name] ?? name), name).toBe(px);
-  const cssNames = new Set([...themeSpacing.keys()].map((n) => alias[n] ?? n));
-  for (const name of jsonSpace.keys()) expect(cssNames.has(name), `tokens.json space.${name} has no --spacing-* in @theme`).toBe(true);
+  const toCss = (jsonName: string) => Object.entries(alias).find(([, j]) => j === jsonName)?.[0] ?? jsonName;
+
+  // JSON leaves as leafName → { px (resolved), alias (leaf name of the {ref}) }.
+  const raw = new Map<string, string>();
+  for (const [k, v] of jsonSpace) raw.set(k.replace(/^(scale|size|role)-/, ""), String(v));
+  const resolveJson = (name: string, depth = 0): string => {
+    const v = raw.get(name);
+    if (v === undefined) throw new Error(`tokens.json space has no leaf ${name}`);
+    const ref = v.match(/^\{space\.(?:scale|size|role)\.([a-z0-9-]+)\}$/);
+    return ref && depth < 5 ? resolveJson(ref[1], depth + 1) : v;
+  };
+
+  for (const [cssName, { px, alias: cssAlias }] of themeSpacing) {
+    const jsonName = alias[cssName] ?? cssName;
+    expect(raw.has(jsonName), `--spacing-${cssName} has no tokens.json space.* leaf`).toBe(true);
+    expect(resolveJson(jsonName), cssName).toBe(px);
+    // The relationship is mirrored, not just the number: a role that aliases a
+    // size in CSS aliases the same size in JSON.
+    const jsonAlias = raw.get(jsonName)!.match(/\{space\.[a-z]+\.([a-z0-9-]+)\}$/)?.[1];
+    expect(jsonAlias, `${cssName} aliases ${cssAlias} in CSS`).toBe(cssAlias);
+  }
+  for (const jsonName of raw.keys()) {
+    expect(themeSpacing.has(toCss(jsonName)), `tokens.json space leaf "${jsonName}" has no --spacing-* in @theme`).toBe(true);
+  }
 });
 
 test("every @theme colour is in tokens.json, with the same value", () => {

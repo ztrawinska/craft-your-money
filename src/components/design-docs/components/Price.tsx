@@ -47,7 +47,7 @@ export function PriceDoc() {
           const c = chipFor(ACTIVE(margin));
           return (
             <Specimen key={tone} label={`variant="profit" tone="${tone}"`}>
-              <div className="flex items-center justify-between gap-2.5">
+              <div className="flex items-center justify-between gap-3">
                 <Price value={{ positive: 18.2, caution: 6.4, critical: 2.1 }[tone]} variant="profit" tone={tone} />
                 <Chip tone={c.tone}>{c.label}</Chip>
               </div>

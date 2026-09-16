@@ -24,7 +24,7 @@ export function ScreensDoc() {
           <li key={name} className="grid gap-x-6 gap-y-1 py-3 md:grid-cols-[260px_minmax(0,1fr)]">
             <div>
               <p className="font-medium text-ink">{name}</p>
-              <p className="mt-0.5 font-mono text-[11px]">
+              <p className="mt-1 font-mono text-[11px]">
                 <a href={repo(path)} className={docLink}>
                   {path.replace("src/components/", "")}
                 </a>

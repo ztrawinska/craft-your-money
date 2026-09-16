@@ -23,7 +23,7 @@ export function IrisSheetDemo() {
           "Materials are 71% of the cost. A silver price rise would show up here first.",
           "Labour is 20 minutes at £15/hr. That rate is on the low side for finished work.",
         ].map((f, i) => (
-          <li key={i} className={`flex gap-2.5 py-2.5 ${i > 0 ? "border-t border-iris/15" : ""}`}>
+          <li key={i} className={`flex gap-2 py-3 ${i > 0 ? "border-t border-iris/15" : ""}`}>
             <span className="font-serif text-[13px] tabular-nums text-iris-deep">{i + 1}</span>
             <span className="font-sans text-[13px] font-light leading-[1.5] text-ink/80">{f}</span>
           </li>
@@ -44,7 +44,7 @@ export function IrisSheetDemo() {
           <button
             key={t}
             type="button"
-            className="rounded-full bg-iris/[0.09] px-3 py-1.5 font-sans text-[12px] font-medium text-iris-deep"
+            className="rounded-full bg-iris/[0.09] px-3 py-2 font-sans text-[12px] font-medium text-iris-deep"
           >
             {t}
           </button>

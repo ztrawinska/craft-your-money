@@ -56,7 +56,7 @@ function NumberField({
   width?: string;
 }) {
   return (
-    <span className="inline-flex items-center gap-1.5">
+    <span className="inline-flex items-center gap-2">
       {prefix && <span className="font-serif text-[15px] text-ink/62">{prefix}</span>}
       <Input
         inputMode="decimal"
@@ -97,7 +97,7 @@ export function SettingsForm({ initial }: { initial: Settings }) {
         <Link
           href="/dashboard"
           aria-label="Back"
-          className="-ml-3.5 flex size-11 items-center justify-center text-ink/62"
+          className="-ml-3 flex size-tap items-center justify-center text-ink/62"
         >
           <ChevronLeft size={22} strokeWidth={2} />
         </Link>

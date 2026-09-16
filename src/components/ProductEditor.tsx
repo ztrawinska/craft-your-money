@@ -538,7 +538,7 @@ export function ProductEditor({
         <Link
           href="/products"
           aria-label="Back"
-          className="-ml-3.5 flex size-11 items-center justify-center text-ink/62"
+          className="-ml-3 flex size-tap items-center justify-center text-ink/62"
         >
           <ChevronLeft size={22} strokeWidth={2} />
         </Link>
@@ -578,7 +578,7 @@ export function ProductEditor({
       {/* ── ledger ── */}
       <div className="px-6">
         {/* materials — editable */}
-        <section className="pb-1.5 pt-section">
+        <section className="pb-2 pt-section">
           <SectionLabel
             total={materials.length > 0 ? <Price value={materialsTotal} variant="sectionTotal" /> : undefined}
           >
@@ -630,7 +630,7 @@ export function ProductEditor({
         </section>
 
         {/* labour — editable */}
-        <section className="border-t border-ink/7 pb-1.5 pt-section">
+        <section className="border-t border-ink/7 pb-2 pt-section">
           <SectionLabel
             total={labour.length > 0 ? <Price value={labourTotal} variant="sectionTotal" /> : undefined}
           >
@@ -682,7 +682,7 @@ export function ProductEditor({
 
         {/* other costs — read-only for now */}
         {/* other costs — editable */}
-        <section className="border-t border-ink/7 pb-1.5 pt-section">
+        <section className="border-t border-ink/7 pb-2 pt-section">
           <SectionLabel
             total={otherCosts.length > 0 ? <Price value={otherTotal} variant="sectionTotal" /> : undefined}
           >
@@ -793,7 +793,7 @@ export function ProductEditor({
 
       {/* ── save bar ── */}
       <div className="mt-section border-t border-ink/7 bg-page px-6 pb-5 pt-4 shadow-[0_-6px_18px_-12px_rgba(30,25,22,0.12)]">
-        <p className="mb-3 flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.12em] text-ink/62 before:h-[5px] before:w-[5px] before:rounded-full before:bg-clay before:content-['']">
+        <p className="mb-3 flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.12em] text-ink/62 before:h-[5px] before:w-[5px] before:rounded-full before:bg-clay before:content-['']">
           Unsaved changes
         </p>
         <div className="mb-2">

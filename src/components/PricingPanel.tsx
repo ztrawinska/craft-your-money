@@ -133,11 +133,11 @@ export function PricingPanel({
   return (
     <FramedSurface className="mx-6 mt-section px-6 pb-5 pt-section">
       {/* calculated price — the suggestion */}
-      <div className="mb-4 flex items-center justify-between gap-2.5 border-b border-ink/7 pb-4">
+      <div className="mb-4 flex items-center justify-between gap-3 border-b border-ink/7 pb-4">
         <div>
           <p className="text-[12.5px] text-clay-deep">Calculated price</p>
           {suggestion.calculatedBeforeVat != null && (
-            <p className="mt-0.5 text-[11px] font-light text-ink/62">
+            <p className="mt-1 text-[11px] font-light text-ink/62">
               {formatMoney(suggestion.calculatedBeforeVat, cur)} before VAT · {targetMarginPct}%
               target
             </p>
@@ -169,11 +169,11 @@ export function PricingPanel({
           hugged left under the clay rule */}
       <label className="mb-3 flex w-full cursor-text items-baseline">
         <span className="inline-flex items-baseline border-b-2 border-clay pb-1">
-          {!cur.suffix && <span className="mr-0.5 font-serif text-[22px] text-ink/62">{cur.symbol}</span>}
+          {!cur.suffix && <span className="mr-nudge font-serif text-[22px] text-ink/62">{cur.symbol}</span>}
           {/* the input hugs its text: an invisible sizer sets the exact width
               (so a suffix symbol sits right after the number, not after slack) */}
           <span className="relative inline-block font-serif text-[44px] font-medium leading-none tracking-[-0.02em] tabular-nums">
-            <span aria-hidden className="invisible block whitespace-pre pr-0.5">
+            <span aria-hidden className="invisible block whitespace-pre pr-nudge">
               {priceText || "0.00"}
             </span>
             <input
@@ -187,7 +187,7 @@ export function PricingPanel({
               className="absolute inset-0 w-full bg-transparent text-ink caret-clay-deep outline-none placeholder:text-ink/25"
             />
           </span>
-          {cur.suffix && <span className="ml-0.5 font-serif text-[22px] text-ink/62">{cur.symbol}</span>}
+          {cur.suffix && <span className="ml-nudge font-serif text-[22px] text-ink/62">{cur.symbol}</span>}
         </span>
       </label>
 
@@ -221,7 +221,7 @@ export function PricingPanel({
               ? "You lose on each piece"
               : "Profit per piece, after all costs"}
         </p>
-        <div className="flex items-center justify-between gap-2.5">
+        <div className="flex items-center justify-between gap-3">
           <EditableProfit
             profit={pricing.profit}
             tone={tone ?? undefined}

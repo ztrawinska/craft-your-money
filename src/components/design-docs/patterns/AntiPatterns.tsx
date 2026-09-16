@@ -38,8 +38,8 @@ export function AntiPatternsDoc() {
           <tbody>
             {ANTI.map(([what, why]) => (
               <tr key={what} className="align-top">
-                <td className="border-b border-ink/7 py-2.5 pr-4 text-ink">{what}</td>
-                <td className="border-b border-ink/7 py-2.5 font-light leading-[1.5] text-ink/70">{why}</td>
+                <td className="border-b border-ink/7 py-3 pr-4 text-ink">{what}</td>
+                <td className="border-b border-ink/7 py-3 font-light leading-[1.5] text-ink/70">{why}</td>
               </tr>
             ))}
           </tbody>
