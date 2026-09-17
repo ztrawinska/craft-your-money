@@ -1,6 +1,6 @@
 # Foundations plan — spacing, type, radius, naming
 
-**Status:** draft, 2026-09-16. Decided the same day: **D1** keep 20 (B) · **D2** 2/6px off the scale, named per component (B) · **D5** the type pass is done *whole*, not in two steps (see D5) · **D6** category × size naming (B) · **D7** name radii as they are now (A), consolidation as a later decision issue · **D4** the ownership rule becomes doctrine, applied in P4. All six decided; nothing is implemented yet. Once made, each phase below becomes one PR and one GitHub issue (milestone *DS inspection 2026-09-15* or a new one).
+**Status:** draft, 2026-09-16. Decided the same day: **D1** keep 20 (B) · **D2** 2/6px off the scale, named per component (B) · **D5** the type pass is done *whole*, not in two steps (see D5) · **D6** category × size naming (B) · **D7** name radii as they are now (A), consolidation decided the next day (#26, 2026-09-17: 2 · 4 · 8 · 12 · 16 · chip, `frame` folded into `band`) · **D4** the ownership rule becomes doctrine, applied in P4. All six decided; nothing is implemented yet. Once made, each phase below becomes one PR and one GitHub issue (milestone *DS inspection 2026-09-15* or a new one).
 
 **Why now.** The 8pt/4pt grid landed in #5 as "option 1". Living with it for a day surfaced two things: the rule in spec §1.5 says *4pt inside components*, but the code is on a 2pt grid in practice (61 half-step uses the checker can't see); and the standard the designer works to — a **semantic spacing scale on the 8-point grid, with 2 and 4 as the small steps** — is a *closed, tiered* scale, which is a stronger thing than "use the 4pt utilities". The same question then falls on type and radius, where nothing is named in code yet (#8). This document decides the shape of all three together, because they share one mechanism (closed scales in `@theme`), one naming scheme and one enforcement story.
 
@@ -175,7 +175,7 @@ Each is one PR, one issue, CI green, before/after screenshots at 430px for the t
 | **P4 · Rhythm owners** | root-margin audit (2 components), pages as `gap` stacks, `SectionLabel`/`inline-form` fixed, checker rule for root margins, spec §1.5 doctrine paragraph made enforceable | D4 | medium | new |
 | **P5 · Figma binding** | S4: bind autolayout spacing, padding, radius and text to the (now final) variables and styles | — | medium | #11 |
 
-Radius consolidation (D7-B) and full even-size type (D5-B) are **decision issues** opened at the end of P2/P3, to be decided after living with the named versions.
+Radius consolidation (D7-B) was decided on screenshots the day after P2 (#26 — yes). Full even-size type (D5-B) is folded into P3's design step.
 
 ---
 

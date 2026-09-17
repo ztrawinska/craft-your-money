@@ -33,19 +33,19 @@
   --color-status-amber: #785f20;
   --color-status-red: #a2443b;
 
-  /* Radii (design system §1.6) — a closed set, named by what uses each value.
+  /* Radii (design system §1.6) — a closed set on the 2/4/8 scale, named by
+     what uses each value (decided 2026-09-17: was 2 5 6 7 8 11 14 100).
      `--radius-*: initial` removes Tailwind's sm/md/lg/xl so a component says
-     `rounded-button`, never `rounded-[7px]` or `rounded-lg`. `rounded-full`
+     `rounded-button`, never `rounded-[8px]` or `rounded-lg`. `rounded-full`
      stays for geometry only: a true circle or capsule (avatar, dot, stripe,
      switch, drag handle). Text in a pill that reads as a chip is `rounded-chip`. */
   --radius-*: initial;
   --radius-stamp: 2px;
-  --radius-input: 5px;
-  --radius-frame: 6px;
-  --radius-button: 7px;
+  --radius-input: 4px;
+  --radius-button: 8px;
   --radius-band: 8px;
-  --radius-nav-plus: 11px;
-  --radius-sheet: 14px;
+  --radius-nav-plus: 12px;
+  --radius-sheet: 16px;
   --radius-chip: 100px;
 
   --font-sans: var(--font-ibm-plex-sans);
@@ -122,7 +122,7 @@
  *   so nothing already on screen shifts.
  */
 :root {
-  --radius: 0.4375rem; /* 7px — matches the button / dropdown geometry */
+  --radius: 0.5rem; /* 8px — matches the button / dropdown geometry */
 
   --background: #f7f4f0; /* page */
   --foreground: #1e1916; /* ink */

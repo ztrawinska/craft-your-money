@@ -16,7 +16,7 @@ export function InkDoc() {
           const t = leaves<number>(tokens.opacity.ink).find(([k]) => `ink/${k}` === name)?.[1];
           return (
             <div key={name} className="w-[128px] font-sans">
-              <div className="h-12 w-full rounded-frame bg-ink" style={{ opacity: o }} />
+              <div className="h-12 w-full rounded-band bg-ink" style={{ opacity: o }} />
               <p className="mt-2 font-serif text-[18px] text-ink" style={{ opacity: o }}>
                 Aa 1234
               </p>

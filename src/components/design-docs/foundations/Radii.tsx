@@ -7,7 +7,7 @@ export function RadiiDoc() {
       id="radii"
       title="Radii"
       spec="§1.6"
-      lede="Eight named radii, closed in the build: a component says rounded-button, never a raw pixel value or a Tailwind default. Nothing rounder than 11px except chips (100px) and a sheet's top corners (14px). rounded-full is for geometry only: a true circle or capsule."
+      lede="Seven named radii on the 2/4/8 scale, closed in the build: a component says rounded-button, never a raw pixel value or a Tailwind default. Nothing rounder than 12px except chips (100px) and a sheet's top corners (16px). rounded-full is for geometry only: a true circle or capsule."
     >
       <div className="flex flex-wrap gap-6">
         {leaves<string>(tokens.radius).map(([name, t]) => (
