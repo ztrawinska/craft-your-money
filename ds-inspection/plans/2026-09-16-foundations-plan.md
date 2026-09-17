@@ -198,6 +198,6 @@ Radius consolidation (D7-B) was decided on screenshots the day after P2 (#26 —
 5. ~~**D7**~~ — decided: A now, B as a decision issue after.
 6. ~~**D4**~~ — decided: doctrine now, applied in P4.
 
-All six decided 2026-09-16. P1 and P2 done the same day (#23, #24). Next: P3 — the type design step (#8).
+All six decided 2026-09-16. P1 and P2 done the same day (#23, #24); #26 the day after. P3 step 0 — the type design session — done 2026-09-17 (see `2026-09-17-type-scale-session.md`: 23 presets, 11 sizes, approved as spec §1.4). Next: P3 implementation (#8).
 
 **Correction learned in P1:** Tailwind v4 does not error on an unknown class — an off-scale `p-2.5` compiles to *nothing*, silently. So "the build enforces it" means "the wrong value has no effect", which is visible but not loud; the checker's spacing section (exit 1 in CI, variants included) is the loud half. Both are in place.
