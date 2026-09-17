@@ -29,7 +29,7 @@ export function AskIrisTeaser({ className = "" }: { className?: string }) {
         That&rsquo;s where we&rsquo;re taking this. It isn&rsquo;t ready yet — you&rsquo;ll find it in
         this same spot when it is.
       </p>
-        <span className="mt-4 inline-flex rounded-full bg-iris/[0.09] px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-iris-deep">
+        <span className="mt-4 inline-flex rounded-chip bg-iris/[0.09] px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-iris-deep">
           Coming soon
         </span>
       </IrisSheet>

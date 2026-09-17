@@ -24,9 +24,6 @@ HARD=0
 # reuse an existing one.
 ALLOWED_HEX_REGEX='#(f7f4f0|ffffff|fdfbf9|1e1916|a0716a|8a5a52|6467c9|5155b4|336e48|785f20|a2443b|efe9e2|706c69|e5ded6)\b'
 
-# Radii from design-system.md §1.6 + the documented §2.12 input exception.
-ALLOWED_RADIUS_PX='2|5|6|7|8|11|100'
-
 # Every hex in src, one "file:line:#hex" per hit. Pure black/white inside a
 # gradient( or mask line is dropped first: in a CSS mask only alpha matters,
 # so the #000 in FramedSurface's torn edge is a stencil, not a colour, and
@@ -61,18 +58,25 @@ else
 fi
 
 echo
-echo "== Arbitrary radius values outside the documented set ($ALLOWED_RADIUS_PX px) =="
-RADIUS_HITS=$(grep -rnoE 'rounded-\[[0-9]+(\.[0-9]+)?px\]' "$ROOT" --include="*.tsx" \
-  | grep -vE "rounded-\[($ALLOWED_RADIUS_PX)px\]")
+echo "== Radius not one of the eight names (design-system §1.6: rounded-stamp/input/frame/button/band/nav-plus/sheet/chip; rounded-full for a true circle only) =="
+# `--radius-*: initial` removed Tailwind's sm/md/lg/xl, so any of those — or a
+# rounded-[Npx] — renders nothing. Hard fail, like spacing. Comments skipped.
+RADIUS_HITS=$(grep -rnE 'rounded(-(t|b|r|l|tl|tr|bl|br|s|e|ss|se|es|ee))?-(\[[^]]+\]|(xs|sm|md|lg|xl|2xl|3xl|4xl)\b)' "$ROOT" --include="*.tsx" --include="*.ts" \
+  | grep -vE '^[^:]+:[0-9]+: *(//|\*|/\*|\{/\*)' \
+  | grep -vE '\.test\.ts:' \
+  | grep -oE '^[^:]+:[0-9]+:|rounded(-(t|b|r|l|tl|tr|bl|br|s|e|ss|se|es|ee))?-(\[[^]]+\]|(xs|sm|md|lg|xl|2xl|3xl|4xl)\b)' \
+  | paste -sd' ' - | sed -E 's/ ([^ ]+:[0-9]+:)/\n\1/g' | sed -E 's/: /:/')
 if [ -n "$RADIUS_HITS" ]; then
   echo "$RADIUS_HITS"
+  echo "  -> §1.6: name the radius (rounded-button, rounded-band…). If none fits, the design wants an existing one, not a new number."
   FAIL=1
+  HARD=1
 else
   echo "  none"
 fi
 
 echo
-echo "== Type and radius still written by hand (S1 meter: design-system §1.4 / §1.6 — should only go down) =="
+echo "== Type still written by hand (S1 meter: design-system §1.4 — should only go down) =="
 # Not a fail yet: the named utilities don't exist, so there is nothing to
 # migrate to. Once they do, this section turns into a hard flag like the
 # spacing one below. /design-docs/ is excluded: the library pages quote the
@@ -80,11 +84,9 @@ echo "== Type and radius still written by hand (S1 meter: design-system §1.4 / 
 count_arbs() { grep -rnoE "$1" "$ROOT" --include="*.tsx" | grep -v '/design-docs/'; }
 TYPE_ARBS=$(count_arbs 'text-\[[0-9]+(\.[0-9]+)?px\]')
 LINE_ARBS=$(count_arbs '(leading|tracking)-\[[^]]+\]')
-RADIUS_ARBS=$(count_arbs 'rounded-\[[^]]+\]')
 n() { if [ -n "$1" ]; then echo "$1" | wc -l | tr -d ' '; else echo 0; fi; }
 echo "  text-[…px]:            $(n "$TYPE_ARBS")"
 echo "  leading-/tracking-[…]: $(n "$LINE_ARBS")"
-echo "  rounded-[…]:           $(n "$RADIUS_ARBS")"
 if [ -n "$TYPE_ARBS" ]; then
   echo "  most common sizes:"
   echo "$TYPE_ARBS" | sed -E 's/^[^:]+:[0-9]+://' | sort | uniq -c | sort -rn | head -5 | sed 's/^/   /'
@@ -117,11 +119,6 @@ else
 fi
 
 echo
-echo "== Distinct radius classes in use (design-system §1.6: nothing rounder than 11px except chips) =="
-grep -rnoE 'rounded-\[[^]]+\]|rounded-(none|sm|md|lg|xl|2xl|3xl|full)\b' "$ROOT" --include="*.tsx" \
-  | sed -E 's/^[^:]+:[0-9]+://' | sort | uniq -c | sort -rn
-
-echo
 echo "== Banned copy: design-system §4 jargon (use the plain-language column instead) =="
 JARGON_WORDS='direct cost|net revenue|contribution margin|\boverhead\b'
 JARGON_HITS=$(grep -rnoiE "$JARGON_WORDS" "$ROOT" --include="*.tsx" --include="*.ts" \
@@ -149,7 +146,7 @@ fi
 
 echo
 if [ "$HARD" -eq 1 ]; then
-  echo "Result: hard hits above (spacing off the closed scale) — these render nothing and fail CI. Other hits are candidates, per docs/craft-your-money-design-system.md §6."
+  echo "Result: hard hits above (spacing or radius off the closed scale) — these render nothing and fail CI. Other hits are candidates, per docs/craft-your-money-design-system.md §6."
 elif [ "$FAIL" -eq 1 ]; then
   echo "Result: hits found above. Each is a candidate, not an automatic failure — decide per-line, per docs/craft-your-money-design-system.md §6."
 else

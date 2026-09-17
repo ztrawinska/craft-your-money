@@ -72,7 +72,7 @@ export function CurrencySelect({
           onCloseAutoFocus={(e) => e.preventDefault()}
           onFocusOutside={(e) => e.preventDefault()}
           onInteractOutside={(e) => e.preventDefault()}
-          className="max-h-[220px] w-[var(--radix-popover-trigger-width)] overflow-auto rounded-[7px] border border-ink/14 bg-page p-0 shadow-[0_8px_24px_-8px_rgba(30,25,22,0.18)]"
+          className="max-h-[220px] w-[var(--radix-popover-trigger-width)] overflow-auto rounded-button border border-ink/14 bg-page p-0 shadow-[0_8px_24px_-8px_rgba(30,25,22,0.18)]"
         >
           <ul>
             {matches.map((c) => (

@@ -148,16 +148,24 @@ Lora was validated against Fraunces, Newsreader and Literata on the real pricing
 
 ### 1.6 Radii
 
-| Value | Used for |
-|---|---|
-| `2px` | Workflow stamp (Draft) |
-| `6px` | Framed surfaces, notes |
-| `7px` | Buttons |
-| `8px` | Tinted bands, dashed containers |
-| `11px` | The nav "+" square |
-| `100px` | Chips only |
+**Eight named radii, closed in the build (2026-09-16, #24).** `globals.css` removes Tailwind's `sm/md/lg/xl` (`--radius-*: initial`) and declares each value under the name of what uses it, so a component says `rounded-button`, never `rounded-[7px]`. Mirrored in `design/tokens.json` `radius.*` and the Figma `Radius` collection; `src/lib/tokens.test.ts` fails on drift, `scripts/check-tells.sh` fails CI on any raw value or Tailwind default.
 
-Nothing is rounder than 11px except chips. Generous radii read as "app card" — the thing we avoid.
+| Name | Value | Used for |
+|---|---|---|
+| `stamp` | 2px | The workflow stamp (Draft, Archived); the nav's active indicator and thin bars |
+| `input` | 5px | Text and money inputs; the type-to-search popover that hangs under one |
+| `frame` | 6px | Notes and small framed elements. *No app component uses it today — only the library's swatches* |
+| `button` | 7px | Buttons, dropdown and select triggers, action-sheet buttons. Also shadcn's `--radius` |
+| `band` | 8px | Tinted bands, the framed surface, the edit shell, dashed containers, radio cards, the assistant slot |
+| `nav-plus` | 11px | The bottom-nav "+" square |
+| `sheet` | 14px | The top corners of a bottom sheet |
+| `chip` | 100px | The chip family: status chips, filter and period chips, follow-up chips, badges — text in a pill that reads as a chip |
+
+**`rounded-full` is geometry, not a token:** a true circle or capsule — an avatar, a dot, the row stripe, a switch, a drag handle. If it has words in it, it is a chip.
+
+Nothing is rounder than 11px except chips and a sheet's top corners. Generous radii read as "app card" — the thing we avoid.
+
+**When a second thing needs the same value for a different reason** (say, a pill-shaped button next to the chip's 100px), don't share the name: split into a primitive (`round` 100px) and one alias per reason (`chip`, `button-pill`), so each can change on its own. Until that case exists, one name per value is enough — no token without a consumer. Whether the eight collapse onto `2 · 4 · 8 · 12 · 16 · full` is a separate decision (#26); the names make that a one-line change per radius.
 
 ### 1.7 Lines
 
@@ -248,7 +256,7 @@ Three levels. **Three, not four** — resist adding a fourth.
 
 | Variant | Appearance | Used for |
 |---|---|---|
-| `primary` | Filled `clay-deep`, `on-clay` text, 7px radius, 14.5px 600 | The one main action per screen (Save and activate) |
+| `primary` | Filled `clay-deep`, `on-clay` text, `button` radius (7px), 14.5px 600 | The one main action per screen (Save and activate) |
 | `ghost` | Transparent, `1px ink-14` border, `ink-62` text, 500 | Secondary action beside a primary (Save draft) |
 | `link` | Clay-deep text + optional chevron, no border, no background | Everything else: verb-links, add-row, reset, inline actions |
 
@@ -273,7 +281,7 @@ A trailing chevron is a promise that something opens. Putting one on an action t
 
 A filter, sort or select control. **Not a new control level — it is the ghost button plus a chevron.**
 
-**Anatomy:** 7px radius, `1px ink-14` border, transparent background, 12.5px Plex 500 in `ink-62`, Lucide `chevron-down` at 14px in `ink-62`, padding 8px 12px.
+**Anatomy:** `button` radius (7px), `1px ink-14` border, transparent background, 12.5px Plex 500 in `ink-62`, Lucide `chevron-down` at 14px in `ink-62`, padding 8px 12px.
 
 **States**
 
@@ -323,7 +331,7 @@ The workhorse. Two lines, optional left stripe, optional right slot.
 
 The one enclosed area per screen. Currently: the pricing block.
 
-- 8px radius, `card` (near-white) background, **no border**.
+- `band` radius (8px), `card` (near-white) background, **no border**.
 - **Torn top edge** — the block reads as a sheet torn from a pad: even flat runs interrupted by concave semicircle notches (`5px` deep, `16px` apart; radius = depth so the notch stays a true semicircle), cut *out* of the card so the real page shows through the gaps. **Both corners begin on a flat run** — solid mask caps at the top-left/right guarantee the edge never opens on a half-notch, whatever the card's width. The card fill + the tear define the surface (this replaced the old `1px` clay border + `3px` clay top rule). Implemented by masking the card itself, so the notches are the true page colour, not an overlaid fill. Kept flat — no shadow, no 3-D lip.
 - Internal sections divided by `ink-07` hairlines.
 
@@ -344,7 +352,7 @@ Iris is the AI layer. It shows up in exactly two forms: the **entry-point slot**
 
 **The entry-point slot** (`AssistantSlot`) — always a button that opens the sheet:
 
-- `1px` iris border at 30%, `rgba(iris, 0.06)` background, 8px radius.
+- `1px` iris border at 30%, `rgba(iris, 0.06)` background, `band` radius (8px).
 - Glint SVG at 15px (`Glint`), then 13.5px iris-deep label, then a trailing `chevron-right` (or centered with no chevron, for the pricing-block "Check this price").
 - Glint path: `M12 3 Q13.6 9.4 21 12 Q13.6 14.6 12 21 Q10.4 14.6 3 12 Q10.4 9.4 12 3 Z`
 
@@ -376,7 +384,7 @@ The rule to remember: **iris marks who is speaking, never what the answer is.**
 
 - Icons: neutral Lucide (house, tag, layers, wallet, plus), 22px, 1.6px stroke, `ink-62`.
 - Active: 2px clay top-tick, clay icon stroke, clay label at 600.
-- Central "+": flat clay square, 42px, 11px radius, **bottom-aligned with the tabs**. No lift, no shadow, no FAB.
+- Central "+": flat clay square, 42px, `nav-plus` radius (11px), **bottom-aligned with the tabs**. No lift, no shadow, no FAB.
 - Labels always visible. Full column is the tap target.
 
 **Rule:** chrome carries no category signal. A candlemaker reads these icons identically. Jewelry lives only in content.
@@ -519,7 +527,8 @@ A rule written down is memory; a rule in a type or a component is enforcement. A
 | Destructive action is last, red, with consequence | Convention | Enforced — an `ActionSheet` item variant |
 | Tokens JSON ↔ CSS agree | **Enforced** | — (`src/lib/tokens.test.ts` fails on drift) |
 | Every component appears in the live library | Convention | Stays convention — `/design` is added to by hand |
-| Hardcoded hex, non-standard radii, banned copy | Convention | Checked — `scripts/check-tells.sh`, run automatically via a `Stop` hook (`.claude/hooks/tell-check-stop.sh`) after every response. Report-only: it surfaces candidates, doesn't block, so a hit still needs a human (or Claude, next turn) call. It also meters what §1.4/§1.6 haven't tokenised yet (`text-[…px]`, `rounded-[…]` counts) so that migration is a number, not a feeling. Pure black/white inside a `gradient(`/mask line is ignored — a stencil, not a colour. |
+| Hardcoded hex, banned copy | Convention | Checked — `scripts/check-tells.sh`, run automatically via a `Stop` hook (`.claude/hooks/tell-check-stop.sh`) after every response. Report-only: it surfaces candidates, doesn't block, so a hit still needs a human (or Claude, next turn) call. It also meters what §1.4 hasn't tokenised yet (`text-[…px]`, `leading-`/`tracking-[…]` counts) so that migration is a number, not a feeling. Pure black/white inside a `gradient(`/mask line is ignored — a stencil, not a colour. |
+| Radius is one of the eight names (§1.6) | **Enforced** | Same two layers: `--radius-*: initial` in the build, and the checker's radius section exits 1 in CI on any `rounded-[…]` or Tailwind default. |
 | Spacing is on the closed scale (§1.5) | **Enforced** | Two layers: the build (`--spacing: initial` — an off-scale class renders nothing) and the checker's spacing section, which exits 1 in CI on any off-scale step or `[Npx]` value, variants included. |
 
 **Convention is fine** for rules that need judgment. What matters is knowing which is which — and never assuming prose will hold a line that code doesn't.

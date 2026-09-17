@@ -170,7 +170,7 @@ Each is one PR, one issue, CI green, before/after screenshots at 430px for the t
 | Phase | Scope | Decisions | Size | Issue |
 |---|---|---|---|---|
 | **P1 · Close the spacing scale** — *done 2026-09-16, #23* | `--spacing: initial` + tier 1 list; tier-2 sizes; roles aliased; migrate 57+4 off-grid uses; named nudges; spec §1.5 rewritten around tiers and the ownership rules (text only); `tokens.json` `space` restructured (primitives / sizes / roles) + parity test; Figma `Space` collection rebuilt as tier 1 + aliases; checker: spacing section hard-fails in CI | D1 D2 D3 | ≈ #5 | resolves #19 |
-| **P2 · Name the radii** | tier 1 `--radius-*` closed, role aliases; 24 migrations + unify `rounded-md`/`[50%]`; spec §1.6; Figma `Radius` re-checked; checker: radius arbitraries hard-fail | D7 (A now, B later) | small | part of #8 |
+| **P2 · Name the radii** — *done 2026-09-16, #24* | tier 1 `--radius-*` closed, role aliases; 24 migrations + unify `rounded-md`/`[50%]`; spec §1.6; Figma `Radius` re-checked; checker: radius arbitraries hard-fail | D7 (A now, B later) | small | part of #8 |
 | **P3 · Type presets** | *Step 0: design the target scale with the designer (sizes, line-heights, weights) and approve the §1.4 preset table.* Then `--text-*` presets with sub-keys per D5/D6; Tailwind defaults removed; migrate 174 + 60 uses component by component (Chip first as the pattern, then the 3 key screens, then the rest); line-heights on 4pt; spec §1.4 rewritten as the preset table; `tokens.json` `type` renamed and mirrored (parity test); Figma text styles renamed to presets; checker: type meter becomes a hard flag | D5 D6 | largest — split in two PRs if needed (presets + Chip/ListRow, then the rest) | part of #8 |
 | **P4 · Rhythm owners** | root-margin audit (2 components), pages as `gap` stacks, `SectionLabel`/`inline-form` fixed, checker rule for root margins, spec §1.5 doctrine paragraph made enforceable | D4 | medium | new |
 | **P5 · Figma binding** | S4: bind autolayout spacing, padding, radius and text to the (now final) variables and styles | — | medium | #11 |
@@ -198,6 +198,6 @@ Radius consolidation (D7-B) and full even-size type (D5-B) are **decision issues
 5. ~~**D7**~~ — decided: A now, B as a decision issue after.
 6. ~~**D4**~~ — decided: doctrine now, applied in P4.
 
-All six decided 2026-09-16. P1 done the same day (#23). Next: P2 (#24).
+All six decided 2026-09-16. P1 and P2 done the same day (#23, #24). Next: P3 — the type design step (#8).
 
 **Correction learned in P1:** Tailwind v4 does not error on an unknown class — an off-scale `p-2.5` compiles to *nothing*, silently. So "the build enforces it" means "the wrong value has no effect", which is visible but not loud; the checker's spacing section (exit 1 in CI, variants included) is the loud half. Both are in place.

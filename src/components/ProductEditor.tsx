@@ -543,11 +543,11 @@ export function ProductEditor({
           <ChevronLeft size={22} strokeWidth={2} />
         </Link>
         {product.archived ? (
-          <span className="rounded-[2px] border border-ink/30 px-3 pb-1 pt-1 text-[9.5px] font-semibold uppercase tracking-[0.22em] text-ink/62">
+          <span className="rounded-stamp border border-ink/30 px-3 pb-1 pt-1 text-[9.5px] font-semibold uppercase tracking-[0.22em] text-ink/62">
             Archived
           </span>
         ) : product.workflow === "draft" ? (
-          <span className="rounded-[2px] border border-ink/30 px-3 pb-1 pt-1 text-[9.5px] font-semibold uppercase tracking-[0.22em] text-ink/62">
+          <span className="rounded-stamp border border-ink/30 px-3 pb-1 pt-1 text-[9.5px] font-semibold uppercase tracking-[0.22em] text-ink/62">
             Draft
           </span>
         ) : (

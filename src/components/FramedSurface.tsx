@@ -51,7 +51,7 @@ export function FramedSurface({ children, className = "" }: FramedSurfaceProps) 
 
   return (
     <div
-      className={`relative overflow-hidden rounded-[8px] bg-card ${className}`}
+      className={`relative overflow-hidden rounded-band bg-card ${className}`}
       style={tornEdge}
     >
       {children}

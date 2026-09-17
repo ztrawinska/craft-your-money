@@ -211,7 +211,7 @@ export default async function Dashboard() {
         {resume && (
           <Link
             href={`/products/${resume.id}`}
-            className="mx-6 mt-3 flex items-center justify-between rounded-[8px] border border-dashed border-ink/14 px-4 py-4"
+            className="mx-6 mt-3 flex items-center justify-between rounded-band border border-dashed border-ink/14 px-4 py-4"
           >
             <div>
               <p className="font-sans text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/62">

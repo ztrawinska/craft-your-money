@@ -15,7 +15,7 @@ type TintedBandProps = {
 
 export function TintedBand({ children, className = "" }: TintedBandProps) {
   return (
-    <div className={`rounded-[8px] bg-ink/[0.035] px-4 py-4 ${className}`}>
+    <div className={`rounded-band bg-ink/[0.035] px-4 py-4 ${className}`}>
       {children}
     </div>
   );

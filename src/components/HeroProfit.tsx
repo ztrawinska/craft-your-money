@@ -67,7 +67,7 @@ export function HeroProfit({
       <div className="relative">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-[16%] top-[4%] bottom-[16%] rounded-[50%]"
+          className="pointer-events-none absolute inset-x-[16%] top-[4%] bottom-[16%] rounded-full"
           style={{
             background:
               "radial-gradient(ellipse at center, rgba(160,113,106,0.42), rgba(160,113,106,0) 68%)",

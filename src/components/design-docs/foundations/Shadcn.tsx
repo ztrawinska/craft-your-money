@@ -29,7 +29,7 @@ export function ShadcnDoc() {
                   <span className="inline-flex items-center gap-2 font-mono text-[12px] text-ink/70 tabular-nums">
                     <span
                       aria-hidden
-                      className="inline-block h-4 w-4 rounded-[2px] border border-ink/14"
+                      className="inline-block h-4 w-4 rounded-stamp border border-ink/14"
                       style={{ backgroundColor: t.$value }}
                     />
                     {t.$value.toUpperCase()}

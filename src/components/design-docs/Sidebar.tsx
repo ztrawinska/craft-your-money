@@ -22,7 +22,7 @@ function Item({ href, name }: { href: string; name: string }) {
         }`}
       >
         {on && (
-          <span aria-hidden className="absolute bottom-1 left-0 top-1 w-[2px] rounded-r-[2px] bg-clay-deep" />
+          <span aria-hidden className="absolute bottom-1 left-0 top-1 w-[2px] rounded-r-stamp bg-clay-deep" />
         )}
         {name}
       </Link>

@@ -26,7 +26,7 @@ export const AssistantSlot = forwardRef<HTMLButtonElement, AssistantSlotProps>(
       <button
         ref={ref}
         type="button"
-        className={`flex w-full items-center gap-2 rounded-[8px] border border-iris/30 bg-iris/[0.06] px-4 py-row font-sans disabled:opacity-55 ${
+        className={`flex w-full items-center gap-2 rounded-band border border-iris/30 bg-iris/[0.06] px-4 py-row font-sans disabled:opacity-55 ${
           centered ? "justify-center" : ""
         } ${className}`}
         {...rest}

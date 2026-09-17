@@ -99,7 +99,7 @@ function CostFields({
               key={p}
               type="button"
               onClick={() => onPatch({ period: p })}
-              className={`rounded-full border px-3 py-2 font-sans text-[12px] capitalize ${
+              className={`rounded-chip border px-3 py-2 font-sans text-[12px] capitalize ${
                 draft.period === p
                   ? "border-clay-deep bg-clay-deep text-on-clay"
                   : "border-ink/14 text-ink/62"
@@ -338,7 +338,7 @@ export function CostsEditor({
               </p>
             </TintedBand>
           ) : (
-            <div className="rounded-[8px] border border-clay/34 bg-card px-5 py-4">
+            <div className="rounded-band border border-clay/34 bg-card px-5 py-4">
               <p className="font-sans text-[12px] font-light text-ink/62">
                 {method === "per-unit"
                   ? "Every piece carries"

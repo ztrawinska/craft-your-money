@@ -48,7 +48,7 @@ export function ActionSheetDemo() {
         type="button"
         aria-label="More actions"
         onClick={() => setOpen(true)}
-        className="flex size-tap items-center justify-center rounded-[7px] text-ink/62"
+        className="flex size-tap items-center justify-center rounded-button text-ink/62"
       >
         <Ellipsis size={20} strokeWidth={1.8} />
       </button>
