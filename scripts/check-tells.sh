@@ -58,7 +58,7 @@ else
 fi
 
 echo
-echo "== Radius not one of the eight names (design-system §1.6: rounded-stamp/input/frame/button/band/nav-plus/sheet/chip; rounded-full for a true circle only) =="
+echo "== Radius not one of the seven names (design-system §1.6: rounded-stamp/input/button/band/nav-plus/sheet/chip; rounded-full for a true circle only) =="
 # `--radius-*: initial` removed Tailwind's sm/md/lg/xl, so any of those — or a
 # rounded-[Npx] — renders nothing. Hard fail, like spacing. Comments skipped.
 RADIUS_HITS=$(grep -rnE 'rounded(-(t|b|r|l|tl|tr|bl|br|s|e|ss|se|es|ee))?-(\[[^]]+\]|(xs|sm|md|lg|xl|2xl|3xl|4xl)\b)' "$ROOT" --include="*.tsx" --include="*.ts" \
