@@ -31,17 +31,17 @@ export default function NewProduct() {
 
       {/* identity */}
       <div className="px-6 pb-2 pt-5">
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-clay-deep">
+        <p className="mb-2 text-caps uppercase text-clay-deep">
           New product
         </p>
-        <h1 className="font-serif text-[27px] font-medium leading-[1.16] tracking-[-0.01em]">
+        <h1 className="font-serif text-title">
           What are you making?
         </h1>
       </div>
 
       <form action={createProductAction} className="px-6 pt-6">
         <label className="block">
-          <span className="mb-1 block text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/62">
+          <span className="mb-1 block text-caps-tight uppercase text-ink/62">
             Name
           </span>
           <Input
@@ -54,14 +54,14 @@ export default function NewProduct() {
         </label>
 
         <fieldset className="mt-6">
-          <legend className="mb-2 text-[9px] font-semibold uppercase tracking-[0.13em] text-ink/62">
+          <legend className="mb-2 text-caps-tight uppercase text-ink/62">
             Type <span className="font-normal normal-case tracking-normal text-ink/62">· optional</span>
           </legend>
           <div className="flex flex-wrap gap-2">
             {PRODUCT_TYPES.map((t) => (
               <label
                 key={t}
-                className="cursor-pointer rounded-chip border border-ink/14 px-4 py-2 font-sans text-[13px] text-ink/70 has-[:checked]:border-clay-deep has-[:checked]:bg-clay-deep has-[:checked]:text-on-clay"
+                className="cursor-pointer rounded-chip border border-ink/14 px-4 py-2 font-sans text-label text-ink/70 has-[:checked]:border-clay-deep has-[:checked]:bg-clay-deep has-[:checked]:text-on-clay"
               >
                 <input
                   type="radio"
@@ -76,7 +76,7 @@ export default function NewProduct() {
           </div>
         </fieldset>
 
-        <p className="mt-6 text-[12px] font-light text-ink/62">
+        <p className="mt-6 text-body-sm text-ink/62">
           Saved as a draft — you&rsquo;ll add costs next.
         </p>
 

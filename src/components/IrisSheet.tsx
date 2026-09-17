@@ -49,7 +49,7 @@ export function IrisSheet({
         {/* iris header — glint + label (who's speaking) + dismiss */}
         <div className="flex items-center gap-2 px-6 pb-3 pt-1">
           <Glint className={`h-[15px] w-[15px] shrink-0 ${busy ? "animate-pulse" : ""}`} />
-          <DrawerTitle className="flex-1 text-left font-sans text-[13.5px] font-medium text-iris-deep">
+          <DrawerTitle className="flex-1 text-left font-sans text-label-strong text-iris-deep">
             {label}
           </DrawerTitle>
           <DrawerClose aria-label="Dismiss" className="text-ink/62">

@@ -17,7 +17,7 @@ function Item({ href, name }: { href: string; name: string }) {
       <Link
         href={href}
         aria-current={on ? "page" : undefined}
-        className={`relative block py-1 pl-4 font-sans text-[13px] ${
+        className={`relative block py-1 pl-4 font-sans text-label ${
           on ? "font-semibold text-clay-deep" : "text-ink/70 hover:text-ink"
         }`}
       >
@@ -38,7 +38,7 @@ function Tree() {
       </ul>
       {NAV.map((g) => (
         <div key={`${g.base}/${g.name}`} className="mb-4">
-          <p className="mb-1 pl-4 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
+          <p className="mb-1 pl-4 font-sans text-caps uppercase text-ink/62">
             {g.name}
           </p>
           <ul>
@@ -59,17 +59,17 @@ export function Sidebar() {
       <aside className="hidden border-r border-ink/7 lg:block">
         <div className="sticky top-0 h-dvh overflow-y-auto px-4 py-8">
           <div className="mb-6 pl-4">
-            <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
+            <p className="font-sans text-caps uppercase text-ink/62">
               Craft Your Money
             </p>
-            <p className="mt-1 font-serif text-[19px] font-medium text-ink">Design system</p>
+            <p className="mt-1 font-serif text-figure-xs text-ink">Design system</p>
           </div>
           <Tree />
         </div>
       </aside>
       {/* narrow: folds above the page */}
       <details className="border-b border-ink/7 px-6 py-3 lg:hidden">
-        <summary className="cursor-pointer list-none font-sans text-[13px] font-medium text-clay-deep">
+        <summary className="cursor-pointer list-none font-sans text-label-strong text-clay-deep">
           Design system · contents
         </summary>
         <div className="pt-4">

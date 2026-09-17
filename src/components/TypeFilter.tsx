@@ -34,7 +34,7 @@ export function TypeFilter({
       <DrawerTrigger asChild>
         <button
           type="button"
-          className={`inline-flex items-center gap-2 whitespace-nowrap rounded-button border bg-transparent px-3 py-2 font-sans text-[12.5px] font-medium ${
+          className={`inline-flex items-center gap-2 whitespace-nowrap rounded-button border bg-transparent px-3 py-2 font-sans text-button-ghost ${
             filtered
               ? "border-clay-deep/45 bg-clay/7 text-clay-deep"
               : "border-ink/14 text-ink/62"
@@ -49,7 +49,7 @@ export function TypeFilter({
         </button>
       </DrawerTrigger>
       <DrawerContent className="pb-4">
-        <DrawerTitle className="px-5 pb-1 pt-1 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
+        <DrawerTitle className="px-5 pb-1 pt-1 font-sans text-caps uppercase text-ink/62">
           Type
         </DrawerTitle>
         {options.map((t) => (
@@ -57,7 +57,7 @@ export function TypeFilter({
             key={t}
             href={productsHref({ status, type: t })}
             onClick={() => setOpen(false)}
-            className={`block px-5 py-3 font-sans text-[14.5px] ${
+            className={`block px-5 py-3 font-sans text-label ${
               t === current ? "font-semibold text-clay-deep" : "text-ink"
             }`}
           >

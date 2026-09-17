@@ -21,9 +21,9 @@ export function VoiceDoc() {
     >
       <GroupLabel>Say · not</GroupLabel>
       <div className="overflow-x-auto">
-        <table className="w-full max-w-[560px] border-collapse font-sans text-[13.5px]">
+        <table className="w-full max-w-[560px] border-collapse font-sans text-label">
           <thead>
-            <tr className="text-left text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
+            <tr className="text-left text-caps uppercase text-ink/62">
               <th className="border-b border-ink/14 py-2 pr-4 font-semibold">Say</th>
               <th className="border-b border-ink/14 py-2 font-semibold">Not</th>
             </tr>

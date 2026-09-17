@@ -14,7 +14,7 @@ export function IrisSheetDemo() {
       label="Price check"
       trigger={<AssistantSlot centered>Check this price</AssistantSlot>}
     >
-      <p className="font-serif text-[16px] leading-[1.35] text-ink">
+      <p className="font-serif text-value text-ink">
         £42.60 is a sound price for this band. It clears your target with room to spare.
       </p>
       <ol className="mt-3">
@@ -24,8 +24,8 @@ export function IrisSheetDemo() {
           "Labour is 20 minutes at £15/hr. That rate is on the low side for finished work.",
         ].map((f, i) => (
           <li key={i} className={`flex gap-2 py-3 ${i > 0 ? "border-t border-iris/15" : ""}`}>
-            <span className="font-serif text-[13px] tabular-nums text-iris-deep">{i + 1}</span>
-            <span className="font-sans text-[13px] font-light leading-[1.5] text-ink/80">{f}</span>
+            <span className="font-serif text-value-sm tabular-nums text-iris-deep">{i + 1}</span>
+            <span className="font-sans text-body text-ink/80">{f}</span>
           </li>
         ))}
       </ol>
@@ -33,7 +33,7 @@ export function IrisSheetDemo() {
         {["at £38.00 → 46%", "at £48.00 → 57%"].map((s) => (
           <span
             key={s}
-            className="rounded-chip border border-ink/14 px-3 py-1 font-sans text-[11.5px] tabular-nums text-ink/70"
+            className="rounded-chip border border-ink/14 px-3 py-1 font-sans text-meta tabular-nums text-ink/70"
           >
             {s}
           </span>
@@ -44,13 +44,13 @@ export function IrisSheetDemo() {
           <button
             key={t}
             type="button"
-            className="rounded-chip bg-iris/[0.09] px-3 py-2 font-sans text-[12px] font-medium text-iris-deep"
+            className="rounded-chip bg-iris/[0.09] px-3 py-2 font-sans text-chip text-iris-deep"
           >
             {t}
           </button>
         ))}
       </div>
-      <div className="mt-4 border-t border-iris/15 pt-3 font-sans text-[11px] font-light leading-[1.65] text-ink/62">
+      <div className="mt-4 border-t border-iris/15 pt-3 font-sans text-body-sm text-ink/62">
         <p>
           <span className="font-medium text-ink/70">Used</span>: your costs, your price, your target
           margin.

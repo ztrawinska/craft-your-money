@@ -30,17 +30,17 @@ export function ButtonDoc() {
       <GroupLabel>link · icon position carries meaning</GroupLabel>
       <SpecimenRow>
         <Specimen label="navigates → trailing chevron" inline>
-          <Button variant="link" className="text-[13.5px] font-semibold" iconTrailing={<ChevronRight size={15} strokeWidth={2} />}>
+          <Button variant="link" className="text-button" iconTrailing={<ChevronRight size={15} strokeWidth={2} />}>
             Reprice
           </Button>
         </Specimen>
         <Specimen label="acts in place → leading action icon" inline>
-          <Button variant="link" className="text-[13.5px] font-semibold" iconLeading={<Plus size={14} strokeWidth={2.2} />}>
+          <Button variant="link" className="text-button" iconLeading={<Plus size={14} strokeWidth={2.2} />}>
             Add material
           </Button>
         </Specimen>
         <Specimen label="acts in place → rotate-ccw, not archive-restore" inline>
-          <Button variant="link" className="text-[13.5px] font-semibold" iconLeading={<RotateCcw size={13} strokeWidth={2.2} />}>
+          <Button variant="link" className="text-button" iconLeading={<RotateCcw size={13} strokeWidth={2.2} />}>
             Restore
           </Button>
         </Specimen>

@@ -16,7 +16,7 @@ export function TintedBandDoc() {
       <SpecimenRow>
         <Specimen label="a briefing paragraph">
           <TintedBand>
-            <p className="font-sans text-[15px] font-light leading-[1.7] text-ink/70">
+            <p className="font-sans text-body text-ink/70">
               Most of your range earns well. The Thalia stacking set is priced under what it
               costs to make, and two rings sit just below target.
             </p>

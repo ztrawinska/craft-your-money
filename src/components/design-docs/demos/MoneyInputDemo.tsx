@@ -26,12 +26,12 @@ export function MoneyInputDemo() {
             onChange={(e) => setQty(e.target.value)}
             className="pr-8 font-serif tabular-nums"
           />
-          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-sans text-[10.5px] text-ink/62">
+          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-sans text-meta text-ink/62">
             g
           </span>
         </div>
       </div>
-      <p className="col-span-2 font-sans text-[11.5px] font-light text-ink/62 tabular-nums">
+      <p className="col-span-2 font-sans text-body-sm text-ink/62 tabular-nums">
         Money field holds {cost === "" ? "nothing yet (reads as empty)" : `"${cost}"`}. Try typing
         5, 6, 8, 0.
       </p>

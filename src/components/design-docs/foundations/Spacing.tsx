@@ -52,8 +52,8 @@ export function SpacingDoc() {
       <div className="space-y-8">
         {tiers.map(({ key, title, lede, utility }) => (
           <div key={key}>
-            <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">{title}</p>
-            <p className="mt-1 max-w-[62ch] font-sans text-[13px] font-light leading-[1.55] text-ink/70">{lede}</p>
+            <p className="font-sans text-caps uppercase text-ink/62">{title}</p>
+            <p className="mt-1 max-w-[62ch] font-sans text-body text-ink/70">{lede}</p>
             <div className="mt-3 space-y-3">
               {groups[key].map(([name, t]) => {
                 const px = resolve(t.$value);
@@ -61,17 +61,17 @@ export function SpacingDoc() {
                 return (
                   <div key={name} className="grid grid-cols-[110px_minmax(0,1fr)] items-center gap-4 font-sans">
                     <div>
-                      <p className="text-[13px] font-medium text-ink">{name}</p>
-                      <p className="font-mono text-[11px] text-ink/62">{utility(name)}</p>
+                      <p className="text-label-strong text-ink">{name}</p>
+                      <p className="font-mono text-meta text-ink/62">{utility(name)}</p>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="h-3 shrink-0 rounded-stamp bg-clay/40" style={{ width: px }} />
-                      <p className="font-mono text-[11.5px] text-ink/62 tabular-nums">
+                      <p className="font-mono text-meta text-ink/62 tabular-nums">
                         {px}
                         {alias && <span className="text-ink/30"> = {alias}</span>}
                       </p>
                       {t.$description && (
-                        <p className="hidden text-[11.5px] font-light text-ink/70 sm:block">{t.$description}</p>
+                        <p className="hidden text-body-sm text-ink/70 sm:block">{t.$description}</p>
                       )}
                     </div>
                   </div>

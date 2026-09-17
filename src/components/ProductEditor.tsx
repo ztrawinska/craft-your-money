@@ -543,11 +543,11 @@ export function ProductEditor({
           <ChevronLeft size={22} strokeWidth={2} />
         </Link>
         {product.archived ? (
-          <span className="rounded-stamp border border-ink/30 px-3 pb-1 pt-1 text-[9.5px] font-semibold uppercase tracking-[0.22em] text-ink/62">
+          <span className="rounded-stamp border border-ink/30 px-3 pb-1 pt-1 text-caps uppercase text-ink/62">
             Archived
           </span>
         ) : product.workflow === "draft" ? (
-          <span className="rounded-stamp border border-ink/30 px-3 pb-1 pt-1 text-[9.5px] font-semibold uppercase tracking-[0.22em] text-ink/62">
+          <span className="rounded-stamp border border-ink/30 px-3 pb-1 pt-1 text-caps uppercase text-ink/62">
             Draft
           </span>
         ) : (
@@ -567,10 +567,10 @@ export function ProductEditor({
 
       {/* ── identity ── */}
       <div className="px-6 pb-2 pt-5">
-        <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-clay-deep">
+        <p className="mb-2 text-caps uppercase text-clay-deep">
           {product.type}
         </p>
-        <h1 className="max-w-[300px] font-serif text-[27px] font-medium leading-[1.16] tracking-[-0.01em]">
+        <h1 className="max-w-[300px] font-serif text-title">
           {product.name}
         </h1>
       </div>
@@ -622,7 +622,7 @@ export function ProductEditor({
               variant="link"
               iconLeading={addIcon}
               onClick={() => openMat("new", BLANK_MAT)}
-              className="pt-3 text-[13px] font-medium"
+              className="pt-3 text-label-strong"
             >
               Add material
             </Button>
@@ -673,7 +673,7 @@ export function ProductEditor({
               variant="link"
               iconLeading={addIcon}
               onClick={() => openLab("new", blankLab(settings.benchRate))}
-              className="pt-3 text-[13px] font-medium"
+              className="pt-3 text-label-strong"
             >
               Add step
             </Button>
@@ -715,10 +715,10 @@ export function ProductEditor({
               variant="link"
               iconLeading={addIcon}
               onClick={() => openOther("new", BLANK_OTHER)}
-              className="pt-3 text-[13px] font-medium"
+              className="pt-3 text-label-strong"
             >
               Add cost{" "}
-              <span className="text-[11.5px] font-light italic text-ink/62">
+              <span className="text-body-sm italic text-ink/62">
                 box, casting, outsourced finishing…
               </span>
             </Button>
@@ -728,36 +728,36 @@ export function ProductEditor({
         {/* reconciling summary — live */}
         <div className="mt-section border-t border-ink/14 pb-1 pt-5">
           {materials.length > 0 && (
-            <div className="flex items-baseline justify-between py-1 text-[13px] text-ink/62">
+            <div className="flex items-baseline justify-between py-1 text-label text-ink/62">
               <span>Materials</span>
               <Price value={materialsTotal} variant="summary" />
             </div>
           )}
           {labour.length > 0 && (
-            <div className="flex items-baseline justify-between py-1 text-[13px] text-ink/62">
+            <div className="flex items-baseline justify-between py-1 text-label text-ink/62">
               <span>Labour</span>
               <Price value={labourTotal} variant="summary" />
             </div>
           )}
           {otherCosts.length > 0 && (
-            <div className="flex items-baseline justify-between py-1 text-[13px] text-ink/62">
+            <div className="flex items-baseline justify-between py-1 text-label text-ink/62">
               <span>Other costs</span>
               <Price value={otherTotal} variant="summary" />
             </div>
           )}
           <div className="mt-3 flex items-baseline justify-between border-t border-ink/7 pt-3">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-ink/62">
+            <span className="text-caps uppercase text-ink/62">
               Direct cost
             </span>
             <Price value={directCost} variant="figure" />
           </div>
           {businessCostShare !== null && (
             <div className="mt-3 border-t border-dashed border-ink/14 pt-3">
-              <div className="flex items-baseline justify-between py-1 text-[12px] text-ink/62">
+              <div className="flex items-baseline justify-between py-1 text-meta text-ink/62">
                 <span className="font-light italic">Share of business costs</span>
                 <Price value={businessCostShare} variant="summary" />
               </div>
-              <div className="flex items-baseline justify-between py-1 text-[12px]">
+              <div className="flex items-baseline justify-between py-1 text-meta">
                 <span className="font-medium text-ink/70">Full cost</span>
                 <Price value={directCost + businessCostShare} variant="inline" />
               </div>
@@ -793,7 +793,7 @@ export function ProductEditor({
 
       {/* ── save bar ── */}
       <div className="mt-section border-t border-ink/7 bg-page px-6 pb-5 pt-4 shadow-[0_-6px_18px_-12px_rgba(30,25,22,0.12)]">
-        <p className="mb-3 flex items-center gap-2 text-[10px] font-medium uppercase tracking-[0.12em] text-ink/62 before:h-[5px] before:w-[5px] before:rounded-full before:bg-clay before:content-['']">
+        <p className="mb-3 flex items-center gap-2 text-caps-tight uppercase text-ink/62 before:h-[5px] before:w-[5px] before:rounded-full before:bg-clay before:content-['']">
           Unsaved changes
         </p>
         <div className="mb-2">

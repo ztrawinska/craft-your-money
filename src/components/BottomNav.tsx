@@ -44,7 +44,7 @@ function Tab({ item, active }: { item: NavItem; active?: NavKey }) {
         className={on ? "text-clay-deep" : "text-ink/62"}
       />
       <span
-        className={`text-[9px] ${
+        className={`text-nav ${
           on ? "font-semibold text-clay-deep" : "font-medium text-ink/62"
         }`}
       >

@@ -98,12 +98,12 @@ export function Combobox({
                 }}
                 className="flex w-full items-center justify-between gap-3 px-3 py-3 text-left hover:bg-ink/5"
               >
-                <span className="flex items-center gap-2 font-sans text-[14px] text-ink">
+                <span className="flex items-center gap-2 font-sans text-label text-ink">
                   <Diamond size={8} className="shrink-0 fill-ink/30 text-ink/30" />
                   {o.label}
                 </span>
                 {o.hint && (
-                  <span className="shrink-0 font-serif text-[12px] tabular-nums text-ink/62">
+                  <span className="shrink-0 font-serif text-value-sm tabular-nums text-ink/62">
                     {o.hint}
                   </span>
                 )}
@@ -119,7 +119,7 @@ export function Combobox({
                   onUseAsNew();
                   setOpen(false);
                 }}
-                className="flex w-full items-center gap-2 px-3 py-3 text-left font-sans text-[13px] font-medium text-clay-deep hover:bg-ink/5"
+                className="flex w-full items-center gap-2 px-3 py-3 text-left font-sans text-label-strong text-clay-deep hover:bg-ink/5"
               >
                 <Plus size={14} strokeWidth={2} />
                 Use as new

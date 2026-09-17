@@ -48,6 +48,40 @@
   --radius-sheet: 16px;
   --radius-chip: 100px;
 
+  /* Type presets (design system §1.4) — twenty-four, on eleven sizes, decided
+     2026-09-17. `--text-*: initial` removes Tailwind's xs…9xl; each preset is
+     one utility that sets size, line-height, weight and tracking together
+     (`text-meta`, `text-figure-lg`). Family is the one thing it doesn't carry:
+     numbers, names and the editorial sentences (prose) take `font-serif`
+     (Lora), chrome takes `font-sans` (Plex). Line boxes are multiples of 4 so text stacks on the spacing
+     rhythm. `caps` and `caps-tight` still need `uppercase`; figures still
+     take `tabular-nums`. */
+  --text-*: initial;
+  --text-figure-xl: 56px; --text-figure-xl--line-height: 48px; --text-figure-xl--font-weight: 500; --text-figure-xl--letter-spacing: -0.025em;
+  --text-figure-lg: 44px; --text-figure-lg--line-height: 44px; --text-figure-lg--font-weight: 500; --text-figure-lg--letter-spacing: -0.02em;
+  --text-figure-md: 34px; --text-figure-md--line-height: 36px; --text-figure-md--font-weight: 500;
+  --text-figure-sm: 24px; --text-figure-sm--line-height: 24px; --text-figure-sm--font-weight: 500;
+  --text-figure-xs: 20px; --text-figure-xs--line-height: 20px; --text-figure-xs--font-weight: 500;
+  --text-figure-2xs: 18px; --text-figure-2xs--line-height: 24px; --text-figure-2xs--font-weight: 400;
+  --text-title: 28px; --text-title--line-height: 32px; --text-title--font-weight: 500;
+  --text-name: 16px; --text-name--line-height: 20px; --text-name--font-weight: 500;
+  --text-value: 16px; --text-value--line-height: 20px; --text-value--font-weight: 400;
+  --text-value-sm: 14px; --text-value-sm--line-height: 16px; --text-value-sm--font-weight: 400;
+  --text-prose: 16px; --text-prose--line-height: 24px; --text-prose--font-weight: 400;
+  --text-prose-sm: 14px; --text-prose-sm--line-height: 20px; --text-prose-sm--font-weight: 400;
+  --text-body: 14px; --text-body--line-height: 20px; --text-body--font-weight: 300;
+  --text-body-sm: 12px; --text-body-sm--line-height: 16px; --text-body-sm--font-weight: 300;
+  --text-label: 14px; --text-label--line-height: 20px; --text-label--font-weight: 400;
+  --text-label-strong: 14px; --text-label-strong--line-height: 20px; --text-label-strong--font-weight: 500;
+  --text-link: 14px; --text-link--line-height: 20px; --text-link--font-weight: 600;
+  --text-button: 14px; --text-button--line-height: 20px; --text-button--font-weight: 600;
+  --text-button-ghost: 14px; --text-button-ghost--line-height: 20px; --text-button-ghost--font-weight: 500;
+  --text-meta: 12px; --text-meta--line-height: 16px; --text-meta--font-weight: 400;
+  --text-chip: 12px; --text-chip--line-height: 16px; --text-chip--font-weight: 600;
+  --text-caps: 10px; --text-caps--line-height: 12px; --text-caps--font-weight: 600; --text-caps--letter-spacing: 0.2em;
+  --text-caps-tight: 10px; --text-caps-tight--line-height: 12px; --text-caps-tight--font-weight: 600; --text-caps-tight--letter-spacing: 0.13em;
+  --text-nav: 10px; --text-nav--line-height: 12px; --text-nav--font-weight: 500;
+
   --font-sans: var(--font-ibm-plex-sans);
   --font-serif: var(--font-lora);
 

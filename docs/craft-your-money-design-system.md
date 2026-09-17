@@ -73,11 +73,13 @@ Two families, strictly divided by role.
 
 The rule of thumb: *if it's a number or a name, it's Lora. If it's chrome, it's Plex.*
 
+One more thing is Lora: the **editorial sentences** — the dashboard briefing, the Price Check verdict, the coach teaser (`prose`, `prose-sm`). The app opens like a message, not a report, and those three sentences are the message. Everything that explains, labels or operates is Plex. (Decided 2026-09-17 against the category convention — finance apps set these in the UI face — and with the briefing deliberately one step quieter than the two reading surfaces, pending a test of the briefing concept itself.)
+
 Lora was validated against Fraunces, Newsreader and Literata on the real pricing block, judged primarily on tabular numerals and pairing with IBM Plex Sans. Kept deliberately, not by default.
 
 #### Type scale
 
-**Twenty-three presets on eleven sizes (decided 2026-09-17, foundations plan P3).** Sizes sit on the 2pt grid — `10 · 12 · 14 · 16 · 18 · 20 · 24 · 28 · 34 · 44 · 56` — and every line box is a multiple of 4, so text stacks on the same rhythm as the spacing scale (§1.5). A preset carries size, line-height, weight and tracking under one name, `category-size`; the family is the one rule above (numbers and names Lora, chrome Plex). In code a preset is one utility (`text-meta`, `text-figure-lg`) plus `font-serif` / `font-sans`; mirrored in `design/tokens.json` `type.*` and the Figma text styles, guarded by `src/lib/tokens.test.ts` and, once migrated, by `scripts/check-tells.sh` (any `text-[…px]`, `leading-[…]` or `tracking-[…]` fails CI).
+**Twenty-four presets on eleven sizes (decided 2026-09-17, foundations plan P3).** Sizes sit on the 2pt grid — `10 · 12 · 14 · 16 · 18 · 20 · 24 · 28 · 34 · 44 · 56` — and every line box is a multiple of 4, so text stacks on the same rhythm as the spacing scale (§1.5). A preset carries size, line-height, weight and tracking under one name, `category-size`; the family is the one rule above (numbers and names Lora, chrome Plex). In code a preset is one utility (`text-meta`, `text-figure-lg`) plus `font-serif` / `font-sans`; mirrored in `design/tokens.json` `type.*` and the Figma text styles, guarded by `src/lib/tokens.test.ts` and, once migrated, by `scripts/check-tells.sh` (any `text-[…px]`, `leading-[…]` or `tracking-[…]` fails CI).
 
 | Preset | Size / box | Weight | Family | Tracking | Used for (r3 name) |
 |---|---|---|---|---|---|
@@ -91,7 +93,8 @@ Lora was validated against Fraunces, Newsreader and Literata on the real pricing
 | `name` | 16 / 20 | 500 | Lora | | Product name in a list row; a material or step name (*row-name*) |
 | `value` | 16 / 20 | 400 | Lora | | A money value on a list row; input values (*row-value*) |
 | `value-sm` | 14 / 16 | 400 | Lora | | The total beside a section label, `ink-62` (*section-total*) |
-| `body-lg` | 14 / 24 | 300 | Plex | | The dashboard briefing paragraph (*briefing*) |
+| `prose` | 16 / 24 | 400 | Lora | | The editorial voice on a surface made for reading: the Price Check verdict, the coach teaser |
+| `prose-sm` | 14 / 20 | 400 | Lora | | The same voice as an aside among data: the dashboard briefing, `ink-62` (*briefing* — r3 misdocumented it as Plex; the code was always Lora) |
 | `body` | 14 / 20 | 300 | Plex | | Body and helper copy — the calm sentences under a figure (*body*) |
 | `body-sm` | 12 / 16 | 300 | Plex | | Quiet captions and sublabels, `ink-62` (*meta-light*) |
 | `label` | 14 / 20 | 400 | Plex | | A cost line's label, a settings row, a list option (*row-label*) |
@@ -107,7 +110,7 @@ Lora was validated against Fraunces, Newsreader and Literata on the real pricing
 
 **Not presets:** the currency glyph beside a figure and the decimals of a large price are proportions of that figure, set inside the `Price` component — component-scoped values, like the 2px nudge (§1.5). Today: currency 22 beside 56 and 29 beside 44, decimals 25.
 
-**What moved, and why (2026-09-17).** r3 had 26 role-named styles on 22 sizes, sixteen of them on a half pixel or an odd integer, with unitless line-heights that landed line boxes at 19.2 or 31.3px. The designer decided every row in a session with each style rendered current beside proposed (`ds-inspection/plans/2026-09-17-type-scale-session.md`): body 13 → 14 is the most-used change; briefing 15 → 14/24 keeps its air; labels went down to 14 so they sit under names at 16; the 9–9.5px caps family became 10; the eight sizes the code used without a style (11, 14, 22, 25, 26, 28, 29, 44) were either folded into a preset or moved into the Price component. Chip text stays 12 for both sizes because 12 is the floor for chip and badge text across public systems.
+**What moved, and why (2026-09-17).** r3 had 26 role-named styles on 22 sizes, sixteen of them on a half pixel or an odd integer, with unitless line-heights that landed line boxes at 19.2 or 31.3px. The designer decided every row in a session with each style rendered current beside proposed (`ds-inspection/plans/2026-09-17-type-scale-session.md`): body 13 → 14 is the most-used change; the briefing goes one step quieter (Lora 15 → 14/20, ink-62) while the verdict and teaser keep their reading size (16/24); labels went down to 14 so they sit under names at 16; the 9–9.5px caps family became 10; the eight sizes the code used without a style (11, 14, 22, 25, 26, 28, 29, 44) were either folded into a preset or moved into the Price component. Chip text stays 12 for both sizes because 12 is the floor for chip and badge text across public systems.
 
 **Numeric rule:** every figure uses `font-feature-settings: 'tnum'` (tabular numerals) so columns align and numbers don't jitter when they change.
 
@@ -533,7 +536,8 @@ A rule written down is memory; a rule in a type or a component is enforcement. A
 | Destructive action is last, red, with consequence | Convention | Enforced — an `ActionSheet` item variant |
 | Tokens JSON ↔ CSS agree | **Enforced** | — (`src/lib/tokens.test.ts` fails on drift) |
 | Every component appears in the live library | Convention | Stays convention — `/design` is added to by hand |
-| Hardcoded hex, banned copy | Convention | Checked — `scripts/check-tells.sh`, run automatically via a `Stop` hook (`.claude/hooks/tell-check-stop.sh`) after every response. Report-only: it surfaces candidates, doesn't block, so a hit still needs a human (or Claude, next turn) call. It also meters what §1.4 hasn't tokenised yet (`text-[…px]`, `leading-`/`tracking-[…]` counts) so that migration is a number, not a feeling. Pure black/white inside a `gradient(`/mask line is ignored — a stencil, not a colour. |
+| Hardcoded hex, banned copy | Convention | Checked — `scripts/check-tells.sh`, run automatically via a `Stop` hook (`.claude/hooks/tell-check-stop.sh`) after every response. Report-only: it surfaces candidates, doesn't block, so a hit still needs a human (or Claude, next turn) call. Pure black/white inside a `gradient(`/mask line is ignored — a stencil, not a colour. |
+| Type is one of the 24 presets (§1.4) | **Enforced** | `--text-*: initial` removes Tailwind's sizes; the checker's type section exits 1 in CI on any `text-[…px]`, `leading-[…]`, `tracking-[…]` or Tailwind default. A figure's parts (currency glyph, decimals) are the one sanctioned raw size, marked "part" on their line in the component that draws them. |
 | Radius is one of the seven names (§1.6) | **Enforced** | Same two layers: `--radius-*: initial` in the build, and the checker's radius section exits 1 in CI on any `rounded-[…]` or Tailwind default. |
 | Spacing is on the closed scale (§1.5) | **Enforced** | Two layers: the build (`--spacing: initial` — an off-scale class renders nothing) and the checker's spacing section, which exits 1 in CI on any off-scale step or `[Npx]` value, variants included. |
 

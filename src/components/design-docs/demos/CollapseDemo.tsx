@@ -14,7 +14,7 @@ export function CollapseDemo() {
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="inline-flex items-center gap-1 border-b border-dotted border-clay/50 pb-px font-sans text-[11.5px] font-medium text-clay-deep"
+        className="inline-flex items-center gap-1 border-b border-dotted border-clay/50 pb-px font-sans text-meta text-clay-deep"
       >
         how this is figured
         <ChevronDown
@@ -24,7 +24,7 @@ export function CollapseDemo() {
         />
       </button>
       <Collapse open={open}>
-        <ul className="mt-3 divide-y divide-ink/7 font-sans text-[13px]">
+        <ul className="mt-3 divide-y divide-ink/7 font-sans text-label">
           {[
             ["Selene hammered band", 18.2],
             ["Thalia stacking set", -2.06],

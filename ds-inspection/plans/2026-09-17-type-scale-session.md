@@ -72,8 +72,8 @@ Bold = a size change. ⚑ = a judgement call, flagged in the session page with i
 
 All 26 rows decided in the session page: 23 as proposed, 3 amended after discussion —
 
-- **body-lg → 14 / 24**, not 16 / 28 (the designer's note: "14/20?"; 24 keeps the briefing's 1.7 air, 20 would read as a label).
+- **`body-lg` is gone; two Lora prose presets instead.** Implementing the picks surfaced that the briefing, the Price Check verdict and the coach teaser are Lora in code (r3 tokens misdocumented the briefing as Plex 15/300), so a Plex `body-lg` had no consumer. A Mobbin benchmark (24 finance and reading apps) showed finance apps set such sentences in the UI face while reading apps use serif; the designer kept Lora by brand principle ("opens like a message") and, after seeing three renders of the dashboard and two of the Price Check, chose **two sizes by role**: `prose` 16/24 for the surfaces made for reading (verdict, teaser) and `prose-sm` 14/20 at ink-62 for the briefing, which should recede on a dashboard that already bombards. The briefing concept itself is to be tested later.
 - **chip-sm has no type of its own.** Benchmarks put the floor for chip/badge text at 12px (Polaris, Carbon, Primer, Ant, Chakra; Material 14); 10 would sit under all of them. Both chip sizes use the `chip` preset (12 / 16 / 600); `sm` is only the tighter inset.
 - **The dropdown trigger is `button-ghost`** (14 / 20 / 500), because *Dropdown = ghost + chevron* (CLAUDE.md). `label-sm` is dropped.
 
-So: **23 presets, 11 sizes** — `10 · 12 · 14 · 16 · 18 · 20 · 24 · 28 · 34 · 44 · 56`, every line box on 4pt. The approved table is spec §1.4; the migration is P3 proper (#8).
+So: **24 presets, 11 sizes** — `10 · 12 · 14 · 16 · 18 · 20 · 24 · 28 · 34 · 44 · 56`, every line box on 4pt. The approved table is spec §1.4; the migration is P3 proper (#8).

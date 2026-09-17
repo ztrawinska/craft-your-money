@@ -24,12 +24,12 @@ export function TokenSwatch({
         style={{ backgroundColor: value }}
       />
       <div className="min-w-0 font-sans">
-        <p className="text-[14px] font-medium text-ink">{name}</p>
-        <p className="mt-1 font-mono text-[11.5px] text-ink/62 tabular-nums">
+        <p className="text-label-strong text-ink">{name}</p>
+        <p className="mt-1 font-mono text-meta text-ink/62 tabular-nums">
           {value.toUpperCase()} · {utility} · {cssVar}
         </p>
         {description && (
-          <p className="mt-1 text-[12.5px] font-light leading-[1.5] text-ink/70">{description}</p>
+          <p className="mt-1 text-body-sm text-ink/70">{description}</p>
         )}
       </div>
     </div>

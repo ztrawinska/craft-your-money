@@ -23,10 +23,12 @@ const toneClasses: Record<ChipTone, string> = {
 };
 
 // Default is the standalone chip. `sm` is only for a chip sitting inline in
-// dense text — e.g. inside a dashboard attention row's meta line.
+// dense text — e.g. inside a dashboard attention row's meta line. Both sizes
+// set the same type (§1.4 `chip`, 12/16/600 — 12 is the floor for chip text);
+// `sm` is only the tighter inset.
 const sizeClasses = {
-  default: "px-3 py-1 text-[12px]",
-  sm: "px-2 py-nudge text-[10.5px]",
+  default: "px-3 py-1",
+  sm: "px-2 py-nudge",
 } as const;
 
 type ChipProps = {
@@ -38,7 +40,7 @@ type ChipProps = {
 export function Chip({ tone = "neutral", size = "default", children }: ChipProps) {
   return (
     <span
-      className={`inline-flex items-center rounded-chip font-semibold font-sans tabular-nums ${sizeClasses[size]} ${toneClasses[tone]}`}
+      className={`inline-flex items-center rounded-chip font-sans text-chip tabular-nums ${sizeClasses[size]} ${toneClasses[tone]}`}
     >
       {children}
     </span>

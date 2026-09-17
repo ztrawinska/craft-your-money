@@ -33,8 +33,8 @@ function Row({
   return (
     <div className="flex items-start justify-between gap-4 py-4">
       <div className="min-w-0">
-        <p className="font-sans text-[15px] text-ink">{label}</p>
-        {help && <p className="mt-1 font-sans text-[12px] font-light leading-[1.5] text-ink/62">{help}</p>}
+        <p className="font-sans text-label text-ink">{label}</p>
+        {help && <p className="mt-1 font-sans text-body-sm text-ink/62">{help}</p>}
       </div>
       <div className="flex shrink-0 items-center">{children}</div>
     </div>
@@ -57,14 +57,14 @@ function NumberField({
 }) {
   return (
     <span className="inline-flex items-center gap-2">
-      {prefix && <span className="font-serif text-[15px] text-ink/62">{prefix}</span>}
+      {prefix && <span className="font-serif text-value text-ink/62">{prefix}</span>}
       <Input
         inputMode="decimal"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className={`${width} text-right font-serif tabular-nums`}
       />
-      {suffix && <span className="font-sans text-[12px] text-ink/62">{suffix}</span>}
+      {suffix && <span className="font-sans text-meta text-ink/62">{suffix}</span>}
     </span>
   );
 }
@@ -103,7 +103,7 @@ export function SettingsForm({ initial }: { initial: Settings }) {
         </Link>
       </div>
       <div className="px-6 pb-2 pt-5">
-        <h1 className="font-serif text-[27px] font-medium tracking-[-0.01em]">Settings</h1>
+        <h1 className="font-serif text-title">Settings</h1>
       </div>
 
       <div className="px-6">
@@ -151,16 +151,16 @@ export function SettingsForm({ initial }: { initial: Settings }) {
           <SectionLabel>Health thresholds</SectionLabel>
           <div className="divide-y divide-ink/7">
             <Row label="Healthy">
-              <span className="font-serif text-[15px] tabular-nums text-ink/62">margin ≥ 30%</span>
+              <span className="font-serif text-value tabular-nums text-ink/62">margin ≥ 30%</span>
             </Row>
             <Row label="Caution">
-              <span className="font-serif text-[15px] tabular-nums text-ink/62">15% – 30%</span>
+              <span className="font-serif text-value tabular-nums text-ink/62">15% – 30%</span>
             </Row>
             <Row label="Risky">
-              <span className="font-serif text-[15px] tabular-nums text-ink/62">below 15%</span>
+              <span className="font-serif text-value tabular-nums text-ink/62">below 15%</span>
             </Row>
           </div>
-          <p className="mt-3 font-sans text-[12px] font-light italic text-ink/62">
+          <p className="mt-3 font-sans text-body-sm italic text-ink/62">
             Fixed for now — adjustable in a later version.
           </p>
         </section>

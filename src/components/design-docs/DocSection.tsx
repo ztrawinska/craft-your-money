@@ -26,7 +26,7 @@ export function DocSection({ id, title, spec, source, lede, page = false, childr
   const sources = source ? (Array.isArray(source) ? source : [source]) : [];
   const Heading = page ? "h1" : "h2";
   const meta = (spec || sources.length > 0) && (
-    <p className="font-sans text-[11.5px] text-ink/62">
+    <p className="font-sans text-meta text-ink/62">
       {spec && (
         <a href={DESIGN_SYSTEM_DOC} className={docLink}>
           design-system.md {spec}
@@ -48,7 +48,7 @@ export function DocSection({ id, title, spec, source, lede, page = false, childr
     <section id={id} className={page ? "" : "scroll-mt-6 border-t border-ink/7 py-8"}>
       <div className={page ? "mb-6" : "mb-5 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1"}>
         <Heading
-          className={`font-serif font-medium leading-tight text-ink ${page ? "text-[27px]" : "text-[22px]"}`}
+          className={`font-serif text-ink ${page ? "text-title" : "text-figure-xs"}`}
         >
           {page ? title : (
             <a href={`#${id}`} className="hover:text-clay-deep">
@@ -58,13 +58,13 @@ export function DocSection({ id, title, spec, source, lede, page = false, childr
         </Heading>
         {page ? <div className="mt-2">{meta}</div> : meta}
         {page && lede && (
-          <p className="mt-3 max-w-[62ch] font-sans text-[15px] font-light leading-[1.7] text-ink/70">
+          <p className="mt-3 max-w-[62ch] font-sans text-body text-ink/70">
             {lede}
           </p>
         )}
       </div>
       {!page && lede && (
-        <p className="mb-6 max-w-[62ch] font-sans text-[15px] font-light leading-[1.7] text-ink/70">
+        <p className="mb-6 max-w-[62ch] font-sans text-body text-ink/70">
           {lede}
         </p>
       )}

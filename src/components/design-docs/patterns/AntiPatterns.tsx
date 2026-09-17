@@ -28,9 +28,9 @@ export function AntiPatternsDoc() {
       lede="Rejected during design. Each was built or considered and turned down for the reason given."
     >
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[520px] border-collapse font-sans text-[13.5px]">
+        <table className="w-full min-w-[520px] border-collapse font-sans text-label">
           <thead>
-            <tr className="text-left text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
+            <tr className="text-left text-caps uppercase text-ink/62">
               <th className="border-b border-ink/14 py-2 pr-4 font-semibold">Anti-pattern</th>
               <th className="border-b border-ink/14 py-2 font-semibold">Why rejected</th>
             </tr>
@@ -39,7 +39,7 @@ export function AntiPatternsDoc() {
             {ANTI.map(([what, why]) => (
               <tr key={what} className="align-top">
                 <td className="border-b border-ink/7 py-3 pr-4 text-ink">{what}</td>
-                <td className="border-b border-ink/7 py-3 font-light leading-[1.5] text-ink/70">{why}</td>
+                <td className="border-b border-ink/7 py-3 text-body text-ink/70">{why}</td>
               </tr>
             ))}
           </tbody>
