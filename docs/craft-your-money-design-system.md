@@ -77,36 +77,41 @@ Lora was validated against Fraunces, Newsreader and Literata on the real pricing
 
 #### Type scale
 
-| Role | Size | Family | Weight | Notes |
-|---|---|---|---|---|
-| Hero figure (dashboard profit) | 46px | Lora | 500 | Currency symbol at 29px, `ink-62` |
-| Final price | 56px | Lora | 500 | Whole number; decimals at 25px, currency at 22px |
-| Profit amount | 34px | Lora | 500 | |
-| Greeting / page title | 27px | Lora | 500 | |
-| Product name (detail header) | 27px | Lora | 500 | Line-height 1.16 |
-| Direct cost total | 24px | Lora | 500 | |
-| Supporting metric | 20px | Lora | 500 | Unit suffix 10.5px sans, `ink-62` |
-| Section total | 13px | Lora | 400 | `ink-62` |
-| Product name (list row) | 15–16px | Lora | 500 | |
-| Row value | 15.5px | Lora | 400 | |
-| Briefing paragraph | 15px | Plex | 300 | Line-height 1.7 |
-| Row label | 15px | Plex | 400 | |
-| Body / helper | 13px | Plex | 300 | |
-| Button | 14.5px | Plex | 600 | Primary |
-| Button, ghost | 14.5px | Plex | 500 | Medium, not semibold, so it sits back from the primary beside it |
-| Verb-link | 13.5px | Plex | 600 | clay-deep |
-| Assistant label | 13.5px | Plex | 500 | `iris-deep` — the only text that wears the glint |
-| Chip | 12px | Plex | 600 | |
-| Chip, sm | 10.5px | Plex | 600 | Inline in dense text (an attention row's meta line) |
-| Meta line | 11.5px | Plex | 300 | `ink-62` |
-| Section label (caps) | 10px | Plex | 600 | `letter-spacing: 0.2em`, uppercase, `ink-62` |
-| Metric label (caps) | 9px | Plex | 600 | `letter-spacing: 0.13em`, uppercase |
-| Workflow stamp | 9.5px | Plex | 600 | `letter-spacing: 0.22em`, uppercase |
-| Nav label | 9px | Plex | 500 | |
+**Twenty-three presets on eleven sizes (decided 2026-09-17, foundations plan P3).** Sizes sit on the 2pt grid — `10 · 12 · 14 · 16 · 18 · 20 · 24 · 28 · 34 · 44 · 56` — and every line box is a multiple of 4, so text stacks on the same rhythm as the spacing scale (§1.5). A preset carries size, line-height, weight and tracking under one name, `category-size`; the family is the one rule above (numbers and names Lora, chrome Plex). In code a preset is one utility (`text-meta`, `text-figure-lg`) plus `font-serif` / `font-sans`; mirrored in `design/tokens.json` `type.*` and the Figma text styles, guarded by `src/lib/tokens.test.ts` and, once migrated, by `scripts/check-tells.sh` (any `text-[…px]`, `leading-[…]` or `tracking-[…]` fails CI).
+
+| Preset | Size / box | Weight | Family | Tracking | Used for (r3 name) |
+|---|---|---|---|---|---|
+| `figure-xl` | 56 / 48 | 500 | Lora | −0.025em | Your price — the final price in the pricing block (*final-price*) |
+| `figure-lg` | 44 / 44 | 500 | Lora | −0.02em | Dashboard average profit; the editable price field (*hero-figure*) |
+| `figure-md` | 34 / 36 | 500 | Lora | | Your profit — the last word of the pricing block (*profit*) |
+| `figure-sm` | 24 / 24 | 500 | Lora | | A total: what this costs to make; the business-costs total (*figure*) |
+| `figure-xs` | 20 / 20 | 500 | Lora | | Dashboard metric band (*metric*) |
+| `figure-2xs` | 18 / 24 | 400 | Lora | | The calculated-price suggestion (*calc*) |
+| `title` | 28 / 32 | 500 | Lora | | Greeting, product name on the detail header, screen titles (*title*) |
+| `name` | 16 / 20 | 500 | Lora | | Product name in a list row; a material or step name (*row-name*) |
+| `value` | 16 / 20 | 400 | Lora | | A money value on a list row; input values (*row-value*) |
+| `value-sm` | 14 / 16 | 400 | Lora | | The total beside a section label, `ink-62` (*section-total*) |
+| `body-lg` | 14 / 24 | 300 | Plex | | The dashboard briefing paragraph (*briefing*) |
+| `body` | 14 / 20 | 300 | Plex | | Body and helper copy — the calm sentences under a figure (*body*) |
+| `body-sm` | 12 / 16 | 300 | Plex | | Quiet captions and sublabels, `ink-62` (*meta-light*) |
+| `label` | 14 / 20 | 400 | Plex | | A cost line's label, a settings row, a list option (*row-label*) |
+| `label-strong` | 14 / 20 | 500 | Plex | | The assistant label (`iris-deep`), a radio card's title, the action sheet's cancel (*assistant*) |
+| `link` | 14 / 20 | 600 | Plex | | A verb-link, `clay-deep`: Reprice ›, + Add material (*verb-link*) |
+| `button` | 14 / 20 | 600 | Plex | | The primary button (*button*) |
+| `button-ghost` | 14 / 20 | 500 | Plex | | The ghost button; dropdown and filter triggers — a dropdown is a ghost with a chevron (*button-ghost*, *dropdown*) |
+| `meta` | 12 / 16 | 400 | Plex | | A row's meta line, `ink-62`: 5g × £38.00/g (*meta*) |
+| `chip` | 12 / 16 | 600 | Plex | | Both chip sizes — `sm` is a tighter inset, not smaller type (*chip*, *chip-sm*) |
+| `caps` | 10 / 12 | 600 | Plex | 0.2em | Section labels and the workflow stamp, uppercase, `ink-62` (*section-label*, *workflow-stamp*) |
+| `caps-tight` | 10 / 12 | 600 | Plex | 0.13em | Metric and field labels, uppercase (*metric-label*) |
+| `nav` | 10 / 12 | 500 | Plex | | Bottom navigation labels (*nav-label*) |
+
+**Not presets:** the currency glyph beside a figure and the decimals of a large price are proportions of that figure, set inside the `Price` component — component-scoped values, like the 2px nudge (§1.5). Today: currency 22 beside 56 and 29 beside 44, decimals 25.
+
+**What moved, and why (2026-09-17).** r3 had 26 role-named styles on 22 sizes, sixteen of them on a half pixel or an odd integer, with unitless line-heights that landed line boxes at 19.2 or 31.3px. The designer decided every row in a session with each style rendered current beside proposed (`ds-inspection/plans/2026-09-17-type-scale-session.md`): body 13 → 14 is the most-used change; briefing 15 → 14/24 keeps its air; labels went down to 14 so they sit under names at 16; the 9–9.5px caps family became 10; the eight sizes the code used without a style (11, 14, 22, 25, 26, 28, 29, 44) were either folded into a preset or moved into the Price component. Chip text stays 12 for both sizes because 12 is the floor for chip and badge text across public systems.
 
 **Numeric rule:** every figure uses `font-feature-settings: 'tnum'` (tabular numerals) so columns align and numbers don't jitter when they change.
 
-**Caps labels** always pair small size with wide tracking (0.12–0.22em). This is the system's quiet structural voice — it recedes while still organising.
+**Caps labels** always pair small size with wide tracking (`caps` 0.2em, `caps-tight` 0.13em). This is the system's quiet structural voice — it recedes while still organising.
 
 ### 1.5 Spacing
 
