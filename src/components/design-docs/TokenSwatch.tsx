@@ -20,7 +20,7 @@ export function TokenSwatch({
     <div className="flex gap-4">
       <div
         aria-hidden
-        className="size-[56px] shrink-0 rounded-[6px] border border-ink/14"
+        className="size-[56px] shrink-0 rounded-frame border border-ink/14"
         style={{ backgroundColor: value }}
       />
       <div className="min-w-0 font-sans">

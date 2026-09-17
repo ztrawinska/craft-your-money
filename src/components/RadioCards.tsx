@@ -26,7 +26,7 @@ export function RadioCards({ name, options, value, onChange }: RadioCardsProps) 
         return (
           <label
             key={o.value}
-            className={`cursor-pointer rounded-[8px] border p-4 ${
+            className={`cursor-pointer rounded-band border p-4 ${
               selected ? "border-clay-deep bg-clay/7" : "border-ink/14"
             }`}
           >

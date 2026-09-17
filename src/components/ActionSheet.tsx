@@ -62,7 +62,7 @@ export function ActionSheet({
               <button
                 type="button"
                 onClick={() => setConfirming(null)}
-                className="flex-1 rounded-[7px] border border-ink/14 py-3 font-sans text-[13.5px] font-medium text-ink/62"
+                className="flex-1 rounded-button border border-ink/14 py-3 font-sans text-[13.5px] font-medium text-ink/62"
               >
                 Keep
               </button>
@@ -73,7 +73,7 @@ export function ActionSheet({
                   close();
                   a.onSelect();
                 }}
-                className="flex-1 rounded-[7px] bg-status-red py-3 font-sans text-[13.5px] font-semibold text-on-clay"
+                className="flex-1 rounded-button bg-status-red py-3 font-sans text-[13.5px] font-semibold text-on-clay"
               >
                 {confirming.confirm!.confirmLabel}
               </button>
@@ -114,7 +114,7 @@ export function ActionSheet({
               <button
                 type="button"
                 onClick={close}
-                className="w-full rounded-[7px] border border-ink/14 py-row font-sans text-[14px] font-medium text-ink/62"
+                className="w-full rounded-button border border-ink/14 py-row font-sans text-[14px] font-medium text-ink/62"
               >
                 Cancel
               </button>

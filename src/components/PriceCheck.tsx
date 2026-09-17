@@ -124,7 +124,7 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
               {scenarios.map((s) => (
                 <span
                   key={s.price}
-                  className="rounded-full border border-ink/14 px-3 py-1 font-sans text-[11.5px] tabular-nums text-ink/70"
+                  className="rounded-chip border border-ink/14 px-3 py-1 font-sans text-[11.5px] tabular-nums text-ink/70"
                 >
                   at {formatMoney(s.price, cur)} → {Math.round(s.marginPct * 100)}%
                 </span>
@@ -143,7 +143,7 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
                     setTopic(t.id);
                     setVisited((v) => [...v, t.id]);
                   }}
-                  className="rounded-full bg-iris/[0.09] px-3 py-2 font-sans text-[12px] font-medium text-iris-deep"
+                  className="rounded-chip bg-iris/[0.09] px-3 py-2 font-sans text-[12px] font-medium text-iris-deep"
                 >
                   {t.label}
                 </button>

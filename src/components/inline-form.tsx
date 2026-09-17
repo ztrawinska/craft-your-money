@@ -124,7 +124,7 @@ export function FormFooter({
             type="button"
             onClick={onSave}
             disabled={!valid}
-            className={`rounded-[7px] px-4 py-2 text-[13px] font-semibold ${
+            className={`rounded-button px-4 py-2 text-[13px] font-semibold ${
               valid ? "bg-clay-deep text-on-clay" : "bg-ink/10 text-ink/30"
             }`}
           >
@@ -154,6 +154,6 @@ export function EditShell({ children }: { children: ReactNode }) {
   // elsewhere stay because they carry meaning (the one framed surface; "AI is
   // here"); this one didn't.
   return (
-    <div className="my-2 rounded-[8px] bg-ink/[0.05] px-4 py-3">{children}</div>
+    <div className="my-2 rounded-band bg-ink/[0.05] px-4 py-3">{children}</div>
   );
 }

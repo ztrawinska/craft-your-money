@@ -130,6 +130,16 @@ test("the shadcn bridge (:root) matches the tokens.json shadcn group", () => {
   expect(new Map(rootVars)).toEqual(jsonShadcn);
 });
 
+test("the @theme radii are closed and mirror tokens.json radius exactly", () => {
+  const theme = block(/@theme inline/);
+  expect(theme).toMatch(/--radius-\*:\s*initial;/); // Tailwind's sm/md/lg/xl are gone
+  const cssRadii = new Map<string, string>();
+  for (const m of theme.matchAll(/--radius-([a-z0-9-]+)\s*:\s*([0-9.]+px)\b/g)) cssRadii.set(m[1], m[2]);
+  const jsonRadii = new Map([...flatten(tokens.radius as Group)].map(([k, v]) => [k, String(v)]));
+  expect(cssRadii).toEqual(jsonRadii);
+  expect(css).not.toMatch(/--radius-(sm|md|lg|xl)\s*:/); // the shadcn bridge no longer redefines them
+});
+
 test("shadcn --radius is the button radius", () => {
   const rem = css.match(/--radius:\s*([\d.]+)rem/);
   expect(rem).not.toBeNull();

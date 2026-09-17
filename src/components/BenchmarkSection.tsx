@@ -88,7 +88,7 @@ export function BenchmarkSection({
               {benchmark.map((b, i) => (
                 <span
                   key={i}
-                  className="inline-flex items-center gap-1 rounded-full border border-ink/14 py-1 pl-3 pr-2 font-serif text-[13px] tabular-nums text-ink"
+                  className="inline-flex items-center gap-1 rounded-chip border border-ink/14 py-1 pl-3 pr-2 font-serif text-[13px] tabular-nums text-ink"
                 >
                   {formatMoney(b.price, cur)}
                   {b.label && (

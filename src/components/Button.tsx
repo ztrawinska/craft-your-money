@@ -21,9 +21,9 @@ type ButtonVariant = "primary" | "ghost" | "link";
 
 const variantClass: Record<ButtonVariant, string> = {
   primary:
-    "block w-full text-center rounded-[7px] px-4 py-3 min-h-tap text-[14.5px] font-semibold bg-clay-deep text-on-clay shadow-[0_1px_2px_rgba(138,90,82,0.3)]",
+    "block w-full text-center rounded-button px-4 py-3 min-h-tap text-[14.5px] font-semibold bg-clay-deep text-on-clay shadow-[0_1px_2px_rgba(138,90,82,0.3)]",
   ghost:
-    "block w-full text-center rounded-[7px] px-4 py-3 min-h-tap text-[14.5px] font-medium border border-ink/14 text-ink/62",
+    "block w-full text-center rounded-button px-4 py-3 min-h-tap text-[14.5px] font-medium border border-ink/14 text-ink/62",
   link: "inline-flex items-center gap-2 text-clay-deep",
 };
 

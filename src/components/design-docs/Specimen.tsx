@@ -27,7 +27,7 @@ export function Specimen({
   return (
     <figure className={`min-w-0 ${inline ? "" : "w-full max-w-[430px]"} ${className}`}>
       <div
-        className={`rounded-[8px] border border-dashed border-ink/14 ${
+        className={`rounded-band border border-dashed border-ink/14 ${
           flush ? "overflow-hidden" : "px-6 py-5"
         }`}
       >

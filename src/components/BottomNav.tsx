@@ -36,7 +36,7 @@ function Tab({ item, active }: { item: NavItem; active?: NavKey }) {
       className="relative flex flex-1 flex-col items-center justify-end gap-1 px-2"
     >
       {on && (
-        <span className="absolute -top-3 left-1/2 h-[2px] w-[22px] -translate-x-1/2 rounded-b-[2px] bg-clay-deep" />
+        <span className="absolute -top-3 left-1/2 h-[2px] w-[22px] -translate-x-1/2 rounded-b-stamp bg-clay-deep" />
       )}
       <Icon
         size={22}
@@ -65,7 +65,7 @@ export function BottomNav({ active }: { active?: NavKey }) {
           <Link
             href="/products/new"
             aria-label="New product"
-            className="mb-px flex h-[42px] w-[42px] items-center justify-center rounded-[11px] bg-clay-deep"
+            className="mb-px flex h-[42px] w-[42px] items-center justify-center rounded-nav-plus bg-clay-deep"
           >
             <Plus size={19} strokeWidth={1.9} className="text-on-clay" />
           </Link>

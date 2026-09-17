@@ -65,7 +65,7 @@ export function SpacingDoc() {
                       <p className="font-mono text-[11px] text-ink/62">{utility(name)}</p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="h-3 shrink-0 rounded-[2px] bg-clay/40" style={{ width: px }} />
+                      <div className="h-3 shrink-0 rounded-stamp bg-clay/40" style={{ width: px }} />
                       <p className="font-mono text-[11.5px] text-ink/62 tabular-nums">
                         {px}
                         {alias && <span className="text-ink/30"> = {alias}</span>}
