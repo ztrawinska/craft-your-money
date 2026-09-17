@@ -63,10 +63,8 @@ export function ListRow({
   const isProduct = emphasis === "product";
 
   const labelClass = isProduct
-    ? `font-serif text-[16px] leading-[1.2] ${
-        muted ? "font-normal text-ink/62" : "font-medium text-ink"
-      }`
-    : "font-sans text-[15px] text-ink";
+    ? `font-serif text-name ${muted ? "font-normal text-ink/62" : "text-ink"}`
+    : "font-sans text-label text-ink";
 
   const rowClass = [
     "flex justify-between gap-3",
@@ -98,7 +96,7 @@ export function ListRow({
         </span>
         {meta && (
           <p
-            className={`mt-1 font-sans text-[12px] ${
+            className={`mt-1 font-sans text-meta ${
               muted ? "text-ink/40" : "text-ink/62"
             }`}
           >

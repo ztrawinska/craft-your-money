@@ -78,10 +78,10 @@ export default async function ProductsOverview({
       <main className="mx-auto w-full max-w-[430px] flex-1">
         {/* header */}
         <div className="flex items-baseline justify-between px-6 pb-3 pt-section">
-          <h1 className="font-serif text-[26px] font-medium tracking-[-0.01em]">
+          <h1 className="font-serif text-title">
             Products
           </h1>
-          <span className="font-sans text-[11px] font-light text-ink/62">
+          <span className="font-sans text-body-sm text-ink/62">
             {count}
           </span>
         </div>
@@ -125,7 +125,7 @@ export default async function ProductsOverview({
                     // alone at full size.
                     <div className="flex flex-col items-end gap-1">
                       {p.finalPrice !== null && (
-                        <span className="font-serif text-[16px] font-medium leading-none tabular-nums text-ink">
+                        <span className="font-serif text-name tabular-nums text-ink">
                           {formatMoney(p.finalPrice, cur)}
                         </span>
                       )}
@@ -139,7 +139,7 @@ export default async function ProductsOverview({
             );
           })}
           {sorted.length === 0 && (
-            <p className="px-6 py-8 font-sans text-[13px] font-light text-ink/62">
+            <p className="px-6 py-8 font-sans text-body text-ink/62">
               Nothing here.
             </p>
           )}

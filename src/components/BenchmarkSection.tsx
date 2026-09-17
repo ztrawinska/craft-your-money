@@ -64,7 +64,7 @@ export function BenchmarkSection({
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="inline-flex items-center gap-1 border-b border-dotted border-clay/50 pb-px font-sans text-[11.5px] font-medium text-clay-deep"
+        className="inline-flex items-center gap-1 border-b border-dotted border-clay/50 pb-px font-sans text-meta text-clay-deep"
       >
         market benchmark
         {benchmark.length > 0 && (
@@ -79,7 +79,7 @@ export function BenchmarkSection({
 
       <Collapse open={open}>
         <div className="pb-1 pt-4">
-          <p className="font-sans text-[12px] font-light leading-[1.6] text-ink/62">
+          <p className="font-sans text-body-sm text-ink/62">
             A few prices you&rsquo;ve seen for similar pieces — three is plenty.
           </p>
 
@@ -88,11 +88,11 @@ export function BenchmarkSection({
               {benchmark.map((b, i) => (
                 <span
                   key={i}
-                  className="inline-flex items-center gap-1 rounded-chip border border-ink/14 py-1 pl-3 pr-2 font-serif text-[13px] tabular-nums text-ink"
+                  className="inline-flex items-center gap-1 rounded-chip border border-ink/14 py-1 pl-3 pr-2 font-serif text-value-sm tabular-nums text-ink"
                 >
                   {formatMoney(b.price, cur)}
                   {b.label && (
-                    <span className="font-sans text-[11px] font-light not-italic text-ink/62">
+                    <span className="font-sans text-body-sm not-italic text-ink/62">
                       {b.label}
                     </span>
                   )}
@@ -131,13 +131,13 @@ export function BenchmarkSection({
             iconLeading={<Plus size={14} strokeWidth={2} />}
             onClick={add}
             disabled={!valid}
-            className="pt-3 text-[13px] font-medium"
+            className="pt-3 text-label-strong"
           >
             Add price
           </Button>
 
           {market && (
-            <p className="mt-3 border-t border-ink/7 pt-3 font-sans text-[12px] font-light leading-[1.6] text-ink/62">
+            <p className="mt-3 border-t border-ink/7 pt-3 font-sans text-body-sm text-ink/62">
               {market.count} price{market.count === 1 ? "" : "s"} ·{" "}
               <span className="tabular-nums">
                 {market.min === market.max

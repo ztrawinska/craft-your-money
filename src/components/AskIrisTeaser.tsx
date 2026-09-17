@@ -21,15 +21,15 @@ export function AskIrisTeaser({ className = "" }: { className?: string }) {
         label="Pricing coach"
         trigger={<AssistantSlot>Talk to your pricing coach</AssistantSlot>}
       >
-      <p className="font-serif text-[16px] leading-[1.4] text-ink">
+      <p className="font-serif text-prose text-ink">
         Chat with your pricing coach — talk through your prices and manage your products, all from
         one place.
       </p>
-      <p className="mt-3 font-sans text-[13px] font-light leading-[1.55] text-ink/60">
+      <p className="mt-3 font-sans text-body text-ink/60">
         That&rsquo;s where we&rsquo;re taking this. It isn&rsquo;t ready yet — you&rsquo;ll find it in
         this same spot when it is.
       </p>
-        <span className="mt-4 inline-flex rounded-chip bg-iris/[0.09] px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.14em] text-iris-deep">
+        <span className="mt-4 inline-flex rounded-chip bg-iris/[0.09] px-3 py-1 font-sans text-caps-tight uppercase text-iris-deep">
           Coming soon
         </span>
       </IrisSheet>

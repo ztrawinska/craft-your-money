@@ -102,18 +102,18 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
       }
     >
       {busy ? (
-        <p className="py-2 font-sans text-[13px] font-light text-ink/62">Reading your numbers…</p>
+        <p className="py-2 font-sans text-body text-ink/62">Reading your numbers…</p>
       ) : (
         <>
           {/* verdict — the answer, in ink (never iris) */}
-          <p className="font-serif text-[16px] leading-[1.35] text-ink">{review!.verdict}</p>
+          <p className="font-serif text-prose text-ink">{review!.verdict}</p>
 
           {/* findings — iris numerals, iris-tinted hairlines between */}
           <ol className="mt-3">
             {review!.findings.map((f, i) => (
               <li key={i} className={`flex gap-2 py-3 ${i > 0 ? "border-t border-iris/15" : ""}`}>
-                <span className="font-serif text-[13px] tabular-nums text-iris-deep">{i + 1}</span>
-                <span className="font-sans text-[13px] font-light leading-[1.5] text-ink/80">{f}</span>
+                <span className="font-serif text-value-sm tabular-nums text-iris-deep">{i + 1}</span>
+                <span className="font-sans text-body text-ink/80">{f}</span>
               </li>
             ))}
           </ol>
@@ -124,7 +124,7 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
               {scenarios.map((s) => (
                 <span
                   key={s.price}
-                  className="rounded-chip border border-ink/14 px-3 py-1 font-sans text-[11.5px] tabular-nums text-ink/70"
+                  className="rounded-chip border border-ink/14 px-3 py-1 font-sans text-meta tabular-nums text-ink/70"
                 >
                   at {formatMoney(s.price, cur)} → {Math.round(s.marginPct * 100)}%
                 </span>
@@ -143,7 +143,7 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
                     setTopic(t.id);
                     setVisited((v) => [...v, t.id]);
                   }}
-                  className="rounded-chip bg-iris/[0.09] px-3 py-2 font-sans text-[12px] font-medium text-iris-deep"
+                  className="rounded-chip bg-iris/[0.09] px-3 py-2 font-sans text-chip text-iris-deep"
                 >
                   {t.label}
                 </button>
@@ -152,7 +152,7 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
           )}
 
           {/* provenance — Used / Assumed / Can't know, and who wrote it */}
-          <div className="mt-4 border-t border-iris/15 pt-3 font-sans text-[11px] font-light leading-[1.65] text-ink/62">
+          <div className="mt-4 border-t border-iris/15 pt-3 font-sans text-body-sm text-ink/62">
             <p>
               <span className="font-medium text-ink/70">Used</span> — {provenance.used.join(", ")}.
             </p>

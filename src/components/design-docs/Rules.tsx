@@ -13,10 +13,10 @@ export function Rules({
 }) {
   return (
     <div className="mt-6">
-      <p className="mb-2 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
+      <p className="mb-2 font-sans text-caps uppercase text-ink/62">
         {title}
       </p>
-      <ul className="max-w-[62ch] space-y-2 font-sans text-[13.5px] font-light leading-[1.55] text-ink/70">
+      <ul className="max-w-[62ch] space-y-2 font-sans text-body text-ink/70">
         {items.map((it, i) => (
           <li key={i} className="flex gap-2">
             <span aria-hidden className="mt-2 h-px w-3 shrink-0 bg-ink/30" />
@@ -39,7 +39,7 @@ export function BuiltOn({
   note?: string;
 }) {
   return (
-    <p className="mt-6 font-sans text-[13px] font-light text-ink/70">
+    <p className="mt-6 font-sans text-body text-ink/70">
       <span className="font-medium text-ink">Built on</span>{" "}
       <a
         href={href}
@@ -55,7 +55,7 @@ export function BuiltOn({
 /** A small-caps label above a group of specimens. */
 export function GroupLabel({ children }: { children: ReactNode }) {
   return (
-    <p className="mb-3 mt-8 font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62 first:mt-0">
+    <p className="mb-3 mt-8 font-sans text-caps uppercase text-ink/62 first:mt-0">
       {children}
     </p>
   );

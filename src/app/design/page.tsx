@@ -53,11 +53,11 @@ const FILES = [
 export default function DesignOverview() {
   return (
     <>
-      <h1 className="font-serif text-[27px] font-medium leading-[1.16] text-ink">Overview</h1>
-      <p className="mt-3 mb-8 max-w-[62ch] font-sans text-[15px] font-light leading-[1.7] text-ink/70">
+      <h1 className="font-serif text-title text-ink">Overview</h1>
+      <p className="mt-3 mb-8 max-w-[62ch] font-sans text-body text-ink/70">
         The design system for Craft Your Money, a pricing tool for handmade makers. This library
-        renders the real components from <code className="font-mono text-[13px] text-ink">src/components</code>{" "}
-        and the real tokens from <code className="font-mono text-[13px] text-ink">globals.css</code>.
+        renders the real components from <code className="font-mono text-label text-ink">src/components</code>{" "}
+        and the real tokens from <code className="font-mono text-label text-ink">globals.css</code>.
         The rationale for each rule is in{" "}
         <a href={DESIGN_SYSTEM_DOC} className={link}>design-system.md</a>; product behaviour is in{" "}
         <a href={repo("docs/craft-your-money-prd-v2.md")} className={link}>the PRD</a>.
@@ -67,12 +67,12 @@ export default function DesignOverview() {
         <ol className="max-w-[62ch] space-y-4">
           {PRINCIPLES.map(([name, line], i) => (
             <li key={name} className="flex gap-4">
-              <span className="w-5 shrink-0 font-serif text-[15px] text-ink/62 tabular-nums">
+              <span className="w-5 shrink-0 font-serif text-value text-ink/62 tabular-nums">
                 {i + 1}
               </span>
               <div>
-                <p className="font-sans text-[15px] font-medium text-ink">{name}</p>
-                <p className="mt-1 font-sans text-[13.5px] font-light leading-[1.55] text-ink/70">
+                <p className="font-sans text-label-strong text-ink">{name}</p>
+                <p className="mt-1 font-sans text-body text-ink/70">
                   {line}
                 </p>
               </div>
@@ -86,7 +86,7 @@ export default function DesignOverview() {
         title="How the documents fit together"
         lede="Reading order for a new screen: behaviour, then components, then layout."
       >
-        <ol className="flex flex-wrap items-center gap-x-3 gap-y-2 font-sans text-[13.5px]">
+        <ol className="flex flex-wrap items-center gap-x-3 gap-y-2 font-sans text-label">
           {[
             ["PRD", repo("docs/craft-your-money-prd-v2.md"), "what it does and why"],
             ["design-system.md", DESIGN_SYSTEM_DOC, "what things look like and when"],
@@ -113,9 +113,9 @@ export default function DesignOverview() {
         lede="Which rules the code enforces, which a script checks, and which are still conventions to remember."
       >
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[640px] border-collapse font-sans text-[13px]">
+          <table className="w-full min-w-[640px] border-collapse font-sans text-label">
             <thead>
-              <tr className="text-left text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
+              <tr className="text-left text-caps uppercase text-ink/62">
                 <th className="border-b border-ink/14 py-2 pr-4 font-semibold">Rule</th>
                 <th className="border-b border-ink/14 py-2 pr-4 font-semibold">Level</th>
                 <th className="border-b border-ink/14 py-2 font-semibold">Where</th>
@@ -130,12 +130,12 @@ export default function DesignOverview() {
                       {r.level}
                     </Chip>
                   </td>
-                  <td className="border-b border-ink/7 py-3 font-light leading-[1.5] text-ink/70">
+                  <td className="border-b border-ink/7 py-3 text-body text-ink/70">
                     {r.where}
                     {r.path && (
                       <>
                         {" · "}
-                        <a href={repo(r.path)} className={`font-mono text-[11.5px] ${link}`}>
+                        <a href={repo(r.path)} className={`font-mono text-meta ${link}`}>
                           {r.path.split("/").pop()}
                         </a>
                       </>
@@ -146,7 +146,7 @@ export default function DesignOverview() {
             </tbody>
           </table>
         </div>
-        <p className="mt-4 max-w-[62ch] font-sans text-[12px] font-light leading-[1.55] text-ink/62">
+        <p className="mt-4 max-w-[62ch] font-sans text-body-sm text-ink/62">
           Enforced: the type system or a test stops it. Checked: a script reports it. Convention: documented only.
         </p>
       </DocSection>
@@ -157,11 +157,11 @@ export default function DesignOverview() {
             <li key={path} className="flex flex-col gap-1 sm:flex-row sm:gap-4">
               <a
                 href={repo(path.replace("*.tsx", ""))}
-                className={`shrink-0 font-mono text-[12.5px] sm:w-[300px] ${link}`}
+                className={`shrink-0 font-mono text-meta sm:w-[300px] ${link}`}
               >
                 {path}
               </a>
-              <span className="font-sans text-[13.5px] font-light leading-[1.5] text-ink/70">
+              <span className="font-sans text-body text-ink/70">
                 {what}
               </span>
             </li>

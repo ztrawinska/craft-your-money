@@ -11,9 +11,9 @@ export function ShadcnDoc() {
       lede="shadcn/ui components read semantic variables (--primary, --border …). These map onto the palette, so shadcn primitives render on-brand by default. Opacity tokens are baked to the nearest solid."
     >
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[520px] border-collapse font-sans text-[13px]">
+        <table className="w-full min-w-[520px] border-collapse font-sans text-label">
           <thead>
-            <tr className="text-left text-[10px] font-semibold uppercase tracking-[0.2em] text-ink/62">
+            <tr className="text-left text-caps uppercase text-ink/62">
               <th className="border-b border-ink/14 py-2 pr-4 font-semibold">shadcn variable</th>
               <th className="border-b border-ink/14 py-2 pr-4 font-semibold">Value</th>
               <th className="border-b border-ink/14 py-2 font-semibold">Which is</th>
@@ -22,11 +22,11 @@ export function ShadcnDoc() {
           <tbody>
             {leaves<string>(tokens.shadcn).map(([name, t]) => (
               <tr key={name}>
-                <td className="border-b border-ink/7 py-2 pr-4 font-mono text-[12px] text-ink">
+                <td className="border-b border-ink/7 py-2 pr-4 font-mono text-meta text-ink">
                   --{name}
                 </td>
                 <td className="border-b border-ink/7 py-2 pr-4">
-                  <span className="inline-flex items-center gap-2 font-mono text-[12px] text-ink/70 tabular-nums">
+                  <span className="inline-flex items-center gap-2 font-mono text-meta text-ink/70 tabular-nums">
                     <span
                       aria-hidden
                       className="inline-block h-4 w-4 rounded-stamp border border-ink/14"

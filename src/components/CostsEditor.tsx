@@ -99,7 +99,7 @@ function CostFields({
               key={p}
               type="button"
               onClick={() => onPatch({ period: p })}
-              className={`rounded-chip border px-3 py-2 font-sans text-[12px] capitalize ${
+              className={`rounded-chip border px-3 py-2 font-sans text-meta capitalize ${
                 draft.period === p
                   ? "border-clay-deep bg-clay-deep text-on-clay"
                   : "border-ink/14 text-ink/62"
@@ -236,8 +236,8 @@ export function CostsEditor({
     <div className="flex min-h-dvh flex-col">
       <main className="mx-auto w-full max-w-[430px] flex-1">
         <div className="px-6 pb-1 pt-section">
-          <h1 className="font-serif text-[26px] font-medium tracking-[-0.01em]">Business costs</h1>
-          <p className="mt-1 font-sans text-[12px] font-light text-ink/62">
+          <h1 className="font-serif text-title">Business costs</h1>
+          <p className="mt-1 font-sans text-body-sm text-ink/62">
             Rent, tools, insurance — the costs of being open, shared across what you make.
           </p>
         </div>
@@ -282,7 +282,7 @@ export function CostsEditor({
               variant="link"
               iconLeading={addIcon}
               onClick={() => setEdit({ index: "new", draft: BLANK, confirmingDelete: false })}
-              className="pt-3 text-[13px] font-medium"
+              className="pt-3 text-label-strong"
             >
               Add cost
             </Button>
@@ -305,7 +305,7 @@ export function CostsEditor({
             />
           </div>
           <label className="mt-4 flex items-center justify-between gap-4">
-            <span className="font-sans text-[15px] text-ink">
+            <span className="font-sans text-label text-ink">
               {method === "per-unit" ? "Pieces you make" : "Your bench hours"}
             </span>
             <span className="inline-flex items-center gap-2">
@@ -317,7 +317,7 @@ export function CostsEditor({
                 placeholder="0"
                 className="w-[72px] text-right font-serif tabular-nums"
               />
-              <span className="font-sans text-[12px] text-ink/62">{volumeLabel}</span>
+              <span className="font-sans text-meta text-ink/62">{volumeLabel}</span>
             </span>
           </label>
         </div>
@@ -326,30 +326,30 @@ export function CostsEditor({
         <div className="mt-6 px-6 pb-8">
           {total <= 0 ? (
             <TintedBand>
-              <p className="font-sans text-[13px] font-light leading-[1.6] text-ink/70">
+              <p className="font-sans text-body text-ink/70">
                 Add your monthly costs above to spread them across your pieces.
               </p>
             </TintedBand>
           ) : share == null ? (
             <TintedBand>
-              <p className="font-sans text-[13px] font-light leading-[1.6] text-ink/70">
+              <p className="font-sans text-body text-ink/70">
                 Set your monthly {method === "per-unit" ? "piece count" : "bench hours"} to see the
                 per-piece share.
               </p>
             </TintedBand>
           ) : (
             <div className="rounded-band border border-clay/34 bg-card px-5 py-4">
-              <p className="font-sans text-[12px] font-light text-ink/62">
+              <p className="font-sans text-body-sm text-ink/62">
                 {method === "per-unit"
                   ? "Every piece carries"
                   : sample
                     ? `${sample.name} (${sample.labourHours.toFixed(1)}h) carries`
                     : "This piece carries"}
               </p>
-              <p className="mt-1 font-serif text-[28px] font-medium tabular-nums text-ink">
+              <p className="mt-1 font-serif text-figure-sm tabular-nums text-ink">
                 {formatMoney(share, cur)}
               </p>
-              <p className="mt-1 font-sans text-[12px] font-light text-ink/62">
+              <p className="mt-1 font-sans text-body-sm text-ink/62">
                 of business costs, added on top of its direct cost.
               </p>
             </div>

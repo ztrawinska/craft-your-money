@@ -7,18 +7,21 @@ import { leaves, tokens } from "@/components/design-docs/tokens";
 /** A sentence each type specimen is set in: numbers for the serif, chrome for the sans. */
 export function sampleFor(name: string, family: "font-serif" | "font-sans"): string {
   if (family === "font-serif") {
-    if (name.includes("price") || name.includes("figure") || name.includes("profit")) return "£42.60";
-    if (name === "metric") return "52%";
-    if (name === "calc" || name.includes("total") || name.includes("value")) return "£14.06";
-    return "Selene hammered band";
+    if (name.startsWith("figure")) return name === "figure-xs" ? "9" : "£163.59";
+    if (name === "title") return "Harmonia collar";
+    if (name.startsWith("value")) return "£190.00";
+    return "14ct gold wire";
   }
-  if (name.includes("label") || name.includes("stamp")) return "What this costs to make";
-  if (name === "chip") return "Healthy · 64%";
-  if (name === "button") return "Save and activate";
-  if (name === "verb-link") return "Reprice";
-  if (name === "dropdown") return "All statuses";
-  if (name === "briefing") return "Most of your range earns well. Two pieces are priced under target.";
-  return "4g × £0.62/g · 20 min at £15/hr";
+  if (name.startsWith("caps")) return "What this costs to make";
+  if (name === "chip") return "Healthy · 38%";
+  if (name.startsWith("button")) return name === "button" ? "Save and activate" : "Save draft";
+  if (name === "link") return "Reprice";
+  if (name === "label-strong") return "Check this price";
+  if (name === "label") return "Materials";
+  if (name === "nav") return "Products";
+  if (name === "body-lg") return "Most of your range earns well. Two pieces are priced under target.";
+  if (name === "body") return "Your price covers costs but is below your 40% margin target.";
+  return "5g × £38.00/g · 90 min at £22/hr";
 }
 
 // Sorted by opacity, darkest first. (JS orders integer-like keys ascending on

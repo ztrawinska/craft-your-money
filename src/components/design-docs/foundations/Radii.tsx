@@ -16,12 +16,12 @@ export function RadiiDoc() {
               className="h-[56px] w-full border border-ink/30 bg-ink/[0.035]"
               style={{ borderRadius: t.$value }}
             />
-            <p className="mt-2 text-[13px] font-medium text-ink">{name}</p>
-            <p className="font-mono text-[11.5px] text-ink/62 tabular-nums">
+            <p className="mt-2 text-label-strong text-ink">{name}</p>
+            <p className="font-mono text-meta text-ink/62 tabular-nums">
               {t.$value} <span className="text-ink/30">·</span> rounded-{name}
             </p>
             {t.$description && (
-              <p className="mt-1 text-[11.5px] font-light leading-[1.45] text-ink/70">
+              <p className="mt-1 text-body-sm text-ink/70">
                 {t.$description}
               </p>
             )}

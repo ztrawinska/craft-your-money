@@ -21,7 +21,7 @@ export type TypeToken = {
   fontFamily: string;
   fontSize: string;
   fontWeight: number;
-  lineHeight?: number;
+  lineHeight?: string;
   letterSpacing?: string;
   textCase?: "uppercase";
 };

@@ -32,7 +32,7 @@ export const AssistantSlot = forwardRef<HTMLButtonElement, AssistantSlotProps>(
         {...rest}
       >
         <Glint className="h-[15px] w-[15px] shrink-0" />
-        <span className={`text-[13.5px] font-medium text-iris-deep ${centered ? "" : "flex-1 text-left"}`}>
+        <span className={`text-label-strong text-iris-deep ${centered ? "" : "flex-1 text-left"}`}>
           {children}
         </span>
         {!centered && <ChevronRight size={15} className="text-iris-deep" />}

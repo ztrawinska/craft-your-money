@@ -32,7 +32,7 @@ export function ListRowDoc() {
             label="Iris twisted pendant"
             meta="archived"
             value={
-              <Button variant="link" className="text-[13.5px] font-semibold" iconLeading={<RotateCcw size={13} strokeWidth={2.2} />}>
+              <Button variant="link" className="text-button" iconLeading={<RotateCcw size={13} strokeWidth={2.2} />}>
                 Restore
               </Button>
             }
@@ -47,7 +47,7 @@ export function ListRowDoc() {
           <ListRow label="Polishing" meta="20 min · £15/hr" value={<Price value={5} />} />
         </Specimen>
         <Specimen label='stripe="neutral" · dashboard attention list'>
-          <ListRow emphasis="product" stripe="neutral" label="Artemis crescent studs" meta={<>Earrings · <Chip tone="neutral" size="sm">No price</Chip></>} value={<Button variant="link" className="text-[13.5px] font-semibold" iconTrailing={<ChevronRight size={15} strokeWidth={2} />}>Set price</Button>} />
+          <ListRow emphasis="product" stripe="neutral" label="Artemis crescent studs" meta={<>Earrings · <Chip tone="neutral" size="sm">No price</Chip></>} value={<Button variant="link" className="text-button" iconTrailing={<ChevronRight size={15} strokeWidth={2} />}>Set price</Button>} />
         </Specimen>
       </SpecimenRow>
       <PropsTable

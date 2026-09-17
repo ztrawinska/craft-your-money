@@ -9,11 +9,11 @@ export function SwitchDemo() {
   const [b, setB] = useState(false);
   return (
     <div className="flex flex-col gap-4">
-      <label className="flex items-center justify-between gap-4 font-sans text-[15px] text-ink">
+      <label className="flex items-center justify-between gap-4 font-sans text-label text-ink">
         VAT registered
         <Switch checked={a} onCheckedChange={setA} aria-label="VAT registered" />
       </label>
-      <label className="flex items-center justify-between gap-4 font-sans text-[15px] text-ink">
+      <label className="flex items-center justify-between gap-4 font-sans text-label text-ink">
         Share business costs per piece
         <Switch checked={b} onCheckedChange={setB} aria-label="Share business costs per piece" />
       </label>

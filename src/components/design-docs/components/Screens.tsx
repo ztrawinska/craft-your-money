@@ -9,7 +9,7 @@ export function ScreensDoc() {
       title="In the app"
       lede="Screen-level components need product data, the store or a model, so they are linked to the app instead of demoed."
     >
-      <ul className="max-w-[70ch] divide-y divide-ink/7 font-sans text-[13.5px]">
+      <ul className="max-w-[70ch] divide-y divide-ink/7 font-sans text-label">
         {[
           ["PricingPanel", "The interactive pricing block: calculated price, your price, VAT, the warning, the profit and its chip.", "/products", "src/components/PricingPanel.tsx"],
           ["EditableProfit", "The profit figure you can type into; the price back-solves.", "/products", "src/components/EditableProfit.tsx"],
@@ -24,13 +24,13 @@ export function ScreensDoc() {
           <li key={name} className="grid gap-x-6 gap-y-1 py-3 md:grid-cols-[260px_minmax(0,1fr)]">
             <div>
               <p className="font-medium text-ink">{name}</p>
-              <p className="mt-1 font-mono text-[11px]">
+              <p className="mt-1 font-mono text-meta">
                 <a href={repo(path)} className={docLink}>
                   {path.replace("src/components/", "")}
                 </a>
               </p>
             </div>
-            <p className="font-light leading-[1.5] text-ink/70">
+            <p className="text-body text-ink/70">
               {what}{" "}
               <a href={href} className={docLink}>
                 open {href}

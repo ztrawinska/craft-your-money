@@ -40,14 +40,25 @@ const toneText: Record<StatusTone, string> = {
 // The money guarantee, in one place. No caller can forget it.
 const base = "font-serif tabular-nums";
 
+// Each variant is one type preset (design system §1.4); the preset carries
+// size, line box and weight, so nothing here spells a pixel.
 const variantClass: Record<Exclude<PriceVariant, "primary" | "hero">, string> = {
-  figure: "text-[24px] font-medium text-ink leading-none",
-  inline: "text-[15.5px] text-ink",
-  calc: "text-[17px] text-ink/70",
-  sectionTotal: "text-[13px] text-ink/62",
-  summary: "text-[13.5px] text-ink/70",
-  profit: "text-[34px] font-medium leading-none",
+  figure: "text-figure-sm text-ink",
+  inline: "text-value text-ink",
+  calc: "text-figure-2xs text-ink/70",
+  sectionTotal: "text-value-sm text-ink/62",
+  summary: "text-value-sm text-ink/70",
+  profit: "text-figure-md",
 };
+
+// The currency glyph and the decimals are parts of their figure, not presets:
+// proportions of the figure they sit beside (§1.4 "not presets"). Named here,
+// in the one component that draws them, like the 2px nudge.
+const PART = {
+  primaryCurrency: "text-[22px]", // part: the currency glyph beside figure-xl 56
+  primaryDecimals: "text-[25px]", // part: the decimals of figure-xl
+  heroCurrency: "text-[29px]", // part: the currency glyph beside figure-lg 44
+} as const;
 
 type PriceProps = {
   value: number;
@@ -64,7 +75,7 @@ export function Price({ value, variant = "inline", tone }: PriceProps): ReactNod
     const [whole, dec] = value.toFixed(2).split(".");
     const sym = (
       <span
-        className={`${cur.suffix ? "ml-1" : "mr-nudge"} -translate-y-[15px] text-[22px] text-ink/62`}
+        className={`${cur.suffix ? "ml-1" : "mr-nudge"} -translate-y-[15px] ${PART.primaryCurrency} text-ink/62`}
       >
         {cur.symbol}
       </span>
@@ -72,10 +83,10 @@ export function Price({ value, variant = "inline", tone }: PriceProps): ReactNod
     return (
       <span className={`${base} inline-flex items-baseline border-b-2 border-clay pb-1`}>
         {!cur.suffix && sym}
-        <span className="text-[56px] font-medium leading-[0.86] tracking-[-0.025em]">
+        <span className="text-figure-xl">
           {whole}
         </span>
-        <span className="ml-nudge -translate-y-[15px] text-[25px] text-ink/70">.{dec}</span>
+        <span className={`ml-nudge -translate-y-[15px] ${PART.primaryDecimals} text-ink/70`}>.{dec}</span>
         {cur.suffix && sym}
       </span>
     );
@@ -86,7 +97,7 @@ export function Price({ value, variant = "inline", tone }: PriceProps): ReactNod
   if (variant === "hero") {
     const sym = (
       <span
-        className={`text-[29px] text-ink/62 ${cur.suffix ? "ml-1" : ""}`}
+        className={`${PART.heroCurrency} text-ink/62 ${cur.suffix ? "ml-1" : ""}`}
         style={{ verticalAlign: "1px" }}
       >
         {cur.symbol}
@@ -94,7 +105,7 @@ export function Price({ value, variant = "inline", tone }: PriceProps): ReactNod
     );
     return (
       <span
-        className={`${base} text-[46px] font-medium leading-[0.96] tracking-[-0.02em] text-ink`}
+        className={`${base} text-figure-lg text-ink`}
       >
         {!cur.suffix && sym}
         {value.toFixed(2)}

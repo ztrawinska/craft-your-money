@@ -140,6 +140,33 @@ test("the @theme radii are closed and mirror tokens.json radius exactly", () => 
   expect(css).not.toMatch(/--radius-(sm|md|lg|xl)\s*:/); // the shadcn bridge no longer redefines them
 });
 
+test("the @theme type presets are closed and mirror tokens.json type exactly", () => {
+  const theme = block(/@theme inline/);
+  expect(theme).toMatch(/--text-\*:\s*initial;/); // Tailwind's xs…9xl are gone
+  // --text-<name>: 14px; --text-<name>--line-height: 20px; --text-<name>--font-weight: 400; --text-<name>--letter-spacing: 0.2em;
+  const css = new Map<string, { fontSize: string; lineHeight?: string; fontWeight?: number; letterSpacing?: string }>();
+  for (const m of theme.matchAll(/--text-([a-z0-9-]+?)(?:--(line-height|font-weight|letter-spacing))?\s*:\s*([^;]+);/g)) {
+    const [, name, sub, raw] = m;
+    const v = raw.trim();
+    const cur = css.get(name) ?? { fontSize: "" };
+    if (!sub) cur.fontSize = v;
+    else if (sub === "line-height") cur.lineHeight = v;
+    else if (sub === "font-weight") cur.fontWeight = Number(v);
+    else cur.letterSpacing = v;
+    css.set(name, cur);
+  }
+  const json = new Map<string, Record<string, unknown>>();
+  for (const [k, v] of Object.entries(tokens.type as Group)) {
+    if (k.startsWith("$")) continue;
+    const { fontSize, lineHeight, fontWeight, letterSpacing } = (v as Group).$value as Record<string, unknown>;
+    json.set(k, { fontSize, lineHeight, fontWeight, ...(letterSpacing ? { letterSpacing } : {}) });
+  }
+  expect([...css.keys()].sort()).toEqual([...json.keys()].sort());
+  for (const [name, j] of json) expect(css.get(name), name).toEqual(j);
+  // every line box sits on the 4pt grid (§1.4)
+  for (const [name, c] of css) expect(Number.parseFloat(c.lineHeight ?? "0") % 4, `${name} line box`).toBe(0);
+});
+
 test("shadcn --radius is the button radius", () => {
   const rem = css.match(/--radius:\s*([\d.]+)rem/);
   expect(rem).not.toBeNull();

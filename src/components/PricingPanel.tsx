@@ -45,7 +45,7 @@ type PricingPanelProps = {
 };
 
 const resetLinkClass =
-  "font-sans text-[10.5px] font-normal text-clay-deep underline decoration-clay-deep/40 underline-offset-2";
+  "font-sans text-meta  text-clay-deep underline decoration-clay-deep/40 underline-offset-2";
 
 // The typed number must feel instant, but the *evaluation* it drives — status,
 // margin, the guidance line, profit — shouldn't lurch on every keystroke (it
@@ -62,6 +62,10 @@ function useSettled<T>(value: T, delay = SETTLE_MS): T {
   }, [value, delay]);
   return settled;
 }
+
+// The currency glyph beside the editable price is a part of that figure, not
+// a preset (§1.4): 22px beside figure-lg, as in Price.tsx.
+const CURRENCY_PART = "text-[22px]"; // part: the currency glyph beside figure-lg
 
 export function PricingPanel({
   workflow,
@@ -135,9 +139,9 @@ export function PricingPanel({
       {/* calculated price — the suggestion */}
       <div className="mb-4 flex items-center justify-between gap-3 border-b border-ink/7 pb-4">
         <div>
-          <p className="text-[12.5px] text-clay-deep">Calculated price</p>
+          <p className="text-meta text-clay-deep">Calculated price</p>
           {suggestion.calculatedBeforeVat != null && (
-            <p className="mt-1 text-[11px] font-light text-ink/62">
+            <p className="mt-1 text-body-sm text-ink/62">
               {formatMoney(suggestion.calculatedBeforeVat, cur)} before VAT · {targetMarginPct}%
               target
             </p>
@@ -146,12 +150,12 @@ export function PricingPanel({
         {calculatedPrice != null ? (
           <Price value={calculatedPrice} variant="calc" />
         ) : (
-          <span className="text-[12px] font-light text-ink/62">Add costs first</span>
+          <span className="text-body-sm text-ink/62">Add costs first</span>
         )}
       </div>
 
       {/* your price — the editable decision */}
-      <div className="mb-2 flex items-baseline justify-between text-[9.5px] font-semibold uppercase tracking-[0.18em] text-ink/62">
+      <div className="mb-2 flex items-baseline justify-between text-caps uppercase text-ink/62">
         <span>Your price</span>
         {diverged ? (
           <button type="button" onClick={onReset} className={resetLinkClass}>
@@ -169,10 +173,10 @@ export function PricingPanel({
           hugged left under the clay rule */}
       <label className="mb-3 flex w-full cursor-text items-baseline">
         <span className="inline-flex items-baseline border-b-2 border-clay pb-1">
-          {!cur.suffix && <span className="mr-nudge font-serif text-[22px] text-ink/62">{cur.symbol}</span>}
+          {!cur.suffix && <span className={`mr-nudge font-serif ${CURRENCY_PART} text-ink/62`}>{cur.symbol}</span>}
           {/* the input hugs its text: an invisible sizer sets the exact width
               (so a suffix symbol sits right after the number, not after slack) */}
-          <span className="relative inline-block font-serif text-[44px] font-medium leading-none tracking-[-0.02em] tabular-nums">
+          <span className="relative inline-block font-serif text-figure-lg tabular-nums">
             <span aria-hidden className="invisible block whitespace-pre pr-nudge">
               {priceText || "0.00"}
             </span>
@@ -187,13 +191,13 @@ export function PricingPanel({
               className="absolute inset-0 w-full bg-transparent text-ink caret-clay-deep outline-none placeholder:text-ink/25"
             />
           </span>
-          {cur.suffix && <span className="ml-nudge font-serif text-[22px] text-ink/62">{cur.symbol}</span>}
+          {cur.suffix && <span className={`ml-nudge font-serif ${CURRENCY_PART} text-ink/62`}>{cur.symbol}</span>}
         </span>
       </label>
 
       {/* VAT — what you keep, reserved wording for VAT only */}
       {pricing.net != null && vatRatePct != null && (
-        <p className="mb-4 text-[13px] font-light text-ink/62">
+        <p className="mb-4 text-body text-ink/62">
           You keep{" "}
           <strong className="font-medium text-ink tabular-nums">
             {formatMoney(pricing.net, cur)}
@@ -206,7 +210,7 @@ export function PricingPanel({
           Collapse fades it in/out in sync with the row's height, so
           growing and shrinking read as the same motion. */}
       <Collapse open={!!warning}>
-        <p className="mb-4 text-[12.5px] font-light leading-[1.5] text-ink/70">
+        <p className="mb-4 text-body-sm text-ink/70">
           {warningText}
         </p>
       </Collapse>
@@ -214,7 +218,7 @@ export function PricingPanel({
       {/* profit / loss — the last word, and editable: type a target and the
           price back-solves. A loss never uses the word "profit". */}
       <div className="border-t border-ink/7 pt-4">
-        <p className="mb-2 text-[12px] text-ink/62">
+        <p className="mb-2 text-meta text-ink/62">
           {pricing.profit == null
             ? "Or set what you want to make per piece"
             : isLoss

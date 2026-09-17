@@ -38,8 +38,8 @@ export function RadioCards({ name, options, value, onChange }: RadioCardsProps) 
               onChange={() => onChange(o.value)}
               className="sr-only"
             />
-            <p className="font-sans text-[14px] font-medium text-ink">{o.title}</p>
-            <p className="mt-1 font-sans text-[12px] font-light leading-[1.5] text-ink/62">
+            <p className="font-sans text-label-strong text-ink">{o.title}</p>
+            <p className="mt-1 font-sans text-body-sm text-ink/62">
               {o.description}
             </p>
           </label>

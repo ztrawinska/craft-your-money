@@ -17,14 +17,14 @@ export function InkDoc() {
           return (
             <div key={name} className="w-[128px] font-sans">
               <div className="h-12 w-full rounded-band bg-ink" style={{ opacity: o }} />
-              <p className="mt-2 font-serif text-[18px] text-ink" style={{ opacity: o }}>
+              <p className="mt-2 font-serif text-figure-2xs text-ink" style={{ opacity: o }}>
                 Aa 1234
               </p>
-              <p className="font-mono text-[11.5px] text-ink/62">
+              <p className="font-mono text-meta text-ink/62">
                 {name} · {Math.round(o * 100)}%
               </p>
               {t?.$description && (
-                <p className="mt-1 text-[11.5px] font-light leading-[1.45] text-ink/70">
+                <p className="mt-1 text-body-sm text-ink/70">
                   {t.$description}
                 </p>
               )}

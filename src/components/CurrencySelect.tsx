@@ -53,7 +53,7 @@ export function CurrencySelect({
             onBlur={() => setOpen(false)}
             onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
             placeholder="Search currency"
-            className="font-sans text-[13.5px]"
+            className="font-sans text-label"
             role="combobox"
             aria-expanded={showList}
             aria-controls={listId}
@@ -86,11 +86,11 @@ export function CurrencySelect({
                   }}
                   className="flex w-full items-center gap-3 px-3 py-2 text-left hover:bg-ink/5"
                 >
-                  <span className="w-6 shrink-0 font-serif text-[15px] text-ink">{c.symbol}</span>
-                  <span className="min-w-0 flex-1 truncate font-sans text-[13px] text-ink">
+                  <span className="w-6 shrink-0 font-serif text-value text-ink">{c.symbol}</span>
+                  <span className="min-w-0 flex-1 truncate font-sans text-label text-ink">
                     {c.name}
                   </span>
-                  <span className="shrink-0 font-sans text-[11px] text-ink/62">{c.code}</span>
+                  <span className="shrink-0 font-sans text-meta text-ink/62">{c.code}</span>
                   {c.code === value && (
                     <Check size={13} strokeWidth={2.2} className="shrink-0 text-clay-deep" />
                   )}

@@ -21,8 +21,8 @@ export function LinesDoc() {
           return (
             <div key={name} className="grid gap-x-8 gap-y-2 font-sans md:grid-cols-[220px_minmax(0,1fr)]">
               <div>
-                <p className="text-[13px] font-medium text-ink">{name}</p>
-                <p className="font-mono text-[11px] text-ink/62">
+                <p className="text-label-strong text-ink">{name}</p>
+                <p className="font-mono text-meta text-ink/62">
                   {t.$value.width} {t.$value.style} · {t.$value.color.replace(/[{}]/g, "")}
                 </p>
               </div>
@@ -32,7 +32,7 @@ export function LinesDoc() {
                   style={{ borderTopWidth: t.$value.width, borderTopStyle: t.$value.style as "solid" | "dashed" }}
                 />
                 {t.$description && (
-                  <p className="mt-2 text-[11.5px] font-light leading-[1.45] text-ink/70">
+                  <p className="mt-2 text-body-sm text-ink/70">
                     {t.$description}
                   </p>
                 )}

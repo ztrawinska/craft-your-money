@@ -76,20 +76,26 @@ else
 fi
 
 echo
-echo "== Type still written by hand (S1 meter: design-system §1.4 — should only go down) =="
-# Not a fail yet: the named utilities don't exist, so there is nothing to
-# migrate to. Once they do, this section turns into a hard flag like the
-# spacing one below. /design-docs/ is excluded: the library pages quote the
-# raw values on purpose.
-count_arbs() { grep -rnoE "$1" "$ROOT" --include="*.tsx" | grep -v '/design-docs/'; }
-TYPE_ARBS=$(count_arbs 'text-\[[0-9]+(\.[0-9]+)?px\]')
-LINE_ARBS=$(count_arbs '(leading|tracking)-\[[^]]+\]')
-n() { if [ -n "$1" ]; then echo "$1" | wc -l | tr -d ' '; else echo 0; fi; }
-echo "  text-[…px]:            $(n "$TYPE_ARBS")"
-echo "  leading-/tracking-[…]: $(n "$LINE_ARBS")"
-if [ -n "$TYPE_ARBS" ]; then
-  echo "  most common sizes:"
-  echo "$TYPE_ARBS" | sed -E 's/^[^:]+:[0-9]+://' | sort | uniq -c | sort -rn | head -5 | sed 's/^/   /'
+echo "== Type not a preset (design-system §1.4: text-<preset> + font-serif/font-sans; never text-[13px], leading-[…], tracking-[…] or Tailwind's text-sm) =="
+# `--text-*: initial` removed Tailwind's xs…9xl, so any of those — or a raw
+# size/leading/tracking — renders nothing or drifts off the 4pt line boxes.
+# Hard fail, like spacing and radius. The only sanctioned raw sizes are a
+# figure's parts (currency glyph, decimals), declared in the one component that
+# draws them and marked with the word "part" on the line (§1.4 "not presets")
+# — those lines are skipped. Comments and tests skipped too.
+TYPE_HITS=$(grep -rnE '\btext-\[[0-9.]+px\]|\b(leading|tracking)-\[[^]]+\]|\bleading-(none|tight|snug|normal|relaxed|loose)\b|(^|[^a-zA-Z0-9_/-])text-(xs|sm|base|lg|xl|[2-9]xl)\b' "$ROOT" --include="*.tsx" --include="*.ts" \
+  | grep -vE '^[^:]+:[0-9]+: *(//|\*|/\*|\{/\*)' \
+  | grep -vE '\.test\.ts:' \
+  | grep -vE '\b[Pp][Aa][Rr][Tt]\b' \
+  | grep -oE '^[^:]+:[0-9]+:|text-\[[0-9.]+px\]|(leading|tracking)-\[[^]]+\]|leading-(none|tight|snug|normal|relaxed|loose)\b|text-(xs|sm|base|lg|xl|[2-9]xl)\b' \
+  | paste -sd' ' - | sed -E 's/ ([^ ]+:[0-9]+:)/\n\1/g' | sed -E 's/: /:/')
+if [ -n "$TYPE_HITS" ]; then
+  echo "$TYPE_HITS"
+  echo "  -> §1.4: pick the preset (text-body, text-label, text-figure-sm…); a preset carries size, line box, weight and tracking. Weight or italic may be modulated by a state (muted, italic), never the size."
+  FAIL=1
+  HARD=1
+else
+  echo "  none"
 fi
 
 echo
@@ -146,7 +152,7 @@ fi
 
 echo
 if [ "$HARD" -eq 1 ]; then
-  echo "Result: hard hits above (spacing or radius off the closed scale) — these render nothing and fail CI. Other hits are candidates, per docs/craft-your-money-design-system.md §6."
+  echo "Result: hard hits above (spacing, radius or type off the closed scales) — these render nothing and fail CI. Other hits are candidates, per docs/craft-your-money-design-system.md §6."
 elif [ "$FAIL" -eq 1 ]; then
   echo "Result: hits found above. Each is a candidate, not an automatic failure — decide per-line, per docs/craft-your-money-design-system.md §6."
 else

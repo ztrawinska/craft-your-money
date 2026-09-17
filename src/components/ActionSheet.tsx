@@ -52,17 +52,17 @@ export function ActionSheet({
 
         {confirming ? (
           <div className="px-5 pb-1 pt-2">
-            <p className="mb-1 font-serif text-[15px] font-medium text-status-red">
+            <p className="mb-1 font-serif text-name text-status-red">
               {confirming.confirm!.title}
             </p>
-            <p className="mb-4 font-sans text-[12px] font-light leading-[1.55] text-ink/62">
+            <p className="mb-4 font-sans text-body-sm text-ink/62">
               {confirming.confirm!.body}
             </p>
             <div className="flex gap-2">
               <button
                 type="button"
                 onClick={() => setConfirming(null)}
-                className="flex-1 rounded-button border border-ink/14 py-3 font-sans text-[13.5px] font-medium text-ink/62"
+                className="flex-1 rounded-button border border-ink/14 py-3 font-sans text-label-strong text-ink/62"
               >
                 Keep
               </button>
@@ -73,7 +73,7 @@ export function ActionSheet({
                   close();
                   a.onSelect();
                 }}
-                className="flex-1 rounded-button bg-status-red py-3 font-sans text-[13.5px] font-semibold text-on-clay"
+                className="flex-1 rounded-button bg-status-red py-3 font-sans text-button text-on-clay"
               >
                 {confirming.confirm!.confirmLabel}
               </button>
@@ -94,7 +94,7 @@ export function ActionSheet({
                       a.onSelect();
                     }
                   }}
-                  className={`flex w-full items-center gap-3 px-5 py-row text-left font-sans text-[14.5px] font-medium ${
+                  className={`flex w-full items-center gap-3 px-5 py-row text-left font-sans text-label-strong ${
                     a.danger ? "text-status-red" : "text-ink"
                   } ${firstDanger ? "border-t border-ink/7" : ""}`}
                 >
@@ -102,7 +102,7 @@ export function ActionSheet({
                   <span>
                     {a.label}
                     {a.sublabel && (
-                      <span className="mt-1 block text-[11px] font-light text-ink/62">
+                      <span className="mt-1 block text-body-sm text-ink/62">
                         {a.sublabel}
                       </span>
                     )}
@@ -114,7 +114,7 @@ export function ActionSheet({
               <button
                 type="button"
                 onClick={close}
-                className="w-full rounded-button border border-ink/14 py-row font-sans text-[14px] font-medium text-ink/62"
+                className="w-full rounded-button border border-ink/14 py-row font-sans text-label-strong text-ink/62"
               >
                 Cancel
               </button>

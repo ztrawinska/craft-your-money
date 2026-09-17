@@ -167,8 +167,8 @@ export function MaterialsEditor({ initial }: { initial: LibraryMaterial[] }) {
     <div className="flex min-h-dvh flex-col">
       <main className="mx-auto w-full max-w-[430px] flex-1">
         <div className="flex items-baseline justify-between px-6 pb-3 pt-section">
-          <h1 className="font-serif text-[26px] font-medium tracking-[-0.01em]">Materials</h1>
-          <span className="font-sans text-[11px] font-light text-ink/62">
+          <h1 className="font-serif text-title">Materials</h1>
+          <span className="font-sans text-body-sm text-ink/62">
             {materials.length} saved
           </span>
         </div>
@@ -202,7 +202,7 @@ export function MaterialsEditor({ initial }: { initial: LibraryMaterial[] }) {
                     )
                   }
                   value={
-                    <span className="font-serif text-[15.5px] tabular-nums text-ink">
+                    <span className="font-serif text-value tabular-nums text-ink">
                       {materialUnitLabel(m, cur)}
                     </span>
                   }
@@ -217,7 +217,7 @@ export function MaterialsEditor({ initial }: { initial: LibraryMaterial[] }) {
               variant="link"
               iconLeading={addIcon}
               onClick={() => open("new", BLANK)}
-              className="pt-3 text-[13px] font-medium"
+              className="pt-3 text-label-strong"
             >
               Add material
             </Button>

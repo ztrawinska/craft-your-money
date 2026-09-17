@@ -48,7 +48,7 @@ export function EditableProfit({
 
   return (
     <label
-      className={`inline-flex cursor-text items-baseline border-b border-dashed border-ink/25 pb-nudge font-serif text-[34px] font-medium leading-none tabular-nums ${color}`}
+      className={`inline-flex cursor-text items-baseline border-b border-dashed border-ink/25 pb-nudge font-serif text-figure-md tabular-nums ${color}`}
     >
       {!cur.suffix && <span className="mr-px">{cur.symbol}</span>}
       {/* input hugs its text via an invisible sizer, so a suffix symbol sits close */}
