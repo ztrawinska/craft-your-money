@@ -30,7 +30,7 @@ export function DropdownDoc() {
       <Rules
         items={[
           "Background stays transparent. A white fill would create a new surface on a flat page.",
-          "Radius is 7px, never 100px: that geometry belongs to chips and means status.",
+          "Radius is rounded-button (8px), never 100px: that geometry belongs to chips and means status.",
           "Filters are dropdowns; sort is not. Sort is a bare arrow-up-down icon at the right of the row.",
         ]}
       />
