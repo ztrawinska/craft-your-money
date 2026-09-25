@@ -2,7 +2,7 @@ import { DocSection } from "@/components/design-docs/DocSection";
 
 const ANTI: [string, string][] = [
   ["Soft white cards for grouping", "Floating surfaces compete; the page reads as generic SaaS."],
-  ["Drop shadows anywhere", "Depth belongs to hairlines and the one frame."],
+  ["A shadow on something that is not floating", "Depth belongs to hairlines and the one frame. Only the popover and the sheet leave the page."],
   ["Green-when-positive profit", "Puts a green number beside a red Risky chip: two contradictory stories."],
   ["Coloured cost figures", "Costs are inputs, not verdicts."],
   ["A fourth button level", "Row actions don't need a box; three levels are enough."],

@@ -167,6 +167,24 @@ test("the @theme type presets are closed and mirror tokens.json type exactly", (
   for (const [name, c] of css) expect(Number.parseFloat(c.lineHeight ?? "0") % 4, `${name} line box`).toBe(0);
 });
 
+test("the @theme shadows are closed and mirror tokens.json shadow exactly", () => {
+  const theme = block(/@theme inline/);
+  expect(theme).toMatch(/--shadow-\*:\s*initial;/); // Tailwind's 2xs…2xl are gone
+  const cssShadows = new Map<string, string>();
+  for (const m of theme.matchAll(/--shadow-([a-z-]+)\s*:\s*([^;]+);/g)) cssShadows.set(m[1], m[2].trim());
+  // Two, and the test is here to keep it two: a shadow means "this surface
+  // genuinely left the page" (§1.1). A third one is a design decision, not a
+  // detail, so it has to come through this line.
+  expect([...cssShadows.keys()].sort()).toEqual(["popover", "sheet"]);
+  const json = new Map<string, string>();
+  for (const [k, v] of Object.entries(tokens.shadow as Group)) {
+    if (k.startsWith("$")) continue;
+    const { color, offsetX, offsetY, blur, spread } = (v as Group).$value as Record<string, string>;
+    json.set(k, `${offsetX} ${offsetY} ${blur} ${spread} ${color}`);
+  }
+  expect(cssShadows).toEqual(json);
+});
+
 test("shadcn --radius is the button radius", () => {
   const rem = css.match(/--radius:\s*([\d.]+)rem/);
   expect(rem).not.toBeNull();

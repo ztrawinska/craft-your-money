@@ -76,6 +76,24 @@ else
 fi
 
 echo
+echo "== A shadow that is not one of the two (design-system §1.1: shadow-popover / shadow-sheet; a shadow means the surface genuinely left the page) =="
+# `--shadow-*: initial` removed Tailwind's 2xs…2xl, so shadow-md renders
+# nothing, and an arbitrary shadow-[…] is a third shadow nobody decided on.
+# Hard fail, like radius. Comments skipped; globals.css defines the two.
+SHADOW_HITS=$(grep -rnoE '(^|[^a-z-])shadow-(\[[^]]+\]|(2xs|xs|sm|md|lg|xl|2xl)\b)' "$ROOT" --include="*.tsx" --include="*.ts" --include="*.css" \
+  | grep -v '/globals\.css' \
+  | grep -vE '^[^:]+:[0-9]+: *(//|\*|/\*|\{/\*)' \
+  | sed -E 's/:[^:]*(shadow-)/:\1/')
+if [ -n "$SHADOW_HITS" ]; then
+  echo "$SHADOW_HITS"
+  echo "  -> §1.1: the system is flat. Separate with a hairline. Only a surface that floats over the page gets a shadow, and there are exactly two of those."
+  FAIL=1
+  HARD=1
+else
+  echo "  none"
+fi
+
+echo
 echo "== Type not a preset (design-system §1.4: text-<preset> + font-serif/font-sans; never text-[13px], leading-[…], tracking-[…] or Tailwind's text-sm) =="
 # `--text-*: initial` removed Tailwind's xs…9xl, so any of those — or a raw
 # size/leading/tracking — renders nothing or drifts off the 4pt line boxes.

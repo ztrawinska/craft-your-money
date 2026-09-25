@@ -796,7 +796,7 @@ export function ProductEditor({
       <BenchmarkSection benchmark={benchmark} onChange={setBenchmark} market={market} />
 
       {/* ── save bar ── */}
-      <div className="mt-section border-t border-ink/7 bg-page px-6 pb-5 pt-4 shadow-[0_-6px_18px_-12px_rgba(30,25,22,0.12)]">
+      <div className="mt-section border-t border-ink/7 bg-page px-6 pb-5 pt-4">
         <p className="mb-3 flex items-center gap-2 text-caps-tight uppercase text-ink/62 before:h-[5px] before:w-[5px] before:rounded-full before:bg-clay before:content-['']">
           Unsaved changes
         </p>
