@@ -70,7 +70,7 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
   // No price yet → nothing to review; the slot is present but inert.
   if (ctx == null) {
     return (
-      <AssistantSlot centered disabled className="mt-5">
+      <AssistantSlot centered disabled>
         Check this price
       </AssistantSlot>
     );
@@ -96,7 +96,7 @@ export function PriceCheck({ ctx }: { ctx: ReviewContext | null }) {
       open={open}
       onOpenChange={(o) => (o ? setOpen(true) : reset())}
       trigger={
-        <AssistantSlot centered className="mt-5">
+        <AssistantSlot centered>
           Check this price
         </AssistantSlot>
       }

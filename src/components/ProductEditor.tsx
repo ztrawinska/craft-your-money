@@ -766,27 +766,31 @@ export function ProductEditor({
         </div>
       </div>
 
-      {/* ── the ONE framed surface: the interactive pricing block ── */}
-      <PricingPanel
-        workflow={product.workflow}
-        directCost={directCost}
-        targetMarginPct={settings.targetMarginPct}
-        vatRatePct={effectiveVatRate(settings)}
-        businessCostShare={businessCostShare}
-        costParts={costParts}
-        topLine={topLine}
-        market={market}
-        priceText={priceText}
-        onPriceChange={(v) => {
-          setManualPrice(v);
-          setDecoupled(true); // first manual edit decouples, permanently
-        }}
-        onReset={() => {
-          if (calculatedPrice != null) setManualPrice(calculatedPrice.toFixed(2));
-          // reset does NOT re-enable auto-sync (decoupled stays true)
-        }}
-        onUseSuggested={() => setDecoupled(false)}
-      />
+      {/* ── the ONE framed surface: the interactive pricing block ──
+           The panel carries no margin of its own (§1.5); the page insets it
+           from the gutter and sets its distance from the costs above. */}
+      <div className="mx-6 mt-section">
+        <PricingPanel
+          workflow={product.workflow}
+          directCost={directCost}
+          targetMarginPct={settings.targetMarginPct}
+          vatRatePct={effectiveVatRate(settings)}
+          businessCostShare={businessCostShare}
+          costParts={costParts}
+          topLine={topLine}
+          market={market}
+          priceText={priceText}
+          onPriceChange={(v) => {
+            setManualPrice(v);
+            setDecoupled(true); // first manual edit decouples, permanently
+          }}
+          onReset={() => {
+            if (calculatedPrice != null) setManualPrice(calculatedPrice.toFixed(2));
+            // reset does NOT re-enable auto-sync (decoupled stays true)
+          }}
+          onUseSuggested={() => setDecoupled(false)}
+        />
+      </div>
 
       {/* ── market benchmark: light, collapsed by default (§11) ── */}
       <BenchmarkSection benchmark={benchmark} onChange={setBenchmark} market={market} />

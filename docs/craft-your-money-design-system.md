@@ -139,12 +139,21 @@ Lora was validated against Fraunces, Newsreader and Literata on the real pricing
 | `tap` | 44 | Minimum touch target (WCAG 2.5.8) — deliberately off the rhythm |
 | `nudge` | 2 | **The only sub-4pt step, and never a rhythm.** A currency glyph or decimals against their figure (`ml-nudge`, `mr-nudge`), a figure above its dashed underline (`pb-nudge`), the sm chip's vertical inset (`py-nudge`). Nothing else. |
 
-**Who owns the space — the four rules.** (Doctrine from 2026-09-16; enforced in code by P4 of the foundations plan, convention until then.)
+**Who owns the space — the five rules.** (Doctrine from 2026-09-16; **enforced since 2026-09-25**, P4 — `scripts/check-tells.sh` fails CI on a vertical margin on a component's root.)
 
-1. **A component never carries a margin on its root.** It doesn't know its context, so it can't know its spacing; a baked-in margin is a bet that every other placement has to undo.
+1. **A component never carries a vertical margin on its root.** It doesn't know its context, so it can't know its spacing; a baked-in margin is a bet that every other placement has to undo. *Padding is not the same bet:* a label that reserves 4px beneath itself (`pb-1`) keeps that space inside its own box, where it cannot collapse into a sibling's margin and cannot leak past the component, and a container can still override it with its own `gap`. Where that line falls is rule 5. Horizontal margins are not rhythm either — `mx-auto` centring a page shell is fine.
 2. **The space between siblings belongs to the container that arranged them** — a column-flex with `gap-section` / `gap-zone`, never `mt-*` on each child.
 3. **Prose owns its flow.** Paragraphs and headings in running text space themselves with `margin-block-end`; the last one trims it.
 4. **A painted surface owns its padding.** The pricing block, a tinted band, a sheet ship the inset that makes bare content presentable.
+5. **Micro-spacing is not rhythm, and these rules don't reach it.** Four pixels or less between the parts of *one* thing — a label and the control it names, a name and its meta line, an icon and its own word — is the component's internal build, not a relationship between blocks. It stays inside the component, as padding (`pb-1`) or as a `gap-1` on the lockup, and no container is expected to supply it. This is the line that decides rules 1 and 2: if removing the space would leave two pieces of one object touching, it is micro-spacing; if it would leave two objects touching, it is rhythm, and the container owns it.
+
+   **Where the lockups are.** *Label above its thing* — `SectionLabel` (label → section), `FieldLabel` (label → input), `ListRow` (name → meta line), `RadioCards` (title → description), `SettingsForm`'s `Row` (label → help), `ActionSheet` (title → sublabel), `CostsEditor`, `PricingPanel` and `HeroProfit` (figure → caption). *Icon beside its word* — `BottomNav` (icon → label), and the verb-links in `RestoreButton`, `NeedsAttention`, `HeroProfit` and `BenchmarkSection` (label → chevron). Sixty-one uses in twenty-five files as of 2026-09-25.
+
+   Not this rule: a small surface's own padding, which is rule 4 — `Chip`'s `py-1`, a filter trigger's `pt-1`, `Price`'s `pb-1` under its clay rule.
+
+   Eddie keeps micro-spacing off the scale entirely, as a custom property per component. Ours sits on the scale as step 1, so nothing in the code distinguishes "4px because it's a lockup" from "4px because it's the first step" — the distinction lives here and in the docblocks, not in the class name. Worth revisiting if the two ever need to move apart.
+
+**History.** Applied 2026-09-25 (#25), visually identical throughout — seven screens diffed pixel by pixel, plus the edit card measured live because it only exists after a click. `SectionLabel` and `FieldLabel` went from `mb-1` to `pb-1`; `EditShell` moved its `my-2` onto an unpainted `py-2` wrapper, because the list it sits in cannot know which of its rows is currently a card; `PricingPanel` and `PriceCheck` gave their `mt-section` and `mt-5` back to the page and to the block that places them. One collapse surfaced and was removed on the spot: the allocation section's label and the radio group each carried 4px, which used to collapse into one — padding does not collapse, so the duplicate went. The settings page's three sections became a `flex flex-col gap-section` stack. Where a run of siblings does *not* share one gap — the product screen's `main`, whose children go header, title, costs, pricing block, benchmark, save bar — the page keeps explicit margins on the wrappers it owns; `gap` states a rhythm that isn't there.
 
 **Inside a component** the same steps apply — `gap-2` (8) between an icon and its label, `py-3` (12) in a button, `mt-1` (4) under a row's name for its meta line. 6px and 10px do not exist; the 2026-09-16 migration moved 57 such uses to the nearest step (see the foundations plan for the per-use calls). Component heights are not on the rhythm: buttons and inputs are 44 (`min-h-tap`), chips sit at their text height.
 
@@ -542,6 +551,7 @@ A rule written down is memory; a rule in a type or a component is enforcement. A
 | Status only in chips | Convention | Enforced — `Chip` is the only status export |
 | Meaning-named tones | **Enforced** | — (`ChipTone` union) |
 | Tokens named by content, not by owner (§1.8) | Convention | Enforced — the rename lands, then the checker flags a new `--text-*` whose name matches a component file |
+| No vertical margin on a component's root (§1.5) | **Enforced** | — (`scripts/check-tells.sh`, hard, since 2026-09-25) |
 | Label ↔ tone mapping | **Enforced** | — (`PROFITABILITY_META` in `lib/status.ts`) |
 | Money always Lora + tnum | **Enforced** (`Price`) | — (the overview row still formats by hand; see `/design/components/list-row`) |
 | Three button levels | **Enforced** | — (`variant` union) |

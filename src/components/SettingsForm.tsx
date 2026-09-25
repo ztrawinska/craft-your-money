@@ -106,7 +106,7 @@ export function SettingsForm({ initial }: { initial: Settings }) {
         <h1 className="font-serif text-title">Settings</h1>
       </div>
 
-      <div className="px-6">
+      <div className="flex flex-col gap-section px-6">
         {/* pricing */}
         <section className="border-t border-ink/7 pt-6">
           <SectionLabel>Pricing</SectionLabel>
@@ -129,7 +129,7 @@ export function SettingsForm({ initial }: { initial: Settings }) {
         </section>
 
         {/* money */}
-        <section className="mt-6 border-t border-ink/7 pt-6">
+        <section className="border-t border-ink/7 pt-6">
           <SectionLabel>Money</SectionLabel>
           <div className="divide-y divide-ink/7">
             <Row label="Currency" help="The symbol shown on every figure. No conversion — it only changes the symbol.">
@@ -147,7 +147,7 @@ export function SettingsForm({ initial }: { initial: Settings }) {
         </section>
 
         {/* thresholds — read-only in MVP */}
-        <section className="mt-6 border-t border-ink/7 pt-6">
+        <section className="border-t border-ink/7 pt-6">
           <SectionLabel>Health thresholds</SectionLabel>
           <div className="divide-y divide-ink/7">
             <Row label="Healthy">
