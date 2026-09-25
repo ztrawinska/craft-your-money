@@ -25,6 +25,22 @@ Everything below descends from these. When a decision is unclear, return here.
 4. **Status lives in chips.** Never as raw coloured text. Numbers are monochrome ink.
 5. **More authored, not louder.** Contrast comes from structure, hierarchy and restraint — never from decoration.
 
+**The two sanctioned shadows — enforced since 2026-09-25 (S7).** Principle 1 says no drop shadows, and two surfaces are exempt because they are not on the page at all: they float over it. That is the whole test. *If the thing is still in the page's flow, it separates with a hairline.*
+
+| Token | Value | The surface that earns it |
+|---|---|---|
+| `shadow-popover` | `0px 8px 24px -8px ink@18%` | The type-to-search list under a field (materials autofill §2.17, currency picker §2.13). Carried by the Popover primitive, so no screen spells it. |
+| `shadow-sheet` | `0px -10px 30px -12px ink@25%` | The bottom sheet as it rises over the page (§2.11). Cast upward, because the sheet arrives from below. |
+
+`--shadow-*: initial` removes Tailwind's `2xs…2xl`, so `shadow-md` renders nothing, and `scripts/check-tells.sh` hard-fails on any third shadow. A new one is a change to this table, not a class in a component.
+
+**What was removed, and why it is worth remembering.** Two shadows had accumulated without ever being decided: a `0 1px 2px` clay lift under the primary button, and a `0 -6px 18px -12px` fold above the save bars on Product detail and Settings. Neither survived being looked at.
+
+- The bars are **not sticky**. They sit in normal flow at the end of the document — on Settings the bar's bottom edge *is* the bottom of the page. An upward fold promises content passing underneath, and nothing ever does.
+- With `spread -12px` under `blur 18px` the fold leaked softly on all four sides, so it was a halo around a rectangle, not a fold.
+- Measured, it moved the page by at most **7/255**. Invisible at 1:1 — but at 5× it was visibly *blurring the hairline above the bar*, which is the device principle 1 relies on.
+- The button's lift was visible (36/255) and read as a darker clay edge — a moulded key, which is the elevation this system rejects. Eight of eight comparable mobile save screens (Oportun, Best Buy, Lifesum, Lloyds, Tripadvisor, Fly Delta, Notion, LinkedIn) carry no shadow on the primary button.
+
 ### 1.2 Colour tokens
 
 | Token | Value | Used for |
@@ -289,8 +305,8 @@ Three levels. **Three, not four** — resist adding a fourth.
 
 | Variant | Appearance | Used for |
 |---|---|---|
-| `primary` | Filled `clay-deep`, `on-clay` text, `button` radius (8px), 14.5px 600 | The one main action per screen (Save and activate) |
-| `ghost` | Transparent, `1px ink-14` border, `ink-62` text, 500 | Secondary action beside a primary (Save draft) |
+| `primary` | Filled `clay-deep`, `on-clay` text, `button` radius (8px), `label-bold`. Flat — no lift (§1.1) | The one main action per screen (Save and activate) |
+| `ghost` | Transparent, `1px ink-14` border, `ink-62` text, `label-strong` | Secondary action beside a primary (Save draft) |
 | `link` | Clay-deep text + optional chevron, no border, no background | Everything else: verb-links, add-row, reset, inline actions |
 
 **Rules**
@@ -334,7 +350,7 @@ A filter, sort or select control. **Not a new control level — it is the ghost 
 
 **One component, every use.** `Dropdown` forwards its ref and props, so it *is* the trigger: `<DrawerTrigger asChild><Dropdown filtered>…</Dropdown></DrawerTrigger>`. `StatusFilter` and `TypeFilter` both do this. A filter that spells the trigger's classes out by hand is a copy that will drift — 2026-09-25 found three of them, one of which was the library's own (#33).
 
-**Type-to-search fields are the one sanctioned exception to "no floating panels."** The currency picker (§14) and the materials-library autofill (§12) are text inputs you type into, with suggestions as you go — a different control from the filter dropdown above. Their list floats in a shadcn **Popover** anchored under the field, not in flow. Rendered in flow, the list pushed the surrounding rows down as it opened and pulled them back as it closed — the UI visibly *jumped*, which read as broken; a stable anchored panel is calmer. The panel wears **page colour**, a `1px ink-14` border and a soft shadow — not the elevated white card the anti-pattern warns against — and it **never steals focus**, so typing continues uninterrupted; picking works because items block the input's blur until the click lands. This is the only floating surface in the app; filters and menus still use the bottom sheet (§2.4, §2.11).
+**Type-to-search fields are the one sanctioned exception to "no floating panels."** The currency picker (§14) and the materials-library autofill (§12) are text inputs you type into, with suggestions as you go — a different control from the filter dropdown above. Their list floats in a shadcn **Popover** anchored under the field, not in flow. Rendered in flow, the list pushed the surrounding rows down as it opened and pulled them back as it closed — the UI visibly *jumped*, which read as broken; a stable anchored panel is calmer. The panel wears **page colour**, a `1px ink-14` border and `shadow-popover` — not the elevated white card the anti-pattern warns against — and it **never steals focus**, so typing continues uninterrupted; picking works because items block the input's blur until the click lands. This is the only panel that floats anchored to a control; filters and menus still use the bottom sheet (§2.4, §2.11).
 
 ### 2.5 Section header — **built** (`SectionLabel`)
 
@@ -440,7 +456,7 @@ Holds destructive and secondary actions for an object (the ⋯ menu). **A bottom
 
 **Anti-pattern:** floating popover menus; a confirm dialog opening on top of a sheet; destructive actions with no stated consequence.
 
-**Implementation:** the action sheet and the status/type filters (§2.4) share ONE primitive — a shadcn **Drawer** (vaul) restyled to these tokens (`ink-28` scrim, 34×3px grab handle, 14px top corners, `max-w-430`, the sheet shadow). vaul supplies focus-trap, Escape and scroll-lock; the anatomy and rules above are enforced by the styling, not the library. This is why the filters open a bottom sheet, never a floating menu — the primitive has no floating variant in this app.
+**Implementation:** the action sheet and the status/type filters (§2.4) share ONE primitive — a shadcn **Drawer** (vaul) restyled to these tokens (`ink-28` scrim, 34×3px grab handle, 14px top corners, `max-w-430`, `shadow-sheet`). vaul supplies focus-trap, Escape and scroll-lock; the anatomy and rules above are enforced by the styling, not the library. This is why the filters open a bottom sheet, never a floating menu — the primitive has no floating variant in this app.
 
 ### 2.12 Inline form — *built*
 
@@ -515,7 +531,7 @@ A two-state toggle for a setting that takes effect immediately: "I'm VAT registe
 
 A text field that suggests what you have saved already — the materials library's autofill. Type a name: if it is in the library, pick it and the row fills itself; if it is new, keep the name and save it as new.
 
-**Anatomy:** the standard `Input` as the anchor, with the list in a popover under it — `button` radius (8px), `page` background, `1px ink-14` border, a soft drop shadow (the one place a shadow is sanctioned, because the list floats over content). Each item: a small `ink-30` diamond, the name in `label`, and an optional right-aligned figure in `value-sm` at `ink-62`. "Use as new" is `label-strong` in `clay-deep` with a `plus` icon, above a hairline.
+**Anatomy:** the standard `Input` as the anchor, with the list in a popover under it — `button` radius (8px), `page` background, `1px ink-14` border, `shadow-popover` — one of the two shadows the system allows (§1.1), because the list genuinely floats over content. Each item: a small `ink-30` diamond, the name in `label`, and an optional right-aligned figure in `value-sm` at `ink-62`. "Use as new" is `label-strong` in `clay-deep` with a `plus` icon, above a hairline.
 
 **Rules**
 - **"Use as new" is always last, and always available once there is something to name.** The library suggests; it never traps.
@@ -576,7 +592,7 @@ Explicitly rejected during design. Each was built or considered and turned down 
 | Anti-pattern | Why rejected |
 |---|---|
 | Soft white cards for grouping | Five floating surfaces compete; the page reads as generic SaaS |
-| Drop shadows anywhere | Depth belongs to hairlines and one frame |
+| Drop shadows anywhere | Depth belongs to hairlines and one frame — except the two surfaces that genuinely float (§1.1) |
 | Green-when-positive profit | Can put a green number beside a red Risky chip — two contradictory stories |
 | Coloured cost figures | Five text colours at once; costs are inputs, not verdicts |
 | A fourth button level | Row actions don't need a box; three levels are enough |
@@ -616,6 +632,7 @@ A rule written down is memory; a rule in a type or a component is enforcement. A
 | Hardcoded hex, banned copy | Convention | Checked — `scripts/check-tells.sh`, run automatically via a `Stop` hook (`.claude/hooks/tell-check-stop.sh`) after every response. Report-only: it surfaces candidates, doesn't block, so a hit still needs a human (or Claude, next turn) call. Pure black/white inside a `gradient(`/mask line is ignored — a stencil, not a colour. |
 | Type is one of the 22 presets (§1.4) | **Enforced** | `--text-*: initial` removes Tailwind's sizes; the checker's type section exits 1 in CI on any `text-[…px]`, `leading-[…]`, `tracking-[…]` or Tailwind default. A figure's parts (currency glyph, decimals) are the one sanctioned raw size, marked "part" on their line in the component that draws them. |
 | Radius is one of the seven names (§1.6) | **Enforced** | Same two layers: `--radius-*: initial` in the build, and the checker's radius section exits 1 in CI on any `rounded-[…]` or Tailwind default. |
+| A shadow means the surface floats (§1.1) | **Enforced** | Same two layers: `--shadow-*: initial` in the build, and the checker's shadow section exits 1 in CI on any `shadow-[…]` or Tailwind default. Two tokens exist, `shadow-popover` and `shadow-sheet`; `src/lib/tokens.test.ts` fails if a third appears. |
 | Spacing is on the closed scale (§1.5) | **Enforced** | Two layers: the build (`--spacing: initial` — an off-scale class renders nothing) and the checker's spacing section, which exits 1 in CI on any off-scale step or `[Npx]` value, variants included. |
 
 **Convention is fine** for rules that need judgment. What matters is knowing which is which — and never assuming prose will hold a line that code doesn't.

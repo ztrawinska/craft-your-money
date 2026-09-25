@@ -5,6 +5,7 @@ import { InkDoc } from "./Ink";
 import { LinesDoc } from "./Lines";
 import { RadiiDoc } from "./Radii";
 import { ShadcnDoc } from "./Shadcn";
+import { ShadowsDoc } from "./Shadows";
 import { SpacingDoc } from "./Spacing";
 import { TypographyDoc } from "./Typography";
 
@@ -15,5 +16,6 @@ export const FOUNDATION_DOCS: Record<string, ComponentType> = {
   spacing: SpacingDoc,
   radii: RadiiDoc,
   lines: LinesDoc,
+  shadows: ShadowsDoc,
   shadcn: ShadcnDoc,
 };

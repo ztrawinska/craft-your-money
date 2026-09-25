@@ -48,6 +48,20 @@
   --radius-sheet: 16px;
   --radius-chip: 100px;
 
+  /* Shadows (design system §1.1) — two, and the test that keeps them at two:
+     a shadow is allowed only on something that genuinely leaves the page, and
+     both of these do. `--shadow-*: initial` removes Tailwind's 2xs…2xl, so a
+     floating surface says `shadow-popover` or `shadow-sheet` and nothing else
+     can spell a shadow at all.
+
+     Decided 2026-09-25 (S7): the primary button's lift and the two save bars'
+     fold were removed. Neither floated — the bars sit in flow at the end of
+     the document, so nothing ever passes beneath them — and the fold's blur
+     was smudging the hairline that does the real separating. */
+  --shadow-*: initial;
+  --shadow-popover: 0px 8px 24px -8px rgba(30, 25, 22, 0.18);
+  --shadow-sheet: 0px -10px 30px -12px rgba(30, 25, 22, 0.25);
+
   /* Type presets (design system §1.4) — twenty-two, on eleven sizes, decided
      2026-09-17, named by content rather than by consumer 2026-09-25 (§1.8).
      `--text-*: initial` removes Tailwind's xs…9xl; each preset is one utility

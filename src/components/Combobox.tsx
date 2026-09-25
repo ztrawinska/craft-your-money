@@ -30,7 +30,7 @@ type ComboboxProps = {
 };
 
 const listSurface =
-  "w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-button border border-ink/14 bg-page p-0 shadow-[0_8px_24px_-8px_rgba(30,25,22,0.18)]";
+  "w-[var(--radix-popover-trigger-width)] overflow-hidden rounded-button border border-ink/14 bg-page p-0";
 
 export function Combobox({
   value,

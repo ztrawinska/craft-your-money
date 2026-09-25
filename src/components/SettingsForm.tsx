@@ -167,7 +167,7 @@ export function SettingsForm({ initial }: { initial: Settings }) {
       </div>
 
       {/* save bar */}
-      <div className="mt-8 border-t border-ink/7 bg-page px-6 pb-5 pt-4 shadow-[0_-6px_18px_-12px_rgba(30,25,22,0.12)]">
+      <div className="mt-8 border-t border-ink/7 bg-page px-6 pb-5 pt-4">
         <Button variant="primary" onClick={save} disabled={isSaving}>
           {isSaving ? "Saving…" : "Save settings"}
         </Button>

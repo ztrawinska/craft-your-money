@@ -11,7 +11,7 @@ import { docLink as link } from "@/components/design-docs/styles";
 import type { ChipTone } from "@/lib/status";
 
 const PRINCIPLES = [
-  ["Flat", "No cards, no drop shadows, no floating panels. Depth comes from hairlines and one framed surface, never from elevation."],
+  ["Flat", "No cards, no floating panels. Depth comes from hairlines and one framed surface, never from elevation. Two surfaces genuinely float over the page and carry a shadow for it; nothing else may."],
   ["One framed surface per screen", "Exactly one place is visually enclosed: where the decision happens. Everything else sits directly on the page."],
   ["One accent", "Clay, and only clay. Iris is not a second accent; it is the AI identity and appears only when the assistant is involved."],
   ["Status lives in chips", "Never as raw coloured text. Numbers are monochrome ink."],

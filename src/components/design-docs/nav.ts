@@ -15,6 +15,7 @@ export const FOUNDATIONS: NavItem[] = [
   { slug: "spacing", name: "Spacing" },
   { slug: "radii", name: "Radii" },
   { slug: "lines", name: "Lines" },
+  { slug: "shadows", name: "Shadows" },
   { slug: "shadcn", name: "shadcn bridge" },
 ];
 
