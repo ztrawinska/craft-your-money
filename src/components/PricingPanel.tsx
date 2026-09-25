@@ -135,7 +135,7 @@ export function PricingPanel({
   const isLoss = pricing.profit != null && pricing.profit < -0.005;
 
   return (
-    <FramedSurface className="mx-6 mt-section px-6 pb-5 pt-section">
+    <FramedSurface className="px-6 pb-5 pt-section">
       {/* calculated price — the suggestion */}
       <div className="mb-4 flex items-center justify-between gap-3 border-b border-ink/7 pb-4">
         <div>
@@ -241,7 +241,10 @@ export function PricingPanel({
         </div>
       </div>
 
-      <PriceCheck ctx={reviewCtx} />
+      {/* §1.5: the slot has no margin of its own — this block places it. */}
+      <div className="mt-5">
+        <PriceCheck ctx={reviewCtx} />
+      </div>
     </FramedSurface>
   );
 }

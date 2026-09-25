@@ -125,6 +125,36 @@ else
 fi
 
 echo
+echo "== A component with a vertical margin on its root (design-system §1.5: a component never decides how far it sits from what is above or below it) =="
+# The root is the element on the line after a top-level `return (` inside a
+# file in src/components. A vertical margin there (mt/mb/my, variants too) is
+# the component deciding page rhythm, which belongs to whoever placed it —
+# move it to the container, or, when the space is part of the component's own
+# box the way a button's padding is, use pb-*/pt-*. Horizontal margins are not
+# rhythm (mx-auto centres a page shell), so they are not checked.
+# A root that carries the word "rhythm-exception" on its line is skipped; the
+# reason belongs in the docblock and in §1.5.
+ROOT_MARGIN_HITS=$(perl -ne '
+  BEGIN { $file = ""; $armed = 0 }
+  if ($ARGV ne $file) { $file = $ARGV; $armed = 0; $. = 1 }
+  if (/^\s*return \($/) { $armed = 1; next }
+  if ($armed) {
+    if (/^\s*$/) { next }
+    if (/rhythm-exception/) { $armed = 0; next }
+    if (/(?:^|[\s"'"'"'`])(?:[a-z-]+:)*(m[tby]|my)-[a-z0-9]/) { print "$ARGV:$.:" . ($_ =~ s/^\s+//r) }
+    $armed = 0;
+  }
+' $(find "$ROOT/components" -name "*.tsx" -not -path "*design-docs*" 2>/dev/null) 2>/dev/null)
+if [ -n "$ROOT_MARGIN_HITS" ]; then
+  echo "$ROOT_MARGIN_HITS"
+  echo "  -> §1.5: give the margin to the container that placed this component, or make it padding when the space is part of the component itself."
+  FAIL=1
+  HARD=1
+else
+  echo "  none"
+fi
+
+echo
 echo "== Banned copy: design-system §4 jargon (use the plain-language column instead) =="
 JARGON_WORDS='direct cost|net revenue|contribution margin|\boverhead\b'
 JARGON_HITS=$(grep -rnoiE "$JARGON_WORDS" "$ROOT" --include="*.tsx" --include="*.ts" \

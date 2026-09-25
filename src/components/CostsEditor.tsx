@@ -292,7 +292,7 @@ export function CostsEditor({
         {/* allocation */}
         <div className="mt-8 px-6">
           <SectionLabel>How to spread them</SectionLabel>
-          <div className="mt-1">
+          <div>
             <RadioCards
               name="allocation"
               options={METHODS}

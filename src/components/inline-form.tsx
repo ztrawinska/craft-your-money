@@ -22,9 +22,11 @@ export const num = (s: string) => Number(s.replace(",", "."));
  *  whether the delete confirm is showing. */
 export type EditState<D> = { index: number | "new"; draft: D; confirmingDelete: boolean };
 
+/** The caps label above a field. The 4px beneath it is `pb-1`, not a margin
+ *  (§1.5) — it is part of the label, and padding cannot collapse or leak. */
 export function FieldLabel({ children }: { children: ReactNode }) {
   return (
-    <span className="mb-1 block text-caps-tight uppercase text-ink/62">
+    <span className="block pb-1 text-caps-tight uppercase text-ink/62">
       {children}
     </span>
   );
@@ -154,6 +156,11 @@ export function EditShell({ children }: { children: ReactNode }) {
   // elsewhere stay because they carry meaning (the one framed surface; "AI is
   // here"); this one didn't.
   return (
-    <div className="my-2 rounded-band bg-ink/[0.05] px-4 py-3">{children}</div>
+    // The 8px that lifts the card off the rows around it is padding on an
+    // unpainted wrapper, not a margin on the card (§1.5): the list cannot know
+    // which of its rows is currently a card, and padding cannot collapse.
+    <div className="py-2">
+      <div className="rounded-band bg-ink/[0.05] px-4 py-3">{children}</div>
+    </div>
   );
 }
