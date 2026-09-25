@@ -32,7 +32,7 @@ export function InputDoc() {
           { name: "Input", type: 'ComponentProps<"input">', meaning: "The shadcn primitive, re-skinned: page background, ink/14 border, clay focus ring, 16px text (stops iOS zoom)." },
           { name: "MoneyInput.value", type: "string", meaning: 'The amount as text, "12.50". Empty when all zeros.' },
           { name: "MoneyInput.onChange", type: "(v: string) => void", meaning: "Fires with the accumulated amount on every keystroke." },
-          { name: "FieldLabel", type: "children", meaning: "The 9px caps label above a field." },
+          { name: "FieldLabel", type: "children", meaning: "The caps label above a field (`caps-tight`, 10px)." },
         ]}
       />
       <BuiltOn name="Input" href={shadcn("input")} note="A plain input has no behaviour for a library to add; this is simply the one place the field's look lives." />

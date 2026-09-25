@@ -2,10 +2,10 @@
  * inline-form — the shared building blocks for editing a row in place (§2.12).
  *
  * Extracted from ProductEditor so the materials library and the business-costs
- * screen edit rows with exactly the same feel: a clay left-stripe marks edit
- * mode, a live figure sits on a dashed rule, Save is gated until valid, and
- * delete confirms inline. Presentational only — the owning client component
- * holds the draft state and passes handlers in.
+ * screen edit rows with exactly the same feel: containment marks edit mode, a
+ * live figure sits on a dashed rule, Save is gated until valid, and delete
+ * confirms inline. Presentational only — the owning client component holds the
+ * draft state and passes handlers in.
  */
 "use client";
 
@@ -146,8 +146,8 @@ export function FormFooter({
   );
 }
 
-/** Edit mode is marked by a 3px clay left stripe and a faint ink tint (rounded
- *  on the right, like the assistant inset in §2.9); content below shifts down. */
+/** Edit mode is marked by containment alone — a rounded card with a faint ink
+ *  tint; content below shifts down. */
 export function EditShell({ children }: { children: ReactNode }) {
   // Edit mode is signalled by containment alone: a rounded, faintly-tinted card
   // that lifts the row off the page, plus the input's own focus ring. No accent

@@ -10,6 +10,7 @@ export function SwitchDoc() {
     <DocSection page
       id="switch"
       title="Switch"
+      spec="§2.16"
       source="src/components/ui/switch.tsx"
       lede="Two-state toggle on shadcn/Radix Switch, re-skinned to the tokens."
     >
