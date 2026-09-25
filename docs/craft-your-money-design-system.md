@@ -314,7 +314,7 @@ A trailing chevron is a promise that something opens. Putting one on an action t
 
 A filter, sort or select control. **Not a new control level — it is the ghost button plus a chevron.**
 
-**Anatomy:** `button` radius (8px), `1px ink-14` border, transparent background, 12.5px Plex 500 in `ink-62`, Lucide `chevron-down` at 14px in `ink-62`, padding 8px 12px.
+**Anatomy:** `button` radius (8px), `1px ink-14` border, transparent background, `label-strong` in `ink-62`, Lucide `chevron-down` at 14px in `ink-62`, padding 8px 12px.
 
 **States**
 
@@ -331,6 +331,8 @@ A filter, sort or select control. **Not a new control level — it is the ghost 
 - Filters are dropdowns; **sort is not**. Sort is a mode, not a value to filter by, so it sits at the right of the control row as a bare `arrow-up-down` icon (18px, `ink-62`, 38px tap target) and opens a sheet. Keeping it out of the dropdown family stops the row from reading as three equal boxes.
 
 **Anti-pattern:** chip-shaped dropdowns; white pills floating on the page; text carets.
+
+**One component, every use.** `Dropdown` forwards its ref and props, so it *is* the trigger: `<DrawerTrigger asChild><Dropdown filtered>…</Dropdown></DrawerTrigger>`. `StatusFilter` and `TypeFilter` both do this. A filter that spells the trigger's classes out by hand is a copy that will drift — 2026-09-25 found three of them, one of which was the library's own (#33).
 
 **Type-to-search fields are the one sanctioned exception to "no floating panels."** The currency picker (§14) and the materials-library autofill (§12) are text inputs you type into, with suggestions as you go — a different control from the filter dropdown above. Their list floats in a shadcn **Popover** anchored under the field, not in flow. Rendered in flow, the list pushed the surrounding rows down as it opened and pulled them back as it closed — the UI visibly *jumped*, which read as broken; a stable anchored panel is calmer. The panel wears **page colour**, a `1px ink-14` border and a soft shadow — not the elevated white card the anti-pattern warns against — and it **never steals focus**, so typing continues uninterrupted; picking works because items block the input's blur until the click lands. This is the only floating surface in the app; filters and menus still use the bottom sheet (§2.4, §2.11).
 
