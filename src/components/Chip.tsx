@@ -40,7 +40,7 @@ type ChipProps = {
 export function Chip({ tone = "neutral", size = "default", children }: ChipProps) {
   return (
     <span
-      className={`inline-flex items-center rounded-chip font-sans text-chip tabular-nums ${sizeClasses[size]} ${toneClasses[tone]}`}
+      className={`inline-flex items-center rounded-chip font-sans text-label-sm-bold tabular-nums ${sizeClasses[size]} ${toneClasses[tone]}`}
     >
       {children}
     </span>

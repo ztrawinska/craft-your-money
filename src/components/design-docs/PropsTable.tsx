@@ -25,13 +25,13 @@ export function PropsTable({ rows }: { rows: PropRow[] }) {
         <tbody>
           {rows.map((r) => (
             <tr key={r.name} className="align-top">
-              <td className="border-b border-ink/7 py-3 pr-4 font-mono text-meta text-ink">
+              <td className="border-b border-ink/7 py-3 pr-4 font-mono text-label-sm text-ink">
                 {r.name}
               </td>
-              <td className="border-b border-ink/7 py-3 pr-4 font-mono text-meta text-ink/70">
+              <td className="border-b border-ink/7 py-3 pr-4 font-mono text-label-sm text-ink/70">
                 {r.type}
               </td>
-              <td className="border-b border-ink/7 py-3 pr-4 font-mono text-meta text-ink/62">
+              <td className="border-b border-ink/7 py-3 pr-4 font-mono text-label-sm text-ink/62">
                 {r.default ?? ""}
               </td>
               <td className="border-b border-ink/7 py-3 text-body text-ink/70">

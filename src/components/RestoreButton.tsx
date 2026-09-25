@@ -15,7 +15,7 @@ export function RestoreButton({ id }: { id: string }) {
       type="button"
       disabled={pending}
       onClick={() => start(() => restoreProductAction(id))}
-      className="inline-flex items-center gap-1 font-sans text-link text-clay-deep"
+      className="inline-flex items-center gap-1 font-sans text-label-bold text-clay-deep"
     >
       <RotateCcw size={14} strokeWidth={2} />
       Restore

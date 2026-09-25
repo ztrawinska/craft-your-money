@@ -112,7 +112,7 @@ export function FormFooter({
             <button
               type="button"
               onClick={onConfirmDelete}
-              className="text-link text-status-red"
+              className="text-label-bold text-status-red"
             >
               Delete
             </button>
@@ -124,7 +124,7 @@ export function FormFooter({
             type="button"
             onClick={onSave}
             disabled={!valid}
-            className={`rounded-button px-4 py-2 text-button ${
+            className={`rounded-button px-4 py-2 text-label-bold ${
               valid ? "bg-clay-deep text-on-clay" : "bg-ink/10 text-ink/30"
             }`}
           >

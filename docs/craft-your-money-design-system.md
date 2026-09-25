@@ -79,7 +79,7 @@ Lora was validated against Fraunces, Newsreader and Literata on the real pricing
 
 #### Type scale
 
-**Twenty-four presets on eleven sizes (decided 2026-09-17, foundations plan P3).** Sizes sit on the 2pt grid — `10 · 12 · 14 · 16 · 18 · 20 · 24 · 28 · 34 · 44 · 56` — and every line box is a multiple of 4, so text stacks on the same rhythm as the spacing scale (§1.5). A preset carries size, line-height, weight and tracking under one name, `category-size`; the family is the one rule above (numbers and names Lora, chrome Plex). In code a preset is one utility (`text-meta`, `text-figure-lg`) plus `font-serif` / `font-sans`; mirrored in `design/tokens.json` `type.*` and the Figma text styles, guarded by `src/lib/tokens.test.ts` and, once migrated, by `scripts/check-tells.sh` (any `text-[…px]`, `leading-[…]` or `tracking-[…]` fails CI).
+**Twenty-two presets on eleven sizes (decided 2026-09-17, foundations plan P3; renamed 2026-09-25, §1.8).** Sizes sit on the 2pt grid — `10 · 12 · 14 · 16 · 18 · 20 · 24 · 28 · 34 · 44 · 56` — and every line box is a multiple of 4, so text stacks on the same rhythm as the spacing scale (§1.5). A preset carries size, line-height, weight and tracking under one name, `category-size`; the family is the one rule above (numbers and names Lora, chrome Plex). In code a preset is one utility (`text-meta`, `text-figure-lg`) plus `font-serif` / `font-sans`; mirrored in `design/tokens.json` `type.*` and the Figma text styles, guarded by `src/lib/tokens.test.ts` and, once migrated, by `scripts/check-tells.sh` (any `text-[…px]`, `leading-[…]` or `tracking-[…]` fails CI).
 
 | Preset | Size / box | Weight | Family | Tracking | Used for (r3 name) |
 |---|---|---|---|---|---|
@@ -98,12 +98,10 @@ Lora was validated against Fraunces, Newsreader and Literata on the real pricing
 | `body` | 14 / 20 | 300 | Plex | | Body and helper copy — the calm sentences under a figure (*body*) |
 | `body-sm` | 12 / 16 | 300 | Plex | | Quiet captions and sublabels, `ink-62` (*meta-light*) |
 | `label` | 14 / 20 | 400 | Plex | | A cost line's label, a settings row, a list option (*row-label*) |
-| `label-strong` | 14 / 20 | 500 | Plex | | The assistant label (`iris-deep`), a radio card's title, the action sheet's cancel (*assistant*) |
-| `link` | 14 / 20 | 600 | Plex | | A verb-link, `clay-deep`: Reprice ›, + Add material (*verb-link*) |
-| `button` | 14 / 20 | 600 | Plex | | The primary button (*button*) |
-| `button-ghost` | 14 / 20 | 500 | Plex | | The ghost button; dropdown and filter triggers — a dropdown is a ghost with a chevron (*button-ghost*, *dropdown*) |
-| `meta` | 12 / 16 | 400 | Plex | | A row's meta line, `ink-62`: 5g × £38.00/g (*meta*) |
-| `chip` | 12 / 16 | 600 | Plex | | Both chip sizes — `sm` is a tighter inset, not smaller type (*chip*, *chip-sm*) |
+| `label-strong` | 14 / 20 | 500 | Plex | | The ghost button and the dropdown/filter triggers; the assistant label (`iris-deep`), a radio card's title, the action sheet's cancel (*assistant*, *button-ghost*, *dropdown*) |
+| `label-bold` | 14 / 20 | 600 | Plex | | The primary button, and verb-links in `clay-deep`: Reprice ›, + Add material. One style: a button and a link differ in colour, not in type (*button*, *verb-link*) |
+| `label-sm` | 12 / 16 | 400 | Plex | | The label one size down: a row's meta line, `ink-62` — 5g × £38.00/g (*meta*) |
+| `label-sm-bold` | 12 / 16 | 600 | Plex | | Both chip sizes — `sm` is a tighter inset, not smaller type — plus the attention count and the assistant pill (*chip*, *chip-sm*) |
 | `caps` | 10 / 12 | 600 | Plex | 0.2em | Section labels and the workflow stamp, uppercase, `ink-62` (*section-label*, *workflow-stamp*) |
 | `caps-tight` | 10 / 12 | 600 | Plex | 0.13em | Metric and field labels, uppercase (*metric-label*) |
 | `nav` | 10 / 12 | 500 | Plex | | Bottom navigation labels (*nav-label*) |
@@ -188,6 +186,23 @@ Nothing is rounder than 12px except chips and a sheet's top corners. Generous ra
 | Active tick | `2px clay-deep` | Above the active nav tab |
 
 The 3px clay top rule and the 2px clay nav tick are deliberately the same device at different scales: *"this is where you are"* and *"this is where you decide"* speak one visual language.
+
+### 1.8 Naming
+
+Names are the part of the system a future reader meets first, so they follow one rule and one test.
+
+**The rule: a token is named by what is inside it, never by who wears it.** `label-bold` (Plex 14/20/600), not `button`. `label-sm-bold` (12/16/600), not `chip`. The first member of the name is fixed by Tailwind v4 — `--color-*`, `--text-*`, `--spacing-*`, `--radius-*` compile straight into `bg-clay`, `text-label`, `pt-section`, `rounded-sheet` — so the only part we choose is what follows, and it stays short enough to read inside a class list.
+
+**The test, before a name is settled:** *what happens when a second element wants the same value?* A name that describes content survives — the second element simply uses it. A name that describes its owner does not: the second element either lies about what it is, or a duplicate gets created. If the answer is "it lies", rename it now.
+
+Two consequences worth stating, because the alternatives are common elsewhere:
+
+- **No five-part names.** `color-background-surface-card-hover` is built for many teams and many themes, where a name has to explain itself to someone who was not in the room. One designer, one theme, one product: the middle members are always empty, so they are not written.
+- **A component's type is documented in the component, not in the token.** What a Button wears is in §2.3 and in its docblock. If the token said it too, the two would drift.
+
+Exceptions carry their reason in this spec: `nav` (10/12/500) is named for the bottom nav because nothing else in the system sits at that size and weight, and `caps` / `caps-tight` describe their own appearance.
+
+**History.** The type presets were named by role in P3 (#8, 2026-09-17), which left `button` ≡ `link` (14/20/600) and `button-ghost` ≡ `label-strong` (14/20/500) as duplicate pairs, and `chip` worn by two things that are not chips. Benchmarked 2026-09-17 against ten systems (Material 3, Carbon, Primer, Atlassian, Fluent 2, Polaris, Spectrum, Apple HIG, Eddie, Geist): nine name by content, and Carbon and Spectrum state outright that button and link share one style. Renamed 2026-09-25 — `button` + `link` → `label-bold`, `button-ghost` → the existing `label-strong`, `chip` → `label-sm-bold` — which folded two duplicates away (24 → 22) and left every value unchanged, confirmed by a pixel diff of five screens. The same pass renamed `meta` → `label-sm`: it failed the test above once chips and the attention count wore its bold twin, and the 12px UI family is now the 14px one a size down (`body`/`body-sm`, `label`/`label-sm`). Recorded in `ds-inspection/plans/2026-09-17-designsystems-one-lens.md` §2a.
 
 ---
 
@@ -526,6 +541,7 @@ A rule written down is memory; a rule in a type or a component is enforcement. A
 |---|---|---|
 | Status only in chips | Convention | Enforced — `Chip` is the only status export |
 | Meaning-named tones | **Enforced** | — (`ChipTone` union) |
+| Tokens named by content, not by owner (§1.8) | Convention | Enforced — the rename lands, then the checker flags a new `--text-*` whose name matches a component file |
 | Label ↔ tone mapping | **Enforced** | — (`PROFITABILITY_META` in `lib/status.ts`) |
 | Money always Lora + tnum | **Enforced** (`Price`) | — (the overview row still formats by hand; see `/design/components/list-row`) |
 | Three button levels | **Enforced** | — (`variant` union) |
@@ -537,7 +553,7 @@ A rule written down is memory; a rule in a type or a component is enforcement. A
 | Tokens JSON ↔ CSS agree | **Enforced** | — (`src/lib/tokens.test.ts` fails on drift) |
 | Every component appears in the live library | Convention | Stays convention — `/design` is added to by hand |
 | Hardcoded hex, banned copy | Convention | Checked — `scripts/check-tells.sh`, run automatically via a `Stop` hook (`.claude/hooks/tell-check-stop.sh`) after every response. Report-only: it surfaces candidates, doesn't block, so a hit still needs a human (or Claude, next turn) call. Pure black/white inside a `gradient(`/mask line is ignored — a stencil, not a colour. |
-| Type is one of the 24 presets (§1.4) | **Enforced** | `--text-*: initial` removes Tailwind's sizes; the checker's type section exits 1 in CI on any `text-[…px]`, `leading-[…]`, `tracking-[…]` or Tailwind default. A figure's parts (currency glyph, decimals) are the one sanctioned raw size, marked "part" on their line in the component that draws them. |
+| Type is one of the 22 presets (§1.4) | **Enforced** | `--text-*: initial` removes Tailwind's sizes; the checker's type section exits 1 in CI on any `text-[…px]`, `leading-[…]`, `tracking-[…]` or Tailwind default. A figure's parts (currency glyph, decimals) are the one sanctioned raw size, marked "part" on their line in the component that draws them. |
 | Radius is one of the seven names (§1.6) | **Enforced** | Same two layers: `--radius-*: initial` in the build, and the checker's radius section exits 1 in CI on any `rounded-[…]` or Tailwind default. |
 | Spacing is on the closed scale (§1.5) | **Enforced** | Two layers: the build (`--spacing: initial` — an off-scale class renders nothing) and the checker's spacing section, which exits 1 in CI on any off-scale step or `[Npx]` value, variants included. |
 

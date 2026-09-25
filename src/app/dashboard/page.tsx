@@ -124,7 +124,7 @@ export default async function Dashboard() {
         {/* header: date + greeting, avatar (Settings lives behind it) */}
         <div className="flex items-start justify-between px-6 pb-2 pt-section">
           <div>
-            <p className="mb-1 font-sans text-meta text-ink/62">
+            <p className="mb-1 font-sans text-label-sm text-ink/62">
               {greeting.date}
             </p>
             <h1 className="font-serif text-title">
@@ -218,7 +218,7 @@ export default async function Dashboard() {
                 Continue where you left off
               </p>
               <p className="mt-1 font-serif text-name">{resume.name}</p>
-              <p className="mt-1 font-sans text-meta text-ink/62">
+              <p className="mt-1 font-sans text-label-sm text-ink/62">
                 Draft · edited 2 days ago
               </p>
             </div>

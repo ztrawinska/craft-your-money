@@ -753,11 +753,11 @@ export function ProductEditor({
           </div>
           {businessCostShare !== null && (
             <div className="mt-3 border-t border-dashed border-ink/14 pt-3">
-              <div className="flex items-baseline justify-between py-1 text-meta text-ink/62">
+              <div className="flex items-baseline justify-between py-1 text-label-sm text-ink/62">
                 <span className="font-light italic">Share of business costs</span>
                 <Price value={businessCostShare} variant="summary" />
               </div>
-              <div className="flex items-baseline justify-between py-1 text-meta">
+              <div className="flex items-baseline justify-between py-1 text-label-sm">
                 <span className="font-medium text-ink/70">Full cost</span>
                 <Price value={directCost + businessCostShare} variant="inline" />
               </div>

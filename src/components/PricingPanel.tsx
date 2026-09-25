@@ -45,7 +45,7 @@ type PricingPanelProps = {
 };
 
 const resetLinkClass =
-  "font-sans text-meta  text-clay-deep underline decoration-clay-deep/40 underline-offset-2";
+  "font-sans text-label-sm  text-clay-deep underline decoration-clay-deep/40 underline-offset-2";
 
 // The typed number must feel instant, but the *evaluation* it drives — status,
 // margin, the guidance line, profit — shouldn't lurch on every keystroke (it
@@ -139,7 +139,7 @@ export function PricingPanel({
       {/* calculated price — the suggestion */}
       <div className="mb-4 flex items-center justify-between gap-3 border-b border-ink/7 pb-4">
         <div>
-          <p className="text-meta text-clay-deep">Calculated price</p>
+          <p className="text-label-sm text-clay-deep">Calculated price</p>
           {suggestion.calculatedBeforeVat != null && (
             <p className="mt-1 text-body-sm text-ink/62">
               {formatMoney(suggestion.calculatedBeforeVat, cur)} before VAT · {targetMarginPct}%
@@ -218,7 +218,7 @@ export function PricingPanel({
       {/* profit / loss — the last word, and editable: type a target and the
           price back-solves. A loss never uses the word "profit". */}
       <div className="border-t border-ink/7 pt-4">
-        <p className="mb-2 text-meta text-ink/62">
+        <p className="mb-2 text-label-sm text-ink/62">
           {pricing.profit == null
             ? "Or set what you want to make per piece"
             : isLoss

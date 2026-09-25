@@ -64,7 +64,7 @@ function NumberField({
         onChange={(e) => onChange(e.target.value)}
         className={`${width} text-right font-serif tabular-nums`}
       />
-      {suffix && <span className="font-sans text-meta text-ink/62">{suffix}</span>}
+      {suffix && <span className="font-sans text-label-sm text-ink/62">{suffix}</span>}
     </span>
   );
 }

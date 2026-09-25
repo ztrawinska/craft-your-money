@@ -14,7 +14,7 @@ export function CollapseDemo() {
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
-        className="inline-flex items-center gap-1 border-b border-dotted border-clay/50 pb-px font-sans text-meta text-clay-deep"
+        className="inline-flex items-center gap-1 border-b border-dotted border-clay/50 pb-px font-sans text-label-sm text-clay-deep"
       >
         how this is figured
         <ChevronDown

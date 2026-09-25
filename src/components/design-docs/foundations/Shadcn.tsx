@@ -22,11 +22,11 @@ export function ShadcnDoc() {
           <tbody>
             {leaves<string>(tokens.shadcn).map(([name, t]) => (
               <tr key={name}>
-                <td className="border-b border-ink/7 py-2 pr-4 font-mono text-meta text-ink">
+                <td className="border-b border-ink/7 py-2 pr-4 font-mono text-label-sm text-ink">
                   --{name}
                 </td>
                 <td className="border-b border-ink/7 py-2 pr-4">
-                  <span className="inline-flex items-center gap-2 font-mono text-meta text-ink/70 tabular-nums">
+                  <span className="inline-flex items-center gap-2 font-mono text-label-sm text-ink/70 tabular-nums">
                     <span
                       aria-hidden
                       className="inline-block h-4 w-4 rounded-stamp border border-ink/14"

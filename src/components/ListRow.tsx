@@ -96,7 +96,7 @@ export function ListRow({
         </span>
         {meta && (
           <p
-            className={`mt-1 font-sans text-meta ${
+            className={`mt-1 font-sans text-label-sm ${
               muted ? "text-ink/40" : "text-ink/62"
             }`}
           >

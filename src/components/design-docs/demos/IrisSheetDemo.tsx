@@ -33,7 +33,7 @@ export function IrisSheetDemo() {
         {["at £38.00 → 46%", "at £48.00 → 57%"].map((s) => (
           <span
             key={s}
-            className="rounded-chip border border-ink/14 px-3 py-1 font-sans text-meta tabular-nums text-ink/70"
+            className="rounded-chip border border-ink/14 px-3 py-1 font-sans text-label-sm tabular-nums text-ink/70"
           >
             {s}
           </span>
@@ -44,7 +44,7 @@ export function IrisSheetDemo() {
           <button
             key={t}
             type="button"
-            className="rounded-chip bg-iris/[0.09] px-3 py-2 font-sans text-chip text-iris-deep"
+            className="rounded-chip bg-iris/[0.09] px-3 py-2 font-sans text-label-sm-bold text-iris-deep"
           >
             {t}
           </button>

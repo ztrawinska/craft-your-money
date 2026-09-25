@@ -13,13 +13,11 @@ export function sampleFor(name: string, family: "font-serif" | "font-sans"): str
     return "14ct gold wire";
   }
   if (name.startsWith("caps")) return "What this costs to make";
-  if (name === "chip") return "Healthy · 38%";
-  if (name.startsWith("button")) return name === "button" ? "Save and activate" : "Save draft";
-  if (name === "link") return "Reprice";
+  if (name === "label-sm-bold") return "Healthy · 38%";
+  if (name === "label-bold") return "Save and activate";
   if (name === "label-strong") return "Check this price";
   if (name === "label") return "Materials";
   if (name === "nav") return "Products";
-  if (name === "body-lg") return "Most of your range earns well. Two pieces are priced under target.";
   if (name === "body") return "Your price covers costs but is below your 40% margin target.";
   return "5g × £38.00/g · 90 min at £22/hr";
 }

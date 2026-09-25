@@ -34,7 +34,7 @@ export function TypeFilter({
       <DrawerTrigger asChild>
         <button
           type="button"
-          className={`inline-flex items-center gap-2 whitespace-nowrap rounded-button border bg-transparent px-3 py-2 font-sans text-button-ghost ${
+          className={`inline-flex items-center gap-2 whitespace-nowrap rounded-button border bg-transparent px-3 py-2 font-sans text-label-strong ${
             filtered
               ? "border-clay-deep/45 bg-clay/7 text-clay-deep"
               : "border-ink/14 text-ink/62"

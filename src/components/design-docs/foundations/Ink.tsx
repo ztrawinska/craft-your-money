@@ -20,7 +20,7 @@ export function InkDoc() {
               <p className="mt-2 font-serif text-figure-2xs text-ink" style={{ opacity: o }}>
                 Aa 1234
               </p>
-              <p className="font-mono text-meta text-ink/62">
+              <p className="font-mono text-label-sm text-ink/62">
                 {name} · {Math.round(o * 100)}%
               </p>
               {t?.$description && (
