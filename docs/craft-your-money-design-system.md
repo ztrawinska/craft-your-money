@@ -447,7 +447,7 @@ Holds destructive and secondary actions for an object (the ⋯ menu). **A bottom
 Add and edit never open a modal.
 
 - The row expands in place into a **rounded (`8px`) card with a faint `ink` 5% tint** — **containment alone** marks edit mode (the benchmark norm: Airwallex, Bevel, Walmart all signal editing by a contained card, no accent stripe). The active input's own focus ring completes the signal. **No left stripe here** — it was decoration, not signal. (Contrast the clay/iris stripes elsewhere, which *carry* meaning — the one framed surface §2.7, "AI is here" §2.9 — and so stay.) Inputs stay `page`-coloured so they lift off the tint.
-- Inputs: `page` background, `1px ink-14` border, `input` radius (4px), 15px Lora for values (tabular).
+- Inputs: `page` background, `1px ink-14` border, `input` radius (4px), `value` in Lora for figures (tabular).
 - Focus: clay border + `0 0 0 3px rgba(clay, 0.12)` ring.
 - Live line cost above the actions, on a dashed rule.
 - Delete opens an **inline confirm**, never a modal, with reassuring copy.
@@ -474,6 +474,55 @@ This is **enforced in code**, not a convention: the shared helpers are the only 
 ### 2.14 Reveal toggle — *built*
 
 The "tap to see the numbers behind this figure" control — the dashboard's *how this is figured* (§ hero) and the product's *market benchmark* (§11) are the same thing and share one look: an **inline** `chevron-down` link, dotted `clay/50` underline, `clay-deep` 11.5px Plex 500, chevron rotating 180° on open. Clay because it is a link/action (§2.3). It is **not** a full-width grey section header — that treatment reads as structure, this reads as optional depth.
+
+### 2.15 RadioCards — *built*
+
+Two or three mutually exclusive options that each need a sentence of explanation — the business-cost allocation method is the one in the app. A plain radio list would make the user guess what "per unit" means; a card carries the title and the line that explains it.
+
+**Anatomy:** one card per option, `band` radius (8px), `1px ink-14` border, `p-4`, `gap-2` between cards. Title in `label-strong`; description in `body-sm` at `ink-62`, 4px under the title (§1.5 rule 5).
+
+| State | Appearance |
+|---|---|
+| Unselected | plain outline, `ink-14` |
+| Selected | `clay-deep` border, `clay` 7% wash |
+
+**Rules**
+- A real `<input type="radio">` sits under each card, visually hidden. It works without JS and reads to a screen reader as one group — the cards are a skin, not a re-implementation.
+- The whole card is the target, not a dot beside it.
+- Two or three options. Past that it is a list, and a list wants a sheet (§2.11).
+- Selection is the only state that carries colour. No hover fill, no shadow — the card is not a button.
+
+### 2.16 Switch — *built*
+
+A two-state toggle for a setting that takes effect immediately: "I'm VAT registered" is the only one in the app.
+
+**Anatomy:** 44 × 26 track, `rounded-full`, 20px knob in `on-clay` with no shadow, 3px inset from the track.
+
+| State | Appearance |
+|---|---|
+| Off | track `ink-14` |
+| On | track `clay-deep`, knob slid to 21px |
+| Keyboard focus | `2px clay/50` ring — visible on Tab, invisible under the mouse |
+| Disabled | 50% opacity, cursor not-allowed |
+
+**Rules**
+- The accent sits on the control, not beside it: the toggle **is** the action, so it may wear clay (§1.1 rule 3).
+- Flat. No shadow on the knob, no gradient on the track — elevation is not in this system.
+- It needs a name: a linked `<label>` or `aria-label`. The Radix API is `checked` + `onCheckedChange`, not `onChange`.
+- A switch applies its change at once. If a choice needs saving, it is not a switch.
+
+### 2.17 Combobox — *built*
+
+A text field that suggests what you have saved already — the materials library's autofill. Type a name: if it is in the library, pick it and the row fills itself; if it is new, keep the name and save it as new.
+
+**Anatomy:** the standard `Input` as the anchor, with the list in a popover under it — `button` radius (8px), `page` background, `1px ink-14` border, a soft drop shadow (the one place a shadow is sanctioned, because the list floats over content). Each item: a small `ink-30` diamond, the name in `label`, and an optional right-aligned figure in `value-sm` at `ink-62`. "Use as new" is `label-strong` in `clay-deep` with a `plus` icon, above a hairline.
+
+**Rules**
+- **"Use as new" is always last, and always available once there is something to name.** The library suggests; it never traps.
+- **The list does not steal focus.** You keep typing while it is open; items block the field's blur until the click lands. It closes on pick, on blur, or on Escape.
+- **The list floats.** It is anchored under the field rather than pushed into the flow, so nothing below moves as it opens and closes.
+- **Every match is shown**, and the list scrolls past 264px. A cap would silently hide a material saved a minute ago.
+- **An empty field shows the whole library**, not nothing: the list is a reminder of what you have, not only a filter.
 
 ---
 

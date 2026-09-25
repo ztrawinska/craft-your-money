@@ -6,9 +6,11 @@ import { BottomNavDoc } from "./BottomNav";
 import { ButtonDoc } from "./Button";
 import { ChipDoc } from "./Chip";
 import { CollapseDoc } from "./Collapse";
+import { ComboboxDoc } from "./Combobox";
 import { DropdownDoc } from "./Dropdown";
 import { FramedSurfaceDoc } from "./FramedSurface";
 import { GlintDoc } from "./Glint";
+import { InlineFormDoc } from "./InlineForm";
 import { InputDoc } from "./Input";
 import { IrisSheetDoc } from "./IrisSheet";
 import { ListRowDoc } from "./ListRow";
@@ -26,6 +28,7 @@ export const COMPONENT_DOCS: Record<string, ComponentType> = {
   price: PriceDoc,
   "section-label": SectionLabelDoc,
   input: InputDoc,
+  combobox: ComboboxDoc,
   switch: SwitchDoc,
   dropdown: DropdownDoc,
   "radio-cards": RadioCardsDoc,
@@ -33,6 +36,7 @@ export const COMPONENT_DOCS: Record<string, ComponentType> = {
   "framed-surface": FramedSurfaceDoc,
   "list-row": ListRowDoc,
   collapse: CollapseDoc,
+  "inline-form": InlineFormDoc,
   "assistant-slot": AssistantSlotDoc,
   "action-sheet": ActionSheetDoc,
   "iris-sheet": IrisSheetDoc,

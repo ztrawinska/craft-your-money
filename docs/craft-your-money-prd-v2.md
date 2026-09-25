@@ -344,7 +344,7 @@ Delete account requires typing DELETE.
 ## 12. Interaction rules
 
 ### Inline add / edit — never a modal
-The row expands in place; a clay left-stripe marks edit mode; everything below shifts down.
+The row expands in place; containment marks edit mode (a rounded, faintly tinted card — see design system §2.12); everything below shifts down.
 - Library autofill: typing surfaces saved materials (◆ marks library items); picking one fills unit cost, still editable; **"+ Use as new" is always the last option** so the library never traps you.
 - Line cost computes live as you type, shown before saving.
 - Delete opens an **inline confirm**, never a jump-away modal, and the copy reassures: the library entry survives, only this line goes.

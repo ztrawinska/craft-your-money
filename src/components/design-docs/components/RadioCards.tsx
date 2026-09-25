@@ -9,6 +9,7 @@ export function RadioCardsDoc() {
     <DocSection page
       id="radio-cards"
       title="RadioCards"
+      spec="§2.15"
       source="src/components/RadioCards.tsx"
       lede="Two or three mutually exclusive options as cards with a title and description. Native radios underneath."
     >
