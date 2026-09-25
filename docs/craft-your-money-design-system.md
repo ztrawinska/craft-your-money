@@ -1,6 +1,8 @@
 # Craft Your Money — Design System
 
-**Status:** the visual source of truth. Values here are extracted from the built r3 mockups in `docs/design/`, not invented.
+**Version 0.7.0** — see [§7](#7-versioning) for how the number moves and [`CHANGELOG.md`](../CHANGELOG.md) for what changed.
+
+**Status:** the visual source of truth. The first values were extracted from the built r3 mockups in `docs/design/`, not invented; everything since has been decided here and in the dated notes under `ds-inspection/plans/`. Where this file and a mockup disagree, this file wins.
 
 **Live library:** `/design` in the app (`src/app/design`) renders the real components and tokens; `design/tokens.json` is the DTCG export of `globals.css`, guarded by `src/lib/tokens.test.ts`.
 
@@ -636,3 +638,22 @@ A rule written down is memory; a rule in a type or a component is enforcement. A
 | Spacing is on the closed scale (§1.5) | **Enforced** | Two layers: the build (`--spacing: initial` — an off-scale class renders nothing) and the checker's spacing section, which exits 1 in CI on any off-scale step or `[Npx]` value, variants included. |
 
 **Convention is fine** for rules that need judgment. What matters is knowing which is which — and never assuming prose will hold a line that code doesn't.
+
+## 7. Versioning
+
+**The system is at `0.7.0`.** The number lives in one place — `design/tokens.json`, `$extensions.cym.version` — and `src/lib/tokens.test.ts` fails if it disagrees with the newest entry in [`CHANGELOG.md`](../CHANGELOG.md). `/design` reads it from the same file, so the library always shows what the tokens actually say.
+
+**Pre-1.0 means what semver says it means:** anything may change. While the major is `0`:
+
+| Change | Bump |
+|---|---|
+| A token removed or renamed; a scale closed; a component API a caller must follow | **minor** |
+| A token added; a value changed under the same name; anything a caller can ignore | **patch** |
+
+**A closed scale is a break**, even when none of our tokens is removed. `--spacing: initial` deletes no `--spacing-*` of ours; it deletes every off-scale Tailwind class, and code that used one renders nothing — silently, which is worse than an error. The same goes for `--radius-*`, `--text-*` and `--shadow-*`.
+
+**`1.0.0` is cut when this milestone closes and Figma is bound to these tokens** — the first moment a break costs someone other than the person making it. After that the full rule applies: **major** = removed, renamed or closed; **minor** = added; **patch** = a value under the same name.
+
+**One release is one pull request**, tagged `v<version>`. Aliases are not kept for a release — there is one consumer and no external team, so a rename ships with its migration in the same PR. That is the solo equivalent of a deprecation window, and it only works while that stays true.
+
+**`r3` is not a version.** It names the third round of static mockups in `docs/design/`, which is where the first values came from. The system has since retuned the status colours, merged the ink ladder, consolidated the radii, rebuilt the type presets twice and removed two shadows. Referring to today's system as "r3" would give one name to two different things.

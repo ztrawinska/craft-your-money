@@ -191,6 +191,33 @@ test("shadcn --radius is the button radius", () => {
   expect(`${Number(rem![1]) * 16}px`).toBe(tokens.radius.button.$value);
 });
 
+test("the version in tokens.json is the newest entry in CHANGELOG.md", () => {
+  const changelog = readFileSync(new URL("../../CHANGELOG.md", import.meta.url), "utf8");
+  // "## 0.7.0 — 2026-09-25", newest first.
+  const entries = [...changelog.matchAll(/^## (\d+\.\d+\.\d+) — (\d{4}-\d{2}-\d{2})$/gm)];
+  expect(entries.length, "CHANGELOG.md has no version headings").toBeGreaterThan(0);
+
+  const stamped = (tokens.$extensions as Record<string, string>)["cym.version"];
+  expect(stamped, "tokens.json $extensions['cym.version']").toBe(entries[0][1]);
+
+  // The spec states the version in prose twice. CLAUDE.md says never let the
+  // docs and the code drift, so this is the line that holds it.
+  const spec = readFileSync(new URL("../../docs/craft-your-money-design-system.md", import.meta.url), "utf8");
+  const inSpec = [...spec.matchAll(/(?:\*\*Version |The system is at `)(\d+\.\d+\.\d+)/g)].map((m) => m[1]);
+  expect(inSpec.length, "the spec no longer states its version").toBeGreaterThan(0);
+  for (const v of inSpec) expect(v, "a version stated in the design-system doc").toBe(stamped);
+
+  // Newest first, and no version listed twice: the file is the ledger, so a
+  // release inserted in the wrong place would quietly re-date the history.
+  const rank = (v: string) => v.split(".").map(Number);
+  for (let i = 1; i < entries.length; i++) {
+    const [a, b] = [rank(entries[i - 1][1]), rank(entries[i][1])];
+    const newer = a[0] - b[0] || a[1] - b[1] || a[2] - b[2];
+    expect(newer, `${entries[i - 1][1]} should sort above ${entries[i][1]}`).toBeGreaterThan(0);
+    expect(entries[i - 1][2] >= entries[i][2], `${entries[i - 1][1]} is dated before ${entries[i][1]}`).toBe(true);
+  }
+});
+
 test("every {alias} in tokens.json points at a token that exists", () => {
   const all = flatten(tokens as unknown as Group);
   const paths = new Set([...all.keys()].map((k) => k));

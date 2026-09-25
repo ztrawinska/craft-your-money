@@ -8,6 +8,7 @@ import { Chip } from "@/components/Chip";
 import { DocSection } from "@/components/design-docs/DocSection";
 import { DESIGN_SYSTEM_DOC, repo } from "@/components/design-docs/links";
 import { docLink as link } from "@/components/design-docs/styles";
+import { tokens } from "@/components/design-docs/tokens";
 import type { ChipTone } from "@/lib/status";
 
 const PRINCIPLES = [
@@ -50,11 +51,20 @@ const FILES = [
   ["docs/design/*.html", "The reference renders each screen was built from."],
 ];
 
+const VERSION = (tokens.$extensions as Record<string, string>)["cym.version"];
+
 export default function DesignOverview() {
   return (
     <>
       <h1 className="font-serif text-title text-ink">Overview</h1>
-      <p className="mt-3 mb-8 max-w-[62ch] font-sans text-body text-ink/70">
+      {/* The version comes from tokens.json, the one place it is written
+          (§7); a test fails if the changelog or the spec disagrees. */}
+      <p className="pt-2 font-sans text-label-sm text-ink/62">
+        Version {VERSION} <span className="text-ink/30">·</span>{" "}
+        <a href={repo("CHANGELOG.md")} className={link}>what changed</a>{" "}
+        <span className="text-ink/30">·</span> pre-1.0, so a break bumps the minor
+      </p>
+      <p className="mt-6 mb-8 max-w-[62ch] font-sans text-body text-ink/70">
         The design system for Craft Your Money, a pricing tool for handmade makers. This library
         renders the real components from <code className="font-mono text-label text-ink">src/components</code>{" "}
         and the real tokens from <code className="font-mono text-label text-ink">globals.css</code>.

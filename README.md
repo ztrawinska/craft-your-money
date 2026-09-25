@@ -94,6 +94,7 @@ npm run check:tells  # design-system tells in src/ — reports; fails only on sp
 | [`src/components/`](src/components/) | The components. Each file opens with the rule it enforces. |
 | [`src/app/design/`](src/app/design/) | The live design-system library |
 | [`design/tokens.json`](design/tokens.json) | The tokens in DTCG format, guarded by [`src/lib/tokens.test.ts`](src/lib/tokens.test.ts) |
+| [`CHANGELOG.md`](CHANGELOG.md) | What changed in the tokens and component APIs, one entry per release, and how the version moves |
 | [`CLAUDE.md`](CLAUDE.md), [`SETUP.md`](SETUP.md) | How the AI pair is briefed, and what was decided against |
 
 ## Scope
