@@ -99,7 +99,7 @@ function CostFields({
               key={p}
               type="button"
               onClick={() => onPatch({ period: p })}
-              className={`rounded-chip border px-3 py-2 font-sans text-meta capitalize ${
+              className={`rounded-chip border px-3 py-2 font-sans text-label-sm capitalize ${
                 draft.period === p
                   ? "border-clay-deep bg-clay-deep text-on-clay"
                   : "border-ink/14 text-ink/62"
@@ -317,7 +317,7 @@ export function CostsEditor({
                 placeholder="0"
                 className="w-[72px] text-right font-serif tabular-nums"
               />
-              <span className="font-sans text-meta text-ink/62">{volumeLabel}</span>
+              <span className="font-sans text-label-sm text-ink/62">{volumeLabel}</span>
             </span>
           </label>
         </div>

@@ -80,7 +80,7 @@ export function HeroProfit({
         <div className="relative">
           <Price value={shown} variant="hero" />
         </div>
-        <p className="relative mt-2 font-sans text-meta text-ink/62">
+        <p className="relative mt-2 font-sans text-label-sm text-ink/62">
           across your {count} priced products, after all costs
         </p>
       </div>
@@ -91,7 +91,7 @@ export function HeroProfit({
             type="button"
             onClick={() => setOpen((o) => !o)}
             aria-expanded={open}
-            className="inline-flex items-center gap-1 border-b border-dotted border-clay/50 pb-px font-sans text-meta text-clay-deep"
+            className="inline-flex items-center gap-1 border-b border-dotted border-clay/50 pb-px font-sans text-label-sm text-clay-deep"
           >
             how this is figured
             <ChevronDown
@@ -105,7 +105,7 @@ export function HeroProfit({
             <div className="mt-3 border-t border-ink/7 pt-1 text-left">
               {contributions.map((c) => (
                 <div key={c.name} className="flex items-baseline justify-between gap-3 py-1">
-                  <span className="min-w-0 truncate font-sans text-meta text-ink/70">
+                  <span className="min-w-0 truncate font-sans text-label-sm text-ink/70">
                     {c.name}
                   </span>
                   <span className="shrink-0 font-serif text-value-sm tabular-nums text-ink">
@@ -114,7 +114,7 @@ export function HeroProfit({
                 </div>
               ))}
               <div className="mt-1 flex items-baseline justify-between border-t border-ink/7 pt-2">
-                <span className="font-sans text-meta text-ink/62">
+                <span className="font-sans text-label-sm text-ink/62">
                   Average across {count}
                 </span>
                 <span className="font-serif text-value-sm tabular-nums text-ink">

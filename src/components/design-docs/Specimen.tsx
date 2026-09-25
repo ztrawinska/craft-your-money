@@ -34,7 +34,7 @@ export function Specimen({
         {children}
       </div>
       {label && (
-        <figcaption className="mt-2 font-sans text-meta text-ink/62 tabular-nums">
+        <figcaption className="mt-2 font-sans text-label-sm text-ink/62 tabular-nums">
           {label}
         </figcaption>
       )}

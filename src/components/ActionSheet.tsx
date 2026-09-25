@@ -73,7 +73,7 @@ export function ActionSheet({
                   close();
                   a.onSelect();
                 }}
-                className="flex-1 rounded-button bg-status-red py-3 font-sans text-button text-on-clay"
+                className="flex-1 rounded-button bg-status-red py-3 font-sans text-label-bold text-on-clay"
               >
                 {confirming.confirm!.confirmLabel}
               </button>

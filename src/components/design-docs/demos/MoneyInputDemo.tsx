@@ -26,7 +26,7 @@ export function MoneyInputDemo() {
             onChange={(e) => setQty(e.target.value)}
             className="pr-8 font-serif tabular-nums"
           />
-          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-sans text-meta text-ink/62">
+          <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 font-sans text-label-sm text-ink/62">
             g
           </span>
         </div>

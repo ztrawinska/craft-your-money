@@ -40,7 +40,7 @@ export function ActionSheetDemo() {
     <div className="flex items-center justify-between">
       <div>
         <p className="font-serif text-name text-ink">Selene hammered band</p>
-        <p className="mt-1 font-sans text-meta text-ink/62">
+        <p className="mt-1 font-sans text-label-sm text-ink/62">
           {last ? `Last action: ${last}` : "Ring"}
         </p>
       </div>

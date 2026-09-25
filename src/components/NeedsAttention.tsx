@@ -52,7 +52,7 @@ function AttentionRow({ item }: { item: AttentionItem }) {
         <Button
           variant="link"
           href={`/products/${item.id}`}
-          className="text-link"
+          className="text-label-bold"
           iconTrailing={<ChevronRight size={15} strokeWidth={2} />}
         >
           {item.action}
@@ -77,12 +77,12 @@ export function NeedsAttention({ items }: { items: AttentionItem[] }) {
             className="flex w-full items-center justify-between gap-3 rounded-band border border-ink/12 px-4 py-row text-left"
           >
             <span className="flex items-center gap-3">
-              <span className="inline-grid h-[24px] min-w-[24px] place-items-center rounded-full bg-clay/12 px-1 font-sans text-chip text-clay-deep">
+              <span className="inline-grid h-[24px] min-w-[24px] place-items-center rounded-full bg-clay/12 px-1 font-sans text-label-sm-bold text-clay-deep">
                 {n}
               </span>
               <span className="font-sans text-label text-ink/75">Needs attention</span>
             </span>
-            <span className="inline-flex shrink-0 items-center gap-1 font-sans text-link text-clay-deep">
+            <span className="inline-flex shrink-0 items-center gap-1 font-sans text-label-bold text-clay-deep">
               Review
               <ChevronRight size={15} strokeWidth={2} />
             </span>

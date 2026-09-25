@@ -135,7 +135,7 @@ export default function DesignOverview() {
                     {r.path && (
                       <>
                         {" · "}
-                        <a href={repo(r.path)} className={`font-mono text-meta ${link}`}>
+                        <a href={repo(r.path)} className={`font-mono text-label-sm ${link}`}>
                           {r.path.split("/").pop()}
                         </a>
                       </>
@@ -157,7 +157,7 @@ export default function DesignOverview() {
             <li key={path} className="flex flex-col gap-1 sm:flex-row sm:gap-4">
               <a
                 href={repo(path.replace("*.tsx", ""))}
-                className={`shrink-0 font-mono text-meta sm:w-[300px] ${link}`}
+                className={`shrink-0 font-mono text-label-sm sm:w-[300px] ${link}`}
               >
                 {path}
               </a>

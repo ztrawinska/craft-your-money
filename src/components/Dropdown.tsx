@@ -22,7 +22,7 @@ export function Dropdown({ children, filtered = false }: DropdownProps) {
   return (
     <button
       type="button"
-      className={`inline-flex items-center gap-2 whitespace-nowrap rounded-button border bg-transparent px-3 py-2 text-button-ghost font-sans ${
+      className={`inline-flex items-center gap-2 whitespace-nowrap rounded-button border bg-transparent px-3 py-2 text-label-strong font-sans ${
         filtered
           ? "border-clay-deep/45 bg-clay/7 text-clay-deep"
           : "border-ink/14 text-ink/62"

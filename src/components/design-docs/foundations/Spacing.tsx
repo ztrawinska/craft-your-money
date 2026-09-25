@@ -62,11 +62,11 @@ export function SpacingDoc() {
                   <div key={name} className="grid grid-cols-[110px_minmax(0,1fr)] items-center gap-4 font-sans">
                     <div>
                       <p className="text-label-strong text-ink">{name}</p>
-                      <p className="font-mono text-meta text-ink/62">{utility(name)}</p>
+                      <p className="font-mono text-label-sm text-ink/62">{utility(name)}</p>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="h-3 shrink-0 rounded-stamp bg-clay/40" style={{ width: px }} />
-                      <p className="font-mono text-meta text-ink/62 tabular-nums">
+                      <p className="font-mono text-label-sm text-ink/62 tabular-nums">
                         {px}
                         {alias && <span className="text-ink/30"> = {alias}</span>}
                       </p>
